@@ -5,4 +5,6 @@ class AppImages{
   static const String onboarding2 = 'assets/images/onboarding2_image.png';
   static const String onboarding3 = 'assets/images/onboarding3_image.png';
 
+  static const String logo = 'assets/images/logo_image.png';
+  
 }

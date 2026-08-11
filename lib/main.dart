@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_drink_delivery/ui/pages/app_start/onboarding_page.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,14 +11,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: RouteConfig.routes,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const OnboardingPage(),
     );
   }
 }
-

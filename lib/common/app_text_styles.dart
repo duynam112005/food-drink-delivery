@@ -33,4 +33,11 @@ class AppTextStyles {
 
   //S14
   static final whiteS14Medium = white.copyWith(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: -0.2);
+
+
+  //red
+  static final red = TextStyle(color: AppColors.red400, fontWeight: FontWeight.w400);
+
+  //S14
+  static final redS14 = red.copyWith(fontSize: 14, letterSpacing: -0.4);
 }
