@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
+import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/ui/pages/auth/login/auth_service.dart';
+import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
+import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,40 +16,74 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-
-  @override
-  initState() {
-    super.initState();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
+  final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 36),
-            child: Column(
-              children: [
-                _buildLogo(),
-                _buildTitle(),
-                const SizedBox(height: 24),
-                _buildLoginForm(),
-              ],
-            ),
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 36),
+                    child: Column(
+                      children: [
+                        _buildLogo(),
+                        const Spacer(),
+                        _buildTitle(),
+                        const SizedBox(height: 24),
+                        BuildLoginForm(),
+                        const SizedBox(height: 16),
+                        _buildForgotPassword(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: Color(0xFFF4F5F7),
+                                thickness: 2,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 16,
+                              ),
+                              child: Text('OR', style: AppTextStyles.greyS14),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: Color(0xFFF4F5F7),
+                                thickness: 2,
+                              ),
+                            ),
+                          ],
+                        ),
+                        _buildSocialLogin(
+                          AppSvgs.facebookIcon,
+                          'Continue with Facebook',
+                          Color(0xFF1877F2).withOpacity(0.1),
+                          _authService,
+                        ),
+                        const SizedBox(height: 8),
+                        _buildSocialLogin(
+                          AppSvgs.googleIcon,
+                          'Continue with Google',
+                          Color(0xFFF4F5F7),
+                          _authService,
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -85,57 +124,120 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginForm() {
+  Widget _buildForgotPassword() {
+    return InkWell(
+      onTap: () {},
+      child: Text('Forgot password?', style: AppTextStyles.redS12Medium),
+    );
+  }
+
+  Widget _buildSocialLogin(
+    String iconPath,
+    String text,
+    Color color,
+    AuthService? authService,
+  ) {
+    return InkWell(
+      onTap: () async {
+        if (authService != null) {
+          await authService.signInWithGoogle();
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            SvgPicture.asset(iconPath),
+            const SizedBox(width: 42),
+            Text(text, style: AppTextStyles.blackS14Medium),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BuildLoginForm extends StatefulWidget {
+  const BuildLoginForm({super.key});
+
+  @override
+  State<BuildLoginForm> createState() => _BuildLoginFormState();
+}
+
+class _BuildLoginFormState extends State<BuildLoginForm> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  bool _isLoginEnabled = false;
+
+  void _checkForm() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    setState(() {
+      _isLoginEnabled = email.isNotEmpty && password.isNotEmpty;
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
+          AppTextfieldWidget(
             controller: _emailController,
-            decoration: InputDecoration(
-              hintText: 'Username or Email',
-              hintStyle: AppTextStyles.greyS14,
-              fillColor: Color(0xFFF4F5F7),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-            ),
-            keyboardType: TextInputType.emailAddress,
-            validator: (value){
-              if(value == null || value.isEmpty){
-                return 'Please enter your email';
-              }
-              return null;
-            }
+            hintText: 'Username or Email',
+            onChanged: (value) => _checkForm(),
           ),
           const SizedBox(height: 8),
-          TextFormField(
+          PasswordTextfieldWidget(
             controller: _passwordController,
-            decoration: InputDecoration(
-              hintText: 'Password',
-              hintStyle: AppTextStyles.greyS14,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              filled: true,
-              fillColor: Color(0xFFF4F5F7),
-              border: OutlineInputBorder(
+            hintText: 'Password',
+            onChanged: (value) => _checkForm(),
+          ),
+          const SizedBox(height: 16),
+          InkWell(
+            onTap: () {
+              if (_formKey.currentState!.validate() && _isLoginEnabled) {}
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: _isLoginEnabled
+                    ? AppColors.red400
+                    : AppColors.red400.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
+              ),
+              child: Text(
+                'Login',
+                style: AppTextStyles.whiteS14Medium,
+                textAlign: TextAlign.center,
               ),
             ),
-            obscureText: true,
-            validator: (value){
-              if(value == null || value.isEmpty){
-                return 'Please enter your password';
-              }
-              return null;
-            }
           ),
         ],
       ),
-      
     );
   }
 }

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "53785082111",
+    "project_id": "food-drink-delivery-2332d",
+    "storage_bucket": "food-drink-delivery-2332d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53785082111:android:ac07bad6a2043beaa8b4ca",
+        "android_client_info": {
+          "package_name": "com.example.food_drink_delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53785082111-46r67ejortdvun1ufdhe08gq80h676hi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.food_drink_delivery",
+            "certificate_hash": "1c96c9e96bd01a5122dc0894cbb3e5806fdf2be6"
+          }
+        },
+        {
+          "client_id": "53785082111-81fld1tkkmaga2co1s7432bn8sn5p9bc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByjH4JbxJKZlv_89hcWP3vOxcKYy6xtKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53785082111-81fld1tkkmaga2co1s7432bn8sn5p9bc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "53785082111-gmu6r4cbr4mn5ak3jpqevudo5ikhfpls.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foodDrinkDelivery"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

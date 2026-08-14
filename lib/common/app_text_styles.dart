@@ -10,6 +10,9 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
+  //S14
+  static final blackS14Medium = black.copyWith(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: -0.4);
+
   //S24
   static final blackS24Bold = black.copyWith(
     fontSize: 24,
@@ -37,6 +40,9 @@ class AppTextStyles {
 
   //red
   static final red = TextStyle(color: AppColors.red400, fontWeight: FontWeight.w400);
+
+  //S12
+  static final redS12Medium = red.copyWith(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: -0.24);
 
   //S14
   static final redS14 = red.copyWith(fontSize: 14, letterSpacing: -0.4);

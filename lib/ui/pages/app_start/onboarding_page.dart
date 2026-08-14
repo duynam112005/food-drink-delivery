@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/ui/widgets/text_button_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -79,32 +80,49 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       ),
                     ),
                     const Spacer(),
-                    InkWell(
-                      onTap:(){
-                        if(index < 2){
-                          _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-                        }
-                        else{
+                    // InkWell(
+                    //   onTap:(){
+                    //     if(index < 2){
+                    //       _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    //     }
+                    //     else{
+                    //       context.pushReplacementNamed('login');
+                    //     }
+                    //   },
+                    //   child: Container(
+                    //     width: double.infinity,
+                    //     padding: const EdgeInsets.symmetric(vertical: 16),
+                    //     decoration: BoxDecoration(
+                    //       color: AppColors.red400,
+                    //       borderRadius: BorderRadius.circular(16),
+                    //     ),
+                    //     child: Text(
+                    //       switch (index) {
+                    //         0 => 'Next',
+                    //         1 => "Next",
+                    //         _ => 'Get Started',
+                    //       },
+                    //       style: AppTextStyles.whiteS14Medium,
+                    //       textAlign: TextAlign.center,
+                    //     ),
+                    //   ),
+                    // ),
+                    TextButtonWidget(
+                      onTap: () {
+                        if (index < 2) {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        } else {
                           context.pushReplacementNamed('login');
                         }
                       },
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        decoration: BoxDecoration(
-                          color: AppColors.red400,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          switch (index) {
-                            0 => 'Next',
-                            1 => "Next",
-                            _ => 'Get Started',
-                          },
-                          style: AppTextStyles.whiteS14Medium,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      text: switch (index) {
+                        0 => 'Next',
+                        1 => 'Next',
+                        _ => 'Get Started',
+                      },
                     ),
                   ],
                 ),
