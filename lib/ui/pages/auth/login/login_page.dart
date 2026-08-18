@@ -4,9 +4,13 @@ import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
-import 'package:food_drink_delivery/ui/pages/auth/login/auth_service.dart';
+import 'package:food_drink_delivery/firebase/auth_service.dart';
+import 'package:food_drink_delivery/models/entities/auth/social/social_entity.dart';
+import 'package:food_drink_delivery/network/api_client.dart';
+import 'package:food_drink_delivery/network/dio_client.dart';
 import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
 import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,6 +21,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthService _authService = AuthService();
+  final ApiClient _apiClient = ApiClient(dio: DioClient().dio);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ],
                         ),
+                        //const Spacer(),
                         _buildSocialLogin(
                           AppSvgs.facebookIcon,
                           'Continue with Facebook',
@@ -77,7 +84,12 @@ class _LoginPageState extends State<LoginPage> {
                           _authService,
                         ),
                         const SizedBox(height: 8),
-                      ],
+                        TextButton(
+                          child: Text('SignOut'),
+                          onPressed: () {
+                            _authService.signOut();
+                          },
+                        ),                      ],
                     ),
                   ),
                 ),
@@ -126,7 +138,9 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildForgotPassword() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        context.pushReplacementNamed('enter_email');
+      },
       child: Text('Forgot password?', style: AppTextStyles.redS12Medium),
     );
   }
@@ -139,8 +153,16 @@ class _LoginPageState extends State<LoginPage> {
   ) {
     return InkWell(
       onTap: () async {
-        if (authService != null) {
-          await authService.signInWithGoogle();
+        try {
+          if (authService != null) {
+            final firebaseIdToken = await authService.signInWithGoogle();
+            if (firebaseIdToken == null || firebaseIdToken.isEmpty) {
+              return;
+            }
+            final social = await _apiClient.loginWithSocial(firebaseIdToken);
+          }
+        } catch (e) {
+          print('Error during social login: $e');
         }
       },
       child: Container(
@@ -218,8 +240,9 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
           const SizedBox(height: 16),
           InkWell(
             onTap: () {
-              if (_formKey.currentState!.validate() && _isLoginEnabled) {}
+              //if (_formKey.currentState!.validate() && _isLoginEnabled) {}
             },
+            radius: 16,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12),

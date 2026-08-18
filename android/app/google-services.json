@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "53785082111",
-    "project_id": "food-drink-delivery-2332d",
-    "storage_bucket": "food-drink-delivery-2332d.firebasestorage.app"
+    "project_number": "435004212053",
+    "project_id": "cook-food-1214a",
+    "storage_bucket": "cook-food-1214a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:53785082111:android:ac07bad6a2043beaa8b4ca",
+        "mobilesdk_app_id": "1:435004212053:android:5c8fc325862400d830a5dc",
         "android_client_info": {
           "package_name": "com.example.food_drink_delivery"
         }
       },
       "oauth_client": [
         {
-          "client_id": "53785082111-46r67ejortdvun1ufdhe08gq80h676hi.apps.googleusercontent.com",
+          "client_id": "435004212053-ongom6aak3l4chl9lknstgpunvnnllia.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.food_drink_delivery",
@@ -22,24 +22,24 @@
           }
         },
         {
-          "client_id": "53785082111-81fld1tkkmaga2co1s7432bn8sn5p9bc.apps.googleusercontent.com",
+          "client_id": "435004212053-7g258fh19kisl5u42g6fes67fse0v2o1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyByjH4JbxJKZlv_89hcWP3vOxcKYy6xtKk"
+          "current_key": "AIzaSyA-E0AyHRaopou1rqde2ZRIo3z038UyP1g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "53785082111-81fld1tkkmaga2co1s7432bn8sn5p9bc.apps.googleusercontent.com",
+              "client_id": "435004212053-7g258fh19kisl5u42g6fes67fse0v2o1.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "53785082111-gmu6r4cbr4mn5ak3jpqevudo5ikhfpls.apps.googleusercontent.com",
+              "client_id": "435004212053-d6l3d1e24em092v4fuhh7tkkpeh5ei5u.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.foodDrinkDelivery"

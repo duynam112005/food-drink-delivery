@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>53785082111-gmu6r4cbr4mn5ak3jpqevudo5ikhfpls.apps.googleusercontent.com</string>
+	<string>435004212053-d6l3d1e24em092v4fuhh7tkkpeh5ei5u.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.53785082111-gmu6r4cbr4mn5ak3jpqevudo5ikhfpls</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>53785082111-46r67ejortdvun1ufdhe08gq80h676hi.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.435004212053-d6l3d1e24em092v4fuhh7tkkpeh5ei5u</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCwYzZEhQcjEqE33n-dt0K1IlIn-6M-R-o</string>
+	<string>AIzaSyBahcyoFClZqQXKozjtVtulsOIHpQVsCUI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>53785082111</string>
+	<string>435004212053</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.foodDrinkDelivery</string>
 	<key>PROJECT_ID</key>
-	<string>food-drink-delivery-2332d</string>
+	<string>cook-food-1214a</string>
 	<key>STORAGE_BUCKET</key>
-	<string>food-drink-delivery-2332d.firebasestorage.app</string>
+	<string>cook-food-1214a.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:53785082111:ios:8300856bc3ebfe0ba8b4ca</string>
+	<string>1:435004212053:ios:f3b9102e21cdad7a30a5dc</string>
 </dict>
 </plist>

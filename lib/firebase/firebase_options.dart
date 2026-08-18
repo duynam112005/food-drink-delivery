@@ -53,10 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyByjH4JbxJKZlv_89hcWP3vOxcKYy6xtKk',
-    appId: '1:53785082111:android:ac07bad6a2043beaa8b4ca',
-    messagingSenderId: '53785082111',
-    projectId: 'food-drink-delivery-2332d',
-    storageBucket: 'food-drink-delivery-2332d.firebasestorage.app',
+    apiKey: 'AIzaSyA-E0AyHRaopou1rqde2ZRIo3z038UyP1g',
+    appId: '1:435004212053:android:5c8fc325862400d830a5dc',
+    messagingSenderId: '435004212053',
+    projectId: 'cook-food-1214a',
+    storageBucket: 'cook-food-1214a.firebasestorage.app',
   );
 }

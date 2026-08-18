@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:food_drink_delivery/firebase_options.dart';
+import 'package:food_drink_delivery/firebase/firebase_options.dart';
 import 'package:food_drink_delivery/router/route_config.dart';
 
 void main() async {

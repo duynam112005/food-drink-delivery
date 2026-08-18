@@ -11,6 +11,7 @@ class TextButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      radius: 16,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12),

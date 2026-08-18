@@ -1,0 +1,12 @@
+1. AuthService
+- googleAuth.idToken: là token của google sign in, cần truyền vào GoogleAuthProvider để firebase có thể xác thực
+    + Nếu googleAuth.idToken = null thì Firebase không thể xác thực được
+
+- còn token = FirebaseAuth.instance.currentUser!.getIdToken(true) mới là idToken của firebase
+    + getIdToken(true) sẽ bắt buộc refresh idToken mỗi khi đăng nhập, còn getIdToken(false) sẽ trả về idToken cũ nếu idToken đó vẫn còn hạn
+    + Dùng để gửi token lên server
+
+- Sự khác nhau giữa googleAuth.idToken và FirebaseAuth.instance.currentUser!.getIdToken
+    + googleAuth.idToken: là token của google dùng để xác thực vào firebase
+    + FirebaseAuth.instance.currentUser!.getIdToken là token của người dùng hiện tại để gửi lên server để gọi API
+    + Google cấp Google ID Token để chứng minh danh tính của tài khoản Google. Firebase dùng credential chứa thông tin xác thực đó để xác thực người dùng. Nếu Firebase chưa có Firebase User tương ứng, Firebase có thể tạo user; nếu đã có thì đăng nhập vào Firebase User đó
