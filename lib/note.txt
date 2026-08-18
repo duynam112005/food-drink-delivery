@@ -10,3 +10,7 @@
     + googleAuth.idToken: là token của google dùng để xác thực vào firebase
     + FirebaseAuth.instance.currentUser!.getIdToken là token của người dùng hiện tại để gửi lên server để gọi API
     + Google cấp Google ID Token để chứng minh danh tính của tài khoản Google. Firebase dùng credential chứa thông tin xác thực đó để xác thực người dùng. Nếu Firebase chưa có Firebase User tương ứng, Firebase có thể tạo user; nếu đã có thì đăng nhập vào Firebase User đó
+
+
+
+2. Lưu ý khi chuyển đổi dữ liệu từ JSON -> Object. Field nào mà backend trả về null thì ở Entity phải khai báo có thể null

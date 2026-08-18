@@ -5,9 +5,9 @@ import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/firebase/auth_service.dart';
-import 'package:food_drink_delivery/models/entities/auth/social/social_entity.dart';
 import 'package:food_drink_delivery/network/api_client.dart';
 import 'package:food_drink_delivery/network/dio_client.dart';
+import 'package:food_drink_delivery/local_data/secure_storage.dart';
 import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
 import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +22,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final AuthService _authService = AuthService();
   final ApiClient _apiClient = ApiClient(dio: DioClient().dio);
+  SecureStorage secureStorage = SecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +161,17 @@ class _LoginPageState extends State<LoginPage> {
               return;
             }
             final social = await _apiClient.loginWithSocial(firebaseIdToken);
+            final accessToken = social.accessToken;
+            if (accessToken!.isEmpty) {
+              debugPrint('Access token is empty from API response');
+              return;
+            }
+            await secureStorage.write('accessToken', accessToken);
+            final savedToken = await secureStorage.read('accessToken');
+            debugPrint('Saved accessToken: $savedToken');
           }
         } catch (e) {
-          print('Error during social login: $e');
+          debugPrint('Error during social login: $e');
         }
       },
       child: Container(

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserEntity {
 
- String get id; String get fullName; String get email; String get phone; String get avatarUrl; bool get emailVerified;
+ String get id; String get fullName; String get email; String? get phone; String get avatarUrl; bool get emailVerified;
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $UserEntityCopyWith<$Res>  {
   factory $UserEntityCopyWith(UserEntity value, $Res Function(UserEntity) _then) = _$UserEntityCopyWithImpl;
 @useResult
 $Res call({
- String id, String fullName, String email, String phone, String avatarUrl, bool emailVerified
+ String id, String fullName, String email, String? phone, String avatarUrl, bool emailVerified
 });
 
 
@@ -65,13 +65,13 @@ class _$UserEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? fullName = null,Object? email = null,Object? phone = null,Object? avatarUrl = null,Object? emailVerified = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? fullName = null,Object? email = null,Object? phone = freezed,Object? avatarUrl = null,Object? emailVerified = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,avatarUrl: null == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
+as String,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,avatarUrl: null == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
 as String,emailVerified: null == emailVerified ? _self.emailVerified : emailVerified // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -158,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String fullName,  String email,  String phone,  String avatarUrl,  bool emailVerified)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String fullName,  String email,  String? phone,  String avatarUrl,  bool emailVerified)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserEntity() when $default != null:
 return $default(_that.id,_that.fullName,_that.email,_that.phone,_that.avatarUrl,_that.emailVerified);case _:
@@ -179,7 +179,7 @@ return $default(_that.id,_that.fullName,_that.email,_that.phone,_that.avatarUrl,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String fullName,  String email,  String phone,  String avatarUrl,  bool emailVerified)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String fullName,  String email,  String? phone,  String avatarUrl,  bool emailVerified)  $default,) {final _that = this;
 switch (_that) {
 case _UserEntity():
 return $default(_that.id,_that.fullName,_that.email,_that.phone,_that.avatarUrl,_that.emailVerified);case _:
@@ -199,7 +199,7 @@ return $default(_that.id,_that.fullName,_that.email,_that.phone,_that.avatarUrl,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String fullName,  String email,  String phone,  String avatarUrl,  bool emailVerified)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String fullName,  String email,  String? phone,  String avatarUrl,  bool emailVerified)?  $default,) {final _that = this;
 switch (_that) {
 case _UserEntity() when $default != null:
 return $default(_that.id,_that.fullName,_that.email,_that.phone,_that.avatarUrl,_that.emailVerified);case _:
@@ -220,7 +220,7 @@ class _UserEntity implements UserEntity {
 @override final  String id;
 @override final  String fullName;
 @override final  String email;
-@override final  String phone;
+@override final  String? phone;
 @override final  String avatarUrl;
 @override final  bool emailVerified;
 
@@ -257,7 +257,7 @@ abstract mixin class _$UserEntityCopyWith<$Res> implements $UserEntityCopyWith<$
   factory _$UserEntityCopyWith(_UserEntity value, $Res Function(_UserEntity) _then) = __$UserEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String fullName, String email, String phone, String avatarUrl, bool emailVerified
+ String id, String fullName, String email, String? phone, String avatarUrl, bool emailVerified
 });
 
 
@@ -274,13 +274,13 @@ class __$UserEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? fullName = null,Object? email = null,Object? phone = null,Object? avatarUrl = null,Object? emailVerified = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? fullName = null,Object? email = null,Object? phone = freezed,Object? avatarUrl = null,Object? emailVerified = null,}) {
   return _then(_UserEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,avatarUrl: null == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
+as String,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,avatarUrl: null == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
 as String,emailVerified: null == emailVerified ? _self.emailVerified : emailVerified // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

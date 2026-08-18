@@ -7,12 +7,12 @@ part of 'user_entity.dart';
 // **************************************************************************
 
 _UserEntity _$UserEntityFromJson(Map<String, dynamic> json) => _UserEntity(
-  id: (json['id'] ?? '').toString(),
-  fullName: (json['fullName'] ?? '').toString(),
-  email: (json['email'] ?? '').toString(),
-  phone: (json['phone'] ?? '').toString(),
-  avatarUrl: (json['avatarUrl'] ?? '').toString(),
-  emailVerified: json['emailVerified'] as bool? ?? false,
+  id: json['id'] as String,
+  fullName: json['fullName'] as String,
+  email: json['email'] as String,
+  phone: json['phone'] as String?,
+  avatarUrl: json['avatarUrl'] as String,
+  emailVerified: json['emailVerified'] as bool,
 );
 
 Map<String, dynamic> _$UserEntityToJson(_UserEntity instance) =>

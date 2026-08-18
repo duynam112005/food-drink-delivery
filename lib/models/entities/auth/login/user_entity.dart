@@ -8,7 +8,7 @@ abstract class UserEntity with _$UserEntity {
     required String id,
     required String fullName,
     required String email,
-    required String phone,
+    required String? phone,
     required String avatarUrl,
     required bool emailVerified,
   }) = _UserEntity;
