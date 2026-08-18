@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_entity.dart';
+part of 'auth_entity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_LoginEntity _$LoginEntityFromJson(Map<String, dynamic> json) => _LoginEntity(
+_AuthEntity _$AuthEntityFromJson(Map<String, dynamic> json) => _AuthEntity(
   user: UserEntity.fromJson(json['user'] as Map<String, dynamic>),
   accessToken: json['accessToken'] as String,
   refreshToken: json['refreshToken'] as String,
@@ -14,7 +14,7 @@ _LoginEntity _$LoginEntityFromJson(Map<String, dynamic> json) => _LoginEntity(
   expiresIn: (json['expiresIn'] as num).toInt(),
 );
 
-Map<String, dynamic> _$LoginEntityToJson(_LoginEntity instance) =>
+Map<String, dynamic> _$AuthEntityToJson(_AuthEntity instance) =>
     <String, dynamic>{
       'user': instance.user,
       'accessToken': instance.accessToken,

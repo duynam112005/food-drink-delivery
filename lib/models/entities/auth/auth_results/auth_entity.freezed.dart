@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'login_entity.dart';
+part of 'auth_entity.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,22 +13,22 @@ part of 'login_entity.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$LoginEntity {
+mixin _$AuthEntity {
 
  UserEntity get user; String get accessToken; String get refreshToken; String get tokenType; int get expiresIn;
-/// Create a copy of LoginEntity
+/// Create a copy of AuthEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$LoginEntityCopyWith<LoginEntity> get copyWith => _$LoginEntityCopyWithImpl<LoginEntity>(this as LoginEntity, _$identity);
+$AuthEntityCopyWith<AuthEntity> get copyWith => _$AuthEntityCopyWithImpl<AuthEntity>(this as AuthEntity, _$identity);
 
-  /// Serializes this LoginEntity to a JSON map.
+  /// Serializes this AuthEntity to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginEntity&&(identical(other.user, user) || other.user == user)&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.tokenType, tokenType) || other.tokenType == tokenType)&&(identical(other.expiresIn, expiresIn) || other.expiresIn == expiresIn));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthEntity&&(identical(other.user, user) || other.user == user)&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.tokenType, tokenType) || other.tokenType == tokenType)&&(identical(other.expiresIn, expiresIn) || other.expiresIn == expiresIn));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,15 +37,15 @@ int get hashCode => Object.hash(runtimeType,user,accessToken,refreshToken,tokenT
 
 @override
 String toString() {
-  return 'LoginEntity(user: $user, accessToken: $accessToken, refreshToken: $refreshToken, tokenType: $tokenType, expiresIn: $expiresIn)';
+  return 'AuthEntity(user: $user, accessToken: $accessToken, refreshToken: $refreshToken, tokenType: $tokenType, expiresIn: $expiresIn)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LoginEntityCopyWith<$Res>  {
-  factory $LoginEntityCopyWith(LoginEntity value, $Res Function(LoginEntity) _then) = _$LoginEntityCopyWithImpl;
+abstract mixin class $AuthEntityCopyWith<$Res>  {
+  factory $AuthEntityCopyWith(AuthEntity value, $Res Function(AuthEntity) _then) = _$AuthEntityCopyWithImpl;
 @useResult
 $Res call({
  UserEntity user, String accessToken, String refreshToken, String tokenType, int expiresIn
@@ -56,14 +56,14 @@ $UserEntityCopyWith<$Res> get user;
 
 }
 /// @nodoc
-class _$LoginEntityCopyWithImpl<$Res>
-    implements $LoginEntityCopyWith<$Res> {
-  _$LoginEntityCopyWithImpl(this._self, this._then);
+class _$AuthEntityCopyWithImpl<$Res>
+    implements $AuthEntityCopyWith<$Res> {
+  _$AuthEntityCopyWithImpl(this._self, this._then);
 
-  final LoginEntity _self;
-  final $Res Function(LoginEntity) _then;
+  final AuthEntity _self;
+  final $Res Function(AuthEntity) _then;
 
-/// Create a copy of LoginEntity
+/// Create a copy of AuthEntity
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? user = null,Object? accessToken = null,Object? refreshToken = null,Object? tokenType = null,Object? expiresIn = null,}) {
   return _then(_self.copyWith(
@@ -75,7 +75,7 @@ as String,expiresIn: null == expiresIn ? _self.expiresIn : expiresIn // ignore: 
 as int,
   ));
 }
-/// Create a copy of LoginEntity
+/// Create a copy of AuthEntity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -88,8 +88,8 @@ $UserEntityCopyWith<$Res> get user {
 }
 
 
-/// Adds pattern-matching-related methods to [LoginEntity].
-extension LoginEntityPatterns on LoginEntity {
+/// Adds pattern-matching-related methods to [AuthEntity].
+extension AuthEntityPatterns on AuthEntity {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -102,10 +102,10 @@ extension LoginEntityPatterns on LoginEntity {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LoginEntity value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _AuthEntity value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _LoginEntity() when $default != null:
+case _AuthEntity() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -124,10 +124,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LoginEntity value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _AuthEntity value)  $default,){
 final _that = this;
 switch (_that) {
-case _LoginEntity():
+case _AuthEntity():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -145,10 +145,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LoginEntity value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _AuthEntity value)?  $default,){
 final _that = this;
 switch (_that) {
-case _LoginEntity() when $default != null:
+case _AuthEntity() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -168,7 +168,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( UserEntity user,  String accessToken,  String refreshToken,  String tokenType,  int expiresIn)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _LoginEntity() when $default != null:
+case _AuthEntity() when $default != null:
 return $default(_that.user,_that.accessToken,_that.refreshToken,_that.tokenType,_that.expiresIn);case _:
   return orElse();
 
@@ -189,7 +189,7 @@ return $default(_that.user,_that.accessToken,_that.refreshToken,_that.tokenType,
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( UserEntity user,  String accessToken,  String refreshToken,  String tokenType,  int expiresIn)  $default,) {final _that = this;
 switch (_that) {
-case _LoginEntity():
+case _AuthEntity():
 return $default(_that.user,_that.accessToken,_that.refreshToken,_that.tokenType,_that.expiresIn);case _:
   throw StateError('Unexpected subclass');
 
@@ -209,7 +209,7 @@ return $default(_that.user,_that.accessToken,_that.refreshToken,_that.tokenType,
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( UserEntity user,  String accessToken,  String refreshToken,  String tokenType,  int expiresIn)?  $default,) {final _that = this;
 switch (_that) {
-case _LoginEntity() when $default != null:
+case _AuthEntity() when $default != null:
 return $default(_that.user,_that.accessToken,_that.refreshToken,_that.tokenType,_that.expiresIn);case _:
   return null;
 
@@ -221,9 +221,9 @@ return $default(_that.user,_that.accessToken,_that.refreshToken,_that.tokenType,
 /// @nodoc
 @JsonSerializable()
 
-class _LoginEntity implements LoginEntity {
-   _LoginEntity({required this.user, required this.accessToken, required this.refreshToken, required this.tokenType, required this.expiresIn});
-  factory _LoginEntity.fromJson(Map<String, dynamic> json) => _$LoginEntityFromJson(json);
+class _AuthEntity implements AuthEntity {
+  const _AuthEntity({required this.user, required this.accessToken, required this.refreshToken, required this.tokenType, required this.expiresIn});
+  factory _AuthEntity.fromJson(Map<String, dynamic> json) => _$AuthEntityFromJson(json);
 
 @override final  UserEntity user;
 @override final  String accessToken;
@@ -231,20 +231,20 @@ class _LoginEntity implements LoginEntity {
 @override final  String tokenType;
 @override final  int expiresIn;
 
-/// Create a copy of LoginEntity
+/// Create a copy of AuthEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LoginEntityCopyWith<_LoginEntity> get copyWith => __$LoginEntityCopyWithImpl<_LoginEntity>(this, _$identity);
+_$AuthEntityCopyWith<_AuthEntity> get copyWith => __$AuthEntityCopyWithImpl<_AuthEntity>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$LoginEntityToJson(this, );
+  return _$AuthEntityToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginEntity&&(identical(other.user, user) || other.user == user)&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.tokenType, tokenType) || other.tokenType == tokenType)&&(identical(other.expiresIn, expiresIn) || other.expiresIn == expiresIn));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AuthEntity&&(identical(other.user, user) || other.user == user)&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken)&&(identical(other.tokenType, tokenType) || other.tokenType == tokenType)&&(identical(other.expiresIn, expiresIn) || other.expiresIn == expiresIn));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -253,15 +253,15 @@ int get hashCode => Object.hash(runtimeType,user,accessToken,refreshToken,tokenT
 
 @override
 String toString() {
-  return 'LoginEntity(user: $user, accessToken: $accessToken, refreshToken: $refreshToken, tokenType: $tokenType, expiresIn: $expiresIn)';
+  return 'AuthEntity(user: $user, accessToken: $accessToken, refreshToken: $refreshToken, tokenType: $tokenType, expiresIn: $expiresIn)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$LoginEntityCopyWith<$Res> implements $LoginEntityCopyWith<$Res> {
-  factory _$LoginEntityCopyWith(_LoginEntity value, $Res Function(_LoginEntity) _then) = __$LoginEntityCopyWithImpl;
+abstract mixin class _$AuthEntityCopyWith<$Res> implements $AuthEntityCopyWith<$Res> {
+  factory _$AuthEntityCopyWith(_AuthEntity value, $Res Function(_AuthEntity) _then) = __$AuthEntityCopyWithImpl;
 @override @useResult
 $Res call({
  UserEntity user, String accessToken, String refreshToken, String tokenType, int expiresIn
@@ -272,17 +272,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$LoginEntityCopyWithImpl<$Res>
-    implements _$LoginEntityCopyWith<$Res> {
-  __$LoginEntityCopyWithImpl(this._self, this._then);
+class __$AuthEntityCopyWithImpl<$Res>
+    implements _$AuthEntityCopyWith<$Res> {
+  __$AuthEntityCopyWithImpl(this._self, this._then);
 
-  final _LoginEntity _self;
-  final $Res Function(_LoginEntity) _then;
+  final _AuthEntity _self;
+  final $Res Function(_AuthEntity) _then;
 
-/// Create a copy of LoginEntity
+/// Create a copy of AuthEntity
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? user = null,Object? accessToken = null,Object? refreshToken = null,Object? tokenType = null,Object? expiresIn = null,}) {
-  return _then(_LoginEntity(
+  return _then(_AuthEntity(
 user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as UserEntity,accessToken: null == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String,refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
@@ -292,7 +292,7 @@ as int,
   ));
 }
 
-/// Create a copy of LoginEntity
+/// Create a copy of AuthEntity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:food_drink_delivery/ui/pages/app_start/onboarding_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/forgot_password/enter_email/enter_email_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_page.dart';
+import 'package:food_drink_delivery/ui/pages/auth/register/register_page.dart';
 import 'package:go_router/go_router.dart';
 
 class RouteConfig {
@@ -14,6 +15,7 @@ class RouteConfig {
   static const String enterEmail = '/enter_email';
   static const String enterOtp = '/enter_otp';
   static const String resetPassword = 'reset_password';
+  static const String register = '/register';
 
   static final routes = GoRouter(
     initialLocation: onboarding,
@@ -33,6 +35,11 @@ class RouteConfig {
         path: enterEmail,
         name: 'enter_email',
         builder: (context, state) => const EnterEmailPage(),
+      ),
+      GoRoute(
+        path: register,
+        name: 'register',
+        builder: (context, state) => const RegisterPage(),
       ),
     ],
   );

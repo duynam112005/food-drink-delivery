@@ -90,7 +90,8 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             _authService.signOut();
                           },
-                        ),                      ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -128,7 +129,10 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Text('Or ', style: AppTextStyles.greyS14),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                context.pushNamed('register');
+                print('Navigating to register page');
+              },
               child: Text('Create new account', style: AppTextStyles.redS14),
             ),
           ],
@@ -162,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
             }
             final social = await _apiClient.loginWithSocial(firebaseIdToken);
             final accessToken = social.accessToken;
-            if (accessToken!.isEmpty) {
+            if (accessToken.isEmpty) {
               debugPrint('Access token is empty from API response');
               return;
             }
@@ -204,6 +208,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  final ApiClient _apiClient = ApiClient(dio: DioClient().dio);
 
   bool _isLoginEnabled = false;
 
@@ -237,7 +242,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
         children: [
           AppTextfieldWidget(
             controller: _emailController,
-            hintText: 'Username or Email',
+            hintText: 'Email',
             onChanged: (value) => _checkForm(),
           ),
           const SizedBox(height: 8),
@@ -248,8 +253,17 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
           ),
           const SizedBox(height: 16),
           InkWell(
-            onTap: () {
-              //if (_formKey.currentState!.validate() && _isLoginEnabled) {}
+            borderRadius: BorderRadius.circular(16),
+            onTap: () async {
+              if (_formKey.currentState!.validate() && _isLoginEnabled) {
+                final email = _emailController.text.trim();
+                final password = _passwordController.text.trim();
+                final data = await _apiClient.loginWithEmailAndPassword(
+                  email,
+                  password,
+                );
+                debugPrint('Login successful: ${data.accessToken}');
+              }
             },
             radius: 16,
             child: Container(

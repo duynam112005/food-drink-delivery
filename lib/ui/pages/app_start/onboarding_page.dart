@@ -80,33 +80,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       ),
                     ),
                     const Spacer(),
-                    // InkWell(
-                    //   onTap:(){
-                    //     if(index < 2){
-                    //       _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-                    //     }
-                    //     else{
-                    //       context.pushReplacementNamed('login');
-                    //     }
-                    //   },
-                    //   child: Container(
-                    //     width: double.infinity,
-                    //     padding: const EdgeInsets.symmetric(vertical: 16),
-                    //     decoration: BoxDecoration(
-                    //       color: AppColors.red400,
-                    //       borderRadius: BorderRadius.circular(16),
-                    //     ),
-                    //     child: Text(
-                    //       switch (index) {
-                    //         0 => 'Next',
-                    //         1 => "Next",
-                    //         _ => 'Get Started',
-                    //       },
-                    //       style: AppTextStyles.whiteS14Medium,
-                    //       textAlign: TextAlign.center,
-                    //     ),
-                    //   ),
-                    // ),
                     TextButtonWidget(
                       onTap: () {
                         if (index < 2) {
