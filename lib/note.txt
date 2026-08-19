@@ -14,3 +14,6 @@
 
 
 2. Lưu ý khi chuyển đổi dữ liệu từ JSON -> Object. Field nào mà backend trả về null thì ở Entity phải khai báo có thể null
+
+3. Dùng package form_builder_validators để bắt lỗi FormField
+   + Dùng .compose để có thể dùng nhiều validator thành 1 validator

@@ -150,14 +150,13 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
                 final phone = _phoneController.text.trim();
                 final password = _passwordController.text.trim();
 
-                context.pushNamed('enter_code', extra: phone);
-
                 final response = await _authRepository.register(
                   fullName,
                   phone,
                   email,
                   password,
                 );
+                context.pushNamed('enter_code', extra: phone);
               }
             },
             borderRadius: BorderRadius.circular(16),

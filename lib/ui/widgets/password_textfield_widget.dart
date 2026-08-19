@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PasswordTextfieldWidget extends StatefulWidget {
   const PasswordTextfieldWidget({super.key, required this.controller, required this.hintText, required this.onChanged});
@@ -55,15 +56,11 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
               ),
             ),
             obscureText: _isObscure,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Please enter your password';
-              }
-              if(value.trim().length < 6) {
-                return 'Password must be at least 6 characters';
-              }
-              return null;
-            },
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'Password is required'),
+              FormBuilderValidators.minLength(8, errorText: 'Password must be at least 8 characters'),
+              FormBuilderValidators.password(errorText: 'Include uppercase letter, lowercase letter'),
+            ])
           );
   }
 }

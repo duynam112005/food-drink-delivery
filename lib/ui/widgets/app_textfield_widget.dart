@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class AppTextfieldWidget extends StatefulWidget {
   const AppTextfieldWidget({
@@ -52,12 +53,10 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
                 : null,
           ),
           keyboardType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Please enter your email';
-            }
-            return null;
-          },
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: 'Email is required'),
+            FormBuilderValidators.email(errorText: 'Invalid email address'),
+          ])
         );
       },
     );
