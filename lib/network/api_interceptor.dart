@@ -7,7 +7,7 @@ class ApiInterceptor extends Interceptor{
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async{
     final token = await secureStorage.read('accessToken');
-    //options.headers['Authorization'] = 'Bearer $token';
+    options.headers['Authorization'] = 'Bearer $token';
     handler.next(options);
   }
 

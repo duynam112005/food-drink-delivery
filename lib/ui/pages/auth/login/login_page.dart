@@ -8,6 +8,7 @@ import 'package:food_drink_delivery/firebase/auth_service.dart';
 import 'package:food_drink_delivery/network/api_client.dart';
 import 'package:food_drink_delivery/network/dio_client.dart';
 import 'package:food_drink_delivery/local_data/secure_storage.dart';
+import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
 import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -21,8 +22,17 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthService _authService = AuthService();
-  final ApiClient _apiClient = ApiClient(dio: DioClient().dio);
-  SecureStorage secureStorage = SecureStorage();
+  late final SecureStorage secureStorage;
+  late final ApiClient _apiClient;
+  late final AuthRepository _authRepository;
+
+  @override
+  initState() {
+    super.initState();
+    _apiClient = ApiClient(dio: DioClient().dio);
+    _authRepository = AuthRepository(apiClient: _apiClient);
+    secureStorage = SecureStorage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,12 +95,6 @@ class _LoginPageState extends State<LoginPage> {
                           _authService,
                         ),
                         const SizedBox(height: 8),
-                        TextButton(
-                          child: Text('SignOut'),
-                          onPressed: () {
-                            _authService.signOut();
-                          },
-                        ),
                       ],
                     ),
                   ),
@@ -164,9 +168,11 @@ class _LoginPageState extends State<LoginPage> {
             if (firebaseIdToken == null || firebaseIdToken.isEmpty) {
               return;
             }
-            final social = await _apiClient.loginWithSocial(firebaseIdToken);
+            final social = await _authRepository.loginWithSocial(
+              firebaseIdToken,
+            );
             final accessToken = social.accessToken;
-            if (accessToken.isEmpty) {
+            if (accessToken!.isEmpty) {
               debugPrint('Access token is empty from API response');
               return;
             }

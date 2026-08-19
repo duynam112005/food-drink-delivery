@@ -1,21 +1,21 @@
 import 'package:dio/dio.dart';
-import 'package:food_drink_delivery/models/entities/auth/auth_results/auth_entity.dart';
+import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
 
 class ApiClient {
   final Dio dio;
   ApiClient({required this.dio});
 
   //login with social
-  Future<AuthEntity> loginWithSocial(String firebaseIdToken) async {
+  Future<AuthDTO> loginWithSocial(String firebaseIdToken) async {
     final response = await dio.post(
       '/v1/auth/social',
       data: {'firebaseIdToken': firebaseIdToken},
     );
-    return AuthEntity.fromJson(response.data['data']);
+    return AuthDTO.fromJson(response.data['data']);
   }
 
   //login with email and password
-  Future<AuthEntity> loginWithEmailAndPassword(
+  Future<AuthDTO> loginWithEmailAndPassword(
     String email,
     String password,
   ) async {
@@ -23,9 +23,48 @@ class ApiClient {
       '/v1/auth/login',
       data: {'identifier': email, 'password': password},
     );
-    return AuthEntity.fromJson(response.data['data']);
+    return AuthDTO.fromJson(response.data['data']);
   }
 
   //register
-  
+  Future<AuthDTO> register(
+    String fullName,
+    String phone,
+    String email,
+    String password,
+  ) async {
+    try {
+      final response = await dio.post(
+        '/v1/auth/register',
+        data: {
+          'fullName': fullName,
+          'phone': phone,
+          'email': email,
+          'password': password,
+        },
+      );
+      return AuthDTO.fromJson(response.data['data']);
+    } catch (e) {
+      throw Exception(
+        'Registration failed',
+      ); // Rethrow the exception to be handled by the caller
+    }
+  }
+
+  //verify otp with phone number
+  Future<AuthDTO> verifyOTPWithPhoneNumber(
+    String phoneNumber,
+    String code,
+  ) async {
+    final response = await dio.post(
+      '/v1/auth/phone/verify-otp',
+      data: {'phone': phoneNumber, 'code': code},
+    );
+    return AuthDTO.fromJson(response.data['data']);
+  }
+
+  //request otp phone
+  Future<void> requestOTPWithPhoneNumber(String phoneNumber) async {
+    await dio.post('/v1/auth/phone/request-otp', data: {'phone': phoneNumber});
+  }
 }

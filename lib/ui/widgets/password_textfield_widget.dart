@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 
@@ -36,7 +37,7 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
                 vertical: 12,
               ),
               filled: true,
-              fillColor: Color(0xFFF4F5F7),
+              fillColor: AppColors.cardColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -57,6 +58,9 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'Please enter your password';
+              }
+              if(value.trim().length < 6) {
+                return 'Password must be at least 6 characters';
               }
               return null;
             },

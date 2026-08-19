@@ -1,0 +1,102 @@
+import 'package:food_drink_delivery/models/entities/auth/auth_results/auth_entity.dart';
+import 'package:food_drink_delivery/models/entities/auth/user/user_entity.dart';
+import 'package:food_drink_delivery/network/api_client.dart';
+
+class AuthRepository {
+  final ApiClient apiClient;
+  AuthRepository({required this.apiClient});
+
+  //login with social
+  Future<AuthEntity> loginWithSocial(String firebaseIdToken) async {
+    try {
+      final response = await apiClient.loginWithSocial(firebaseIdToken);
+      return AuthEntity(
+        user: UserEntity(
+          id: response.user.id,
+          fullName: response.user.fullName,
+          email: response.user.email,
+          phone: response.user.phone,
+          avatarUrl: response.user.avatarUrl,
+          emailVerified: response.user.emailVerified,
+        ),
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        tokenType: response.tokenType,
+        expiresIn: response.expiresIn,
+      );
+    } catch (e) {
+      throw Exception('Login with social failed: $e');
+    }
+  }
+
+  //verify otp with phone number
+  Future<AuthEntity> verifyOTPWithPhoneNumber(
+    String phoneNumber,
+    String code,
+  ) async {
+    try {
+      final response = await apiClient.verifyOTPWithPhoneNumber(
+        phoneNumber,
+        code,
+      );
+      return AuthEntity(
+        user: UserEntity(
+          id: response.user.id,
+          fullName: response.user.fullName,
+          email: response.user.email,
+          phone: response.user.phone,
+          avatarUrl: response.user.avatarUrl,
+          emailVerified: response.user.emailVerified,
+        ),
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        tokenType: response.tokenType,
+        expiresIn: response.expiresIn,
+      );
+    } catch (e) {
+      throw Exception('Verify OTP with phone number failed: $e');
+    }
+  }
+
+  //register
+  Future<AuthEntity> register(
+    String fullName,
+    String phone,
+    String email,
+    String password,
+  ) async {
+    try {
+      final response = await apiClient.register(
+        fullName,
+        phone,
+        email,
+        password,
+      );
+      return AuthEntity(
+        user: UserEntity(
+          id: response.user.id,
+          fullName: response.user.fullName,
+          email: response.user.email,
+          phone: response.user.phone,
+          avatarUrl: response.user.avatarUrl,
+          emailVerified: response.user.emailVerified,
+        ),
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        tokenType: response.tokenType,
+        expiresIn: response.expiresIn,
+      );
+    } catch (e) {
+      throw Exception('Registration failed: $e');
+    }
+  }
+
+  //request otp phone
+  Future<void> requestOTPPhone(String phoneNumber) async {
+    try {
+      await apiClient.requestOTPWithPhoneNumber(phoneNumber);
+    } catch (e) {
+      throw Exception('Request OTP with phone number failed: $e');
+    }
+  }
+}

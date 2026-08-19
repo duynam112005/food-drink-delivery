@@ -9,4 +9,6 @@ class AppColors{
   static const Color neutral800 = Color(0xFF172B4D);
 
   static const Color red400 = Color(0xFFEF9F27);
+
+  static const Color cardColor = Color(0xFFF4F5F7);
 }

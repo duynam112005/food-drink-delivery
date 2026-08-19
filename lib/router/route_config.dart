@@ -3,6 +3,7 @@ import 'package:food_drink_delivery/ui/pages/app_start/onboarding_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/forgot_password/enter_email/enter_email_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_page.dart';
+import 'package:food_drink_delivery/ui/pages/auth/verify/enter_code_page.dart';
 import 'package:go_router/go_router.dart';
 
 class RouteConfig {
@@ -13,7 +14,7 @@ class RouteConfig {
   static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String enterEmail = '/enter_email';
-  static const String enterOtp = '/enter_otp';
+  static const String enterCode = '/enter_code';
   static const String resetPassword = 'reset_password';
   static const String register = '/register';
 
@@ -35,6 +36,14 @@ class RouteConfig {
         path: enterEmail,
         name: 'enter_email',
         builder: (context, state) => const EnterEmailPage(),
+      ),
+      GoRoute(
+        path: enterCode,
+        name: 'enter_code',
+        builder: (context, state) {
+          final identifier = state.extra as String;
+          return EnterCodePage(identifier: identifier);
+        },
       ),
       GoRoute(
         path: register,

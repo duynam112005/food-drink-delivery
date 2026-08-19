@@ -4,6 +4,7 @@ import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
 import 'package:food_drink_delivery/ui/widgets/text_button_widget.dart';
+import 'package:go_router/go_router.dart';
 
 class EnterEmailPage extends StatefulWidget {
   const EnterEmailPage({super.key});
@@ -85,7 +86,9 @@ class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
           const SizedBox(height: 24),
           TextButtonWidget(
             onTap:(){
-              if(_formKey.currentState!.validate()){}
+              if(_formKey.currentState!.validate()){
+                context.pushNamed('enter_code', extra: _emailController.text.trim());
+              }
             },
             text: 'Next'
           ),
