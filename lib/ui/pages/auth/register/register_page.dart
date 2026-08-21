@@ -1,13 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
-import 'package:food_drink_delivery/network/api_client.dart';
-import 'package:food_drink_delivery/network/dio_client.dart';
-import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
+import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/ui/pages/auth/register/register_provider.dart';
 import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
 import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -77,18 +79,41 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
   late final TextEditingController _phoneController;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-  late final _authRepository;
   final _formKey = GlobalKey<FormState>();
 
-  bool _isRegisterEnabled = false;
+  late bool _isRegisterEnabled;
 
   void _checkRegisterEnabled() {
     setState(() {
       _isRegisterEnabled =
           _nameController.text.trim().isNotEmpty &&
-          _emailController.text.contains('@gmail.com') &&
-          _passwordController.text.trim().length >= 6;
+          _phoneController.text.trim().isNotEmpty &&
+          _emailController.text.trim().isNotEmpty &&
+          _passwordController.text.trim().isNotEmpty;
     });
+  }
+
+  Future<void> _onRegister(BuildContext context, WidgetRef ref) async {
+    final fullName = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final phone = _phoneController.text.trim();
+    final password = _passwordController.text.trim();
+
+    await ref
+        .read(registerProviderProvider.notifier)
+        .onRegister(fullName, phone, email, password);
+    final state = ref.read(registerProviderProvider);
+    if (state.loadStatus == LoadStatus.success) {
+      context.pushNamed('enter_code', extra: phone);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            state.errorMessage ?? 'Failed to register. Please try again.',
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -98,9 +123,7 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
     _phoneController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    _authRepository = AuthRepository(
-      apiClient: ApiClient(dio: DioClient().dio),
-    );
+    _isRegisterEnabled = false;
   }
 
   @override
@@ -142,39 +165,38 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
             },
           ),
           const SizedBox(height: 16),
-          InkWell(
-            onTap: () async {
-              if (_formKey.currentState!.validate() && _isRegisterEnabled) {
-                final fullName = _nameController.text.trim();
-                final email = _emailController.text.trim();
-                final phone = _phoneController.text.trim();
-                final password = _passwordController.text.trim();
-
-                final response = await _authRepository.register(
-                  fullName,
-                  phone,
-                  email,
-                  password,
-                );
-                context.pushNamed('enter_code', extra: phone);
+          Consumer(
+            builder: (context, ref, _) {
+              final registerProvider = ref.watch(registerProviderProvider);
+              if (registerProvider.loadStatus == LoadStatus.loading) {
+                return const Center(child: CircularProgressIndicator());
               }
-            },
-            borderRadius: BorderRadius.circular(16),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: _isRegisterEnabled
-                    ? AppColors.red400
-                    : AppColors.red400.withOpacity(0.5),
+              return InkWell(
+                onTap: _isRegisterEnabled == false
+                    ? null
+                    : () {
+                        if (_formKey.currentState!.validate()) {
+                          _onRegister(context, ref);
+                        }
+                      },
                 borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                'Register',
-                style: AppTextStyles.whiteS14Medium,
-                textAlign: TextAlign.center,
-              ),
-            ),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: _isRegisterEnabled
+                        ? AppColors.red400
+                        : AppColors.red400.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    'Register',
+                    style: AppTextStyles.whiteS14Medium,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

@@ -53,10 +53,18 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
                 : null,
           ),
           keyboardType: TextInputType.emailAddress,
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: 'Email is required'),
-            FormBuilderValidators.email(errorText: 'Invalid email address'),
-          ])
+          validator: switch (widget.hintText){
+            'Email' => FormBuilderValidators.compose([
+              FormBuilderValidators.email(errorText: 'Invalid email address'),
+            ]),
+            'Your name' => FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'Name is required'),
+            ]),
+            'Phone number' => FormBuilderValidators.compose([
+              FormBuilderValidators.numeric(errorText: 'Invalid phone number'),
+            ]),
+            _ => null
+          }
         );
       },
     );

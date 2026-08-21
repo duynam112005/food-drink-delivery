@@ -33,21 +33,20 @@ class ApiClient {
     String email,
     String password,
   ) async {
-    try {
+    try{
       final response = await dio.post(
-        '/v1/auth/register',
-        data: {
-          'fullName': fullName,
-          'phone': phone,
-          'email': email,
-          'password': password,
-        },
-      );
-      return AuthDTO.fromJson(response.data['data']);
-    } catch (e) {
-      throw Exception(
-        'Registration failed',
-      ); // Rethrow the exception to be handled by the caller
+      '/v1/auth/register',
+      data: {
+        'fullName': fullName,
+        'phone': phone,
+        'email': email,
+        'password': password,
+        'refferalCode': 'DVZZXF',
+      },
+    );
+    return AuthDTO.fromJson(response.data['data']);
+    } on DioException catch (e){
+      throw Exception(e.response!.data['error']['message']);
     }
   }
 

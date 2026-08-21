@@ -80,14 +80,16 @@ class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
         children: [
           AppTextfieldWidget(
             controller: _emailController,
-            hintText: 'Enter your email',
+            hintText: 'Email',
             onChanged: (value) {},
           ),
           const SizedBox(height: 24),
           TextButtonWidget(
             onTap:(){
               if(_formKey.currentState!.validate()){
-                context.pushNamed('enter_code', extra: _emailController.text.trim());
+                //context.pushNamed('enter_code', extra: _emailController.text.trim());
+                context.pushNamed('login');
+                print('Email: ${_emailController.text.trim()}');
               }
             },
             text: 'Next'

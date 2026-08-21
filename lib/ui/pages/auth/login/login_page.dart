@@ -216,7 +216,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
   late final TextEditingController _passwordController;
   final ApiClient _apiClient = ApiClient(dio: DioClient().dio);
 
-  bool _isLoginEnabled = false;
+  late bool _isLoginEnabled;
 
   void _checkForm() {
     final email = _emailController.text.trim();
@@ -231,6 +231,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _isLoginEnabled = false;
   }
 
   @override
@@ -260,8 +261,8 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
           const SizedBox(height: 16),
           InkWell(
             borderRadius: BorderRadius.circular(16),
-            onTap: () async {
-              if (_formKey.currentState!.validate() && _isLoginEnabled) {
+            onTap: _isLoginEnabled == false ? null : () async {
+              if (_formKey.currentState!.validate()) {
                 final email = _emailController.text.trim();
                 final password = _passwordController.text.trim();
                 final data = await _apiClient.loginWithEmailAndPassword(

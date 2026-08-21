@@ -34,28 +34,24 @@ class AuthRepository {
     String phoneNumber,
     String code,
   ) async {
-    try {
-      final response = await apiClient.verifyOTPWithPhoneNumber(
-        phoneNumber,
-        code,
-      );
-      return AuthEntity(
-        user: UserEntity(
-          id: response.user.id,
-          fullName: response.user.fullName,
-          email: response.user.email,
-          phone: response.user.phone,
-          avatarUrl: response.user.avatarUrl,
-          emailVerified: response.user.emailVerified,
-        ),
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-        tokenType: response.tokenType,
-        expiresIn: response.expiresIn,
-      );
-    } catch (e) {
-      throw Exception('Verify OTP with phone number failed: $e');
-    }
+    final response = await apiClient.verifyOTPWithPhoneNumber(
+      phoneNumber,
+      code,
+    );
+    return AuthEntity(
+      user: UserEntity(
+        id: response.user.id,
+        fullName: response.user.fullName,
+        email: response.user.email,
+        phone: response.user.phone,
+        avatarUrl: response.user.avatarUrl,
+        emailVerified: response.user.emailVerified,
+      ),
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      tokenType: response.tokenType,
+      expiresIn: response.expiresIn,
+    );
   }
 
   //register
@@ -65,30 +61,21 @@ class AuthRepository {
     String email,
     String password,
   ) async {
-    try {
-      final response = await apiClient.register(
-        fullName,
-        phone,
-        email,
-        password,
-      );
-      return AuthEntity(
-        user: UserEntity(
-          id: response.user.id,
-          fullName: response.user.fullName,
-          email: response.user.email,
-          phone: response.user.phone,
-          avatarUrl: response.user.avatarUrl,
-          emailVerified: response.user.emailVerified,
-        ),
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-        tokenType: response.tokenType,
-        expiresIn: response.expiresIn,
-      );
-    } catch (e) {
-      throw Exception('Registration failed: $e');
-    }
+    final response = await apiClient.register(fullName, phone, email, password);
+    return AuthEntity(
+      user: UserEntity(
+        id: response.user.id,
+        fullName: response.user.fullName,
+        email: response.user.email,
+        phone: response.user.phone,
+        avatarUrl: response.user.avatarUrl,
+        emailVerified: response.user.emailVerified,
+      ),
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      tokenType: response.tokenType,
+      expiresIn: response.expiresIn,
+    );
   }
 
   //request otp phone
