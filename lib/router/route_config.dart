@@ -4,6 +4,7 @@ import 'package:food_drink_delivery/ui/pages/auth/forgot_password/enter_email/en
 import 'package:food_drink_delivery/ui/pages/auth/login/login_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/verify/enter_code_page.dart';
+import 'package:food_drink_delivery/ui/pages/home/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 class RouteConfig {
@@ -17,6 +18,8 @@ class RouteConfig {
   static const String enterCode = '/enter_code';
   static const String resetPassword = 'reset_password';
   static const String register = '/register';
+
+  static const String home = '/home';
 
   static final routes = GoRouter(
     initialLocation: onboarding,
@@ -50,6 +53,7 @@ class RouteConfig {
         name: 'register',
         builder: (context, state) => const RegisterPage(),
       ),
+      GoRoute(path: home, name: 'home', builder: (context, state)  => const HomePage()),
     ],
   );
 }

@@ -1,17 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
-import 'package:food_drink_delivery/firebase/auth_service.dart';
-import 'package:food_drink_delivery/network/api_client.dart';
-import 'package:food_drink_delivery/network/dio_client.dart';
-import 'package:food_drink_delivery/local_data/secure_storage.dart';
-import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
+import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/ui/pages/auth/login/login_provider.dart';
 import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
 import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,18 +21,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final AuthService _authService = AuthService();
-  late final SecureStorage secureStorage;
-  late final ApiClient _apiClient;
-  late final AuthRepository _authRepository;
-
-  @override
-  initState() {
-    super.initState();
-    _apiClient = ApiClient(dio: DioClient().dio);
-    _authRepository = AuthRepository(apiClient: _apiClient);
-    secureStorage = SecureStorage();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                           AppSvgs.facebookIcon,
                           'Continue with Facebook',
                           Color(0xFF1877F2).withOpacity(0.1),
-                          _authService,
                         ),
                         const SizedBox(height: 8),
                         _buildSocialLogin(
                           AppSvgs.googleIcon,
                           'Continue with Google',
                           Color(0xFFF4F5F7),
-                          _authService,
                         ),
                         const SizedBox(height: 8),
                       ],
@@ -135,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
             InkWell(
               onTap: () {
                 context.pushNamed('register');
-                print('Navigating to register page');
               },
               child: Text('Create new account', style: AppTextStyles.redS14),
             ),
@@ -154,51 +139,57 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildSocialLogin(
-    String iconPath,
-    String text,
-    Color color,
-    AuthService? authService,
-  ) {
-    return InkWell(
-      onTap: () async {
-        try {
-          if (authService != null) {
-            final firebaseIdToken = await authService.signInWithGoogle();
-            if (firebaseIdToken == null || firebaseIdToken.isEmpty) {
-              return;
-            }
-            final social = await _authRepository.loginWithSocial(
-              firebaseIdToken,
-            );
-            final accessToken = social.accessToken;
-            if (accessToken!.isEmpty) {
-              debugPrint('Access token is empty from API response');
-              return;
-            }
-            await secureStorage.write('accessToken', accessToken);
-            final savedToken = await secureStorage.read('accessToken');
-            debugPrint('Saved accessToken: $savedToken');
-          }
-        } catch (e) {
-          debugPrint('Error during social login: $e');
+  Widget _buildSocialLogin(String iconPath, String text, Color color) {
+    return Consumer(
+      builder: (context, ref, _) {
+        final loginSocial = ref.watch(
+          loginProvider.select((state) => state.socialLoginStatus),
+        );
+        if (loginSocial == LoadStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(color: AppColors.red400),
+          );
         }
+        return InkWell(
+          onTap: () async {
+            await ref.read(loginProvider.notifier).onLoginWithGoogle();
+            final loginSocialState = ref.read(
+              loginProvider.select((state) => state.socialLoginStatus),
+            );
+            if (loginSocialState == LoadStatus.success) {
+              context.goNamed('home');
+            } else {
+              final errorMessage = ref.read(
+                loginProvider.select((state) => state.errorMessage),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    errorMessage ??
+                        'Login with social failed. Please try again.',
+                  ),
+                ),
+              );
+            }
+          },
+
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                SvgPicture.asset(iconPath),
+                const SizedBox(width: 42),
+                Text(text, style: AppTextStyles.blackS14Medium),
+              ],
+            ),
+          ),
+        );
       },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(iconPath),
-            const SizedBox(width: 42),
-            Text(text, style: AppTextStyles.blackS14Medium),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -214,23 +205,16 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-  final ApiClient _apiClient = ApiClient(dio: DioClient().dio);
 
   late bool _isLoginEnabled;
-
-  void _checkForm() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    setState(() {
-      _isLoginEnabled = email.isNotEmpty && password.isNotEmpty;
-    });
-  }
 
   @override
   initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _emailController.addListener(_checkForm);
+    _passwordController.addListener(_checkForm);
     _isLoginEnabled = false;
   }
 
@@ -241,53 +225,91 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
     super.dispose();
   }
 
+  void _checkForm() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    bool enabled = email.isNotEmpty && password.isNotEmpty;
+    if (enabled != _isLoginEnabled) {
+      setState(() {
+        _isLoginEnabled = enabled;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          AppTextfieldWidget(
-            controller: _emailController,
-            hintText: 'Email',
-            onChanged: (value) => _checkForm(),
-          ),
+          AppTextfieldWidget(controller: _emailController, hintText: 'Email'),
           const SizedBox(height: 8),
           PasswordTextfieldWidget(
             controller: _passwordController,
             hintText: 'Password',
-            onChanged: (value) => _checkForm(),
           ),
           const SizedBox(height: 16),
-          InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: _isLoginEnabled == false ? null : () async {
-              if (_formKey.currentState!.validate()) {
-                final email = _emailController.text.trim();
-                final password = _passwordController.text.trim();
-                final data = await _apiClient.loginWithEmailAndPassword(
-                  email,
-                  password,
+          Consumer(
+            builder: (context, ref, _) {
+              final loginEmail = ref.watch(
+                loginProvider.select((state) => state.loadStatus),
+              );
+              if (loginEmail == LoadStatus.loading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.red400),
                 );
-                debugPrint('Login successful: ${data.accessToken}');
               }
-            },
-            radius: 16,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: _isLoginEnabled
-                    ? AppColors.red400
-                    : AppColors.red400.withOpacity(0.5),
+              return InkWell(
                 borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                'Login',
-                style: AppTextStyles.whiteS14Medium,
-                textAlign: TextAlign.center,
-              ),
-            ),
+                onTap: _isLoginEnabled == false
+                    ? null
+                    : () async {
+                        if (_formKey.currentState!.validate()) {
+                          final email = _emailController.text.trim();
+                          final password = _passwordController.text.trim();
+                          await ref
+                              .read(loginProvider.notifier)
+                              .onLoginEmailAndPassword(email, password);
+                          final loginEmailState = ref.read(
+                            loginProvider.select((state) => state.loadStatus),
+                          );
+                          if (loginEmailState == LoadStatus.success) {
+                            context.goNamed('home');
+                          } else {
+                            final errorMessage = ref.read(
+                              loginProvider.select(
+                                (state) => state.errorMessage,
+                              ),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  errorMessage ??
+                                      'Login failed. Please try again.',
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                radius: 16,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: _isLoginEnabled
+                        ? AppColors.red400
+                        : AppColors.red400.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    'Login',
+                    style: AppTextStyles.whiteS14Medium,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

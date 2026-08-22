@@ -1,13 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_provider.dart';
 import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
 import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
+import 'package:food_drink_delivery/ui/widgets/text_button_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -83,14 +83,40 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
 
   late bool _isRegisterEnabled;
 
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _phoneController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _nameController.addListener(_checkRegisterEnabled);
+    _phoneController.addListener(_checkRegisterEnabled);
+    _emailController.addListener(_checkRegisterEnabled);
+    _passwordController.addListener(_checkRegisterEnabled);
+    _isRegisterEnabled = false;
+  }
+
   void _checkRegisterEnabled() {
-    setState(() {
-      _isRegisterEnabled =
-          _nameController.text.trim().isNotEmpty &&
-          _phoneController.text.trim().isNotEmpty &&
-          _emailController.text.trim().isNotEmpty &&
-          _passwordController.text.trim().isNotEmpty;
-    });
+    bool enabled =
+        _nameController.text.trim().isNotEmpty &&
+        _phoneController.text.trim().isNotEmpty &&
+        _emailController.text.trim().isNotEmpty &&
+        _passwordController.text.trim().isNotEmpty;
+    if (enabled != _isRegisterEnabled) {
+      setState(() {
+        _isRegisterEnabled = enabled;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   Future<void> _onRegister(BuildContext context, WidgetRef ref) async {
@@ -100,30 +126,21 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
     final password = _passwordController.text.trim();
 
     await ref
-        .read(registerProviderProvider.notifier)
+        .read(registerProvider.notifier)
         .onRegister(fullName, phone, email, password);
-    final state = ref.read(registerProviderProvider);
-    if (state.loadStatus == LoadStatus.success) {
-      context.pushNamed('enter_code', extra: phone);
+    final registerState = ref.read(registerProvider.select((state) => state.loadStatus));
+    if (registerState == LoadStatus.success) {
+      context.goNamed('enter_code', extra: phone);
     } else {
+      final errorMessage = ref.read(registerProvider.select((state) => state.errorMessage));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            state.errorMessage ?? 'Failed to register. Please try again.',
+            errorMessage ?? 'Failed to register. Please try again.',
           ),
         ),
       );
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _phoneController = TextEditingController();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _isRegisterEnabled = false;
   }
 
   @override
@@ -135,66 +152,42 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
           AppTextfieldWidget(
             controller: _nameController,
             hintText: 'Your name',
-            onChanged: (value) {
-              _checkRegisterEnabled();
-            },
           ),
           const SizedBox(height: 8),
           AppTextfieldWidget(
             controller: _phoneController,
             hintText: 'Phone number',
-            onChanged: (value) {
-              _checkRegisterEnabled();
-            },
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: AppTextfieldWidget(
               controller: _emailController,
               hintText: 'Email',
-              onChanged: (value) {
-                _checkRegisterEnabled();
-              },
             ),
           ),
           PasswordTextfieldWidget(
             controller: _passwordController,
             hintText: 'Password',
-            onChanged: (value) {
-              _checkRegisterEnabled();
-            },
           ),
           const SizedBox(height: 16),
           Consumer(
             builder: (context, ref, _) {
-              final registerProvider = ref.watch(registerProviderProvider);
-              if (registerProvider.loadStatus == LoadStatus.loading) {
+              final registerStatus = ref.watch(
+                registerProvider.select((state) => state.loadStatus),
+              );
+              if (registerStatus == LoadStatus.loading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return InkWell(
+              return TextButtonWidget(
                 onTap: _isRegisterEnabled == false
-                    ? null
+                    ? () {}
                     : () {
                         if (_formKey.currentState!.validate()) {
                           _onRegister(context, ref);
                         }
                       },
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: _isRegisterEnabled
-                        ? AppColors.red400
-                        : AppColors.red400.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    'Register',
-                    style: AppTextStyles.whiteS14Medium,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                text: 'Register',
+                isEnabled: _isRegisterEnabled,
               );
             },
           ),

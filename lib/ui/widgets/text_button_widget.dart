@@ -5,7 +5,8 @@ import 'package:food_drink_delivery/common/app_text_styles.dart';
 class TextButtonWidget extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
-  const TextButtonWidget({super.key, required this.onTap, required this.text});
+  final bool _isEnabled;
+  const TextButtonWidget({super.key, required this.onTap, required this.text, required this._isEnabled});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,9 @@ class TextButtonWidget extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.red400,
+          color: _isEnabled
+                        ? AppColors.red400
+                        : AppColors.red400.withOpacity(0.5),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(

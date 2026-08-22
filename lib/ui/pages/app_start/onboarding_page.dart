@@ -96,6 +96,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         1 => 'Next',
                         _ => 'Get Started',
                       },
+                      isEnabled: true,
                     ),
                   ],
                 ),

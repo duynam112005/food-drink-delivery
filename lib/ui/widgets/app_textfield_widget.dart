@@ -10,12 +10,12 @@ class AppTextfieldWidget extends StatefulWidget {
     super.key,
     required this.controller,
     required this.hintText,
-    required this.onChanged,
+    //required this.onChanged,
   });
 
   final String hintText;
   final TextEditingController controller;
-  final Function onChanged;
+  //final Function onChanged;
 
   @override
   State<AppTextfieldWidget> createState() => _AppTextfieldWidgetState();
@@ -31,7 +31,7 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
 
         return TextFormField(
           controller: widget.controller,
-          onChanged: (value) => widget.onChanged(value),
+          //onChanged: (value) => widget.onChanged(value),
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: AppTextStyles.greyS14,

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
@@ -65,11 +64,29 @@ class BuildEnterEmailForm extends StatefulWidget {
 class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
+  late bool _isNextEnabled;
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController();
+    _isNextEnabled = false;
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  void checkForm(){
+    final email = _emailController.text.trim();
+    bool enabled = email.isNotEmpty;
+    if(enabled != _isNextEnabled){
+      setState(() {
+        _isNextEnabled = enabled;
+      });
+    }
   }
 
   @override
@@ -81,7 +98,6 @@ class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
           AppTextfieldWidget(
             controller: _emailController,
             hintText: 'Email',
-            onChanged: (value) {},
           ),
           const SizedBox(height: 24),
           TextButtonWidget(
@@ -89,10 +105,10 @@ class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
               if(_formKey.currentState!.validate()){
                 //context.pushNamed('enter_code', extra: _emailController.text.trim());
                 context.pushNamed('login');
-                print('Email: ${_emailController.text.trim()}');
               }
             },
-            text: 'Next'
+            text: 'Next',
+            isEnabled: _isNextEnabled,
           ),
         ],
       ),

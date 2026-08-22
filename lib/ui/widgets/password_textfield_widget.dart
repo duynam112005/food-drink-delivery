@@ -6,11 +6,11 @@ import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PasswordTextfieldWidget extends StatefulWidget {
-  const PasswordTextfieldWidget({super.key, required this.controller, required this.hintText, required this.onChanged});
+  const PasswordTextfieldWidget({super.key, required this.controller, required this.hintText});
 
   final TextEditingController controller;
   final String hintText;
-  final Function onChanged;
+  //final Function onChanged;
 
   @override
   State<PasswordTextfieldWidget> createState() => _PasswordTextfieldWidgetState();
@@ -29,7 +29,7 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
   Widget build(BuildContext context) {
     return TextFormField(
             controller: widget.controller,
-            onChanged: (value) => widget.onChanged(value),
+            //onChanged: (value) => widget.onChanged(value),
             decoration: InputDecoration(
               hintText: 'Password',
               hintStyle: AppTextStyles.greyS14,

@@ -49,7 +49,7 @@ class _EnterCodePageState extends State<EnterCodePage> {
     await ref
         .read(enterCodeProvider.notifier)
         .onVerifyCode(widget.identifier, _codeController.text);
-    context.pushNamed('login');
+    context.pushReplacementNamed('home');
   }
 
   @override
@@ -135,13 +135,14 @@ class _EnterCodePageState extends State<EnterCodePage> {
           const SizedBox(height: 40),
           Consumer(
             builder: (context, ref, _) {
-              final enterCode = ref.watch(enterCodeProvider);
-              if (enterCode.loadStatus == LoadStatus.loading) {
+              final enterCode = ref.watch(enterCodeProvider.select((state) => state.loadStatus));
+              if (enterCode == LoadStatus.loading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if (enterCode.loadStatus == LoadStatus.failure) {
+              if (enterCode == LoadStatus.failure) {
+                final enterCodeState = ref.read(enterCodeProvider.select((state) => state.errorMessage));
                 return Text(
-                  enterCode.errorMessage ?? 'An error occurred',
+                  enterCodeState ?? 'An error occurred',
                   style: AppTextStyles.errorS12Medium,
                 );
               }
@@ -152,6 +153,7 @@ class _EnterCodePageState extends State<EnterCodePage> {
                   }
                 },
                 text: 'Next',
+                isEnabled: false
               );
             },
           ),

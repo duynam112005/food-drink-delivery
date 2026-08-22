@@ -29,6 +29,25 @@ class AuthRepository {
     }
   }
 
+  //login with email and password
+  Future<AuthEntity> loginWithEmailAndPassword(String email, String password) async{
+    final response = await apiClient.loginWithEmailAndPassword(email, password);
+    return AuthEntity(
+      user: UserEntity(
+        id: response.user.id,
+        fullName: response.user.fullName,
+        email: response.user.email,
+        phone: response.user.phone,
+        avatarUrl: response.user.avatarUrl,
+        emailVerified: response.user.emailVerified,
+      ),
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      tokenType: response.tokenType,
+      expiresIn: response.expiresIn,
+    );
+  }
+
   //verify otp with phone number
   Future<AuthEntity> verifyOTPWithPhoneNumber(
     String phoneNumber,

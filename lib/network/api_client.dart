@@ -19,11 +19,15 @@ class ApiClient {
     String email,
     String password,
   ) async {
-    final response = await dio.post(
+    try{
+      final response = await dio.post(
       '/v1/auth/login',
       data: {'identifier': email, 'password': password},
     );
     return AuthDTO.fromJson(response.data['data']);
+    } on DioException catch(e){
+      throw Exception(e.response!.data['error']['message']);
+    }
   }
 
   //register
