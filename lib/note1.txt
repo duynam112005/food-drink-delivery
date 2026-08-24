@@ -1,7 +1,7 @@
 behavior
 1. logo app: splash native
 2. xử lý loading không làm mất button
-3. xử lý loading riêng sau khi chọn account google
+3. xử lý loading riêng sau khi chọn account google: done
 4. thay đổi icon eye khi click
 5. khi điền giá trị hợp lệ thì tự mất error valid ở form 
 6. Khi đăng nhập lỗi thì không hiển thị snackbar mà hiển thị popup hoặc dòng chữ đỏ báo lỗi

@@ -6,7 +6,8 @@ class TextButtonWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final String text;
   final bool _isEnabled;
-  const TextButtonWidget({super.key, required this.onTap, required this.text, required this._isEnabled});
+  final Widget? widget;
+  const TextButtonWidget({super.key, required this.onTap, required this.text, required this._isEnabled, this.widget});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +23,17 @@ class TextButtonWidget extends StatelessWidget {
                         : AppColors.red400Opacity50,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Text(
-          text,
-          style: AppTextStyles.whiteS14Medium,
-          textAlign: TextAlign.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: AppTextStyles.whiteS14Medium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(width: 8),
+            widget ?? const SizedBox.shrink(),
+          ],
         ),
       ),
     );

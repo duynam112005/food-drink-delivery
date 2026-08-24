@@ -254,11 +254,6 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
               final loginEmail = ref.watch(
                 loginProvider.select((state) => state.loadStatus),
               );
-              if (loginEmail == LoadStatus.loading) {
-                return const Center(
-                  child: CircularProgressIndicator(color: AppColors.red400),
-                );
-              }
               return TextButtonWidget(
                 onTap: _isLoginEnabled == false
                     ? null
@@ -266,6 +261,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                         if (_formKey.currentState!.validate()) {
                           final email = _emailController.text.trim();
                           final password = _passwordController.text.trim();
+                          _isLoginEnabled = false;
                           await ref
                               .read(loginProvider.notifier)
                               .onLoginEmailAndPassword(email, password);
@@ -275,6 +271,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                           if (loginEmailState == LoadStatus.success) {
                             context.goNamed(RouteConfig.home);
                           } else {
+                            _isLoginEnabled = true;
                             final errorMessage = ref.read(
                               loginProvider.select(
                                 (state) => state.errorMessage,
@@ -292,6 +289,16 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                         }
                       },
                 text: AppLocalizations.of(context)!.sign_in_button,
+                widget: loginEmail == LoadStatus.loading
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: AppColors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : null,
                 isEnabled: _isLoginEnabled,
               );
             },
