@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:food_drink_delivery/local_data/secure_storage.dart';
+import 'package:food_drink_delivery/storage/secure_storage.dart';
 
 class ApiInterceptor extends Interceptor{
   SecureStorage secureStorage = SecureStorage();
@@ -7,14 +7,18 @@ class ApiInterceptor extends Interceptor{
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async{
     final token = await secureStorage.read('accessToken');
-    options.headers['Authorization'] = 'Bearer $token';
+    if(token!=null){
+      options.headers['Authorization'] = 'Bearer $token';
+    }
     handler.next(options);
   }
 
+  @override
   void onResponse(Response response, ResponseInterceptorHandler handler){
     handler.next(response);
   }
 
+  @override
   void onError(DioException err, ErrorInterceptorHandler handler){
     handler.next(err);
   }

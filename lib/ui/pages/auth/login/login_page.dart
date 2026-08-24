@@ -1,93 +1,97 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/common/text_button_widget.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_provider.dart';
-import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
-import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
+import 'package:food_drink_delivery/common/app_textfield_widget.dart';
+import 'package:food_drink_delivery/common/password_textfield_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginSocial = ref.watch(
+      loginProvider.select((state) => state.socialLoginStatus),
+    );
+    ref.watch(
+      loginProvider.select((state) => state.loadStatus),
+    );
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 36),
-                    child: Column(
-                      children: [
-                        _buildLogo(),
-                        const Spacer(),
-                        _buildTitle(),
-                        const SizedBox(height: 24),
-                        BuildLoginForm(),
-                        const SizedBox(height: 16),
-                        _buildForgotPassword(),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: Color(0xFFF4F5F7),
-                                thickness: 2,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 16,
-                              ),
-                              child: Text('OR', style: AppTextStyles.greyS14),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: Color(0xFFF4F5F7),
-                                thickness: 2,
-                              ),
-                            ),
-                          ],
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 36),
+              child: Column(
+                children: [
+                  _buildLogo(),
+                  _buildTitle(context),
+                  const SizedBox(height: 24),
+                  BuildLoginForm(),
+                  const SizedBox(height: 16),
+                  _buildForgotPassword(context),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.cardColor,
+                          thickness: 2,
                         ),
-                        //const Spacer(),
-                        _buildSocialLogin(
-                          AppSvgs.facebookIcon,
-                          'Continue with Facebook',
-                          Color(0xFF1877F2).withOpacity(0.1),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 16,
                         ),
-                        const SizedBox(height: 8),
-                        _buildSocialLogin(
-                          AppSvgs.googleIcon,
-                          'Continue with Google',
-                          Color(0xFFF4F5F7),
+                        child: Text(
+                          AppLocalizations.of(context)!.or,
+                          style: AppTextStyles.greyS14,
                         ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: AppColors.cardColor,
+                          thickness: 2,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  _buildSocialLogin(
+                    context,
+                    ref,
+                    AppSvgs.googleIcon,
+                    AppLocalizations.of(context)!.connect_google_button,
+                    AppColors.cardColor,
+                  ),
+                  const SizedBox(height: 8),
+                ],
               ),
-            );
-          },
+            ),
+            loginSocial == LoadStatus.loading
+                ? Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    decoration: BoxDecoration(color: AppColors.blackOpacity50),
+                    child: const Center(
+                      child: CircularProgressIndicator(color: AppColors.red400),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ],
         ),
       ),
     );
@@ -100,96 +104,95 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTitle() {
-    return Column(
-      children: [
-        Text(
-          'Welcome Back',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.blackS24Bold,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Hello there, sign in to continue!',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.greyS14,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Or ', style: AppTextStyles.greyS14),
-            InkWell(
-              onTap: () {
-                context.pushNamed('register');
-              },
-              child: Text('Create new account', style: AppTextStyles.redS14),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildForgotPassword() {
-    return InkWell(
-      onTap: () {
-        context.pushReplacementNamed('enter_email');
-      },
-      child: Text('Forgot password?', style: AppTextStyles.redS12Medium),
-    );
-  }
-
-  Widget _buildSocialLogin(String iconPath, String text, Color color) {
-    return Consumer(
-      builder: (context, ref, _) {
-        final loginSocial = ref.watch(
-          loginProvider.select((state) => state.socialLoginStatus),
-        );
-        if (loginSocial == LoadStatus.loading) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.red400),
-          );
-        }
-        return InkWell(
-          onTap: () async {
-            await ref.read(loginProvider.notifier).onLoginWithGoogle();
-            final loginSocialState = ref.read(
-              loginProvider.select((state) => state.socialLoginStatus),
-            );
-            if (loginSocialState == LoadStatus.success) {
-              context.goNamed('home');
-            } else {
-              final errorMessage = ref.read(
-                loginProvider.select((state) => state.errorMessage),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    errorMessage ??
-                        'Login with social failed. Please try again.',
-                  ),
-                ),
-              );
-            }
-          },
-
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
+  Widget _buildTitle(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 50),
+      child: Column(
+        children: [
+          Text(
+            AppLocalizations.of(context)!.title_login,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.blackS24Bold,
+          ),
+          const SizedBox(height: 4),
+          Text.rich(
+            textAlign: TextAlign.center,
+            TextSpan(
               children: [
-                SvgPicture.asset(iconPath),
-                const SizedBox(width: 42),
-                Text(text, style: AppTextStyles.blackS14Medium),
+                TextSpan(
+                  text: AppLocalizations.of(context)!.subtitle_login,
+                  style: AppTextStyles.greyS14,
+                ),
+                TextSpan(
+                  text: AppLocalizations.of(context)!.create_account_button,
+                  style: AppTextStyles.redS14,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      context.pushNamed(RouteConfig.register);
+                    },
+                ),
               ],
             ),
           ),
-        );
+        ],
+      ),
+    );
+  }
+
+  Widget _buildForgotPassword(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        context.pushReplacementNamed(RouteConfig.enterCode);
       },
+      child: Text(
+        AppLocalizations.of(context)!.forgot_password_button,
+        style: AppTextStyles.redS12Medium,
+      ),
+    );
+  }
+
+  Widget _buildSocialLogin(BuildContext context, WidgetRef ref, String iconPath, String text, Color color) {
+    return InkWell(
+      radius: 16,
+      onTap: () async {
+        await ref.read(loginProvider.notifier).onLoginWithGoogle();
+        final loginSocialState = ref.read(
+          loginProvider.select((state) => state.socialLoginStatus),
+        );
+        if (loginSocialState == LoadStatus.success) {
+          context.goNamed(RouteConfig.home);
+        } else {
+          final errorMessage = ref.read(
+            loginProvider.select((state) => state.errorMessage),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                errorMessage ?? 'Login with social failed. Please try again.',
+              ),
+            ),
+          );
+        }
+      },
+
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            SvgPicture.asset(iconPath),
+            Expanded(
+              child: Center(
+                child: Text(text, style: AppTextStyles.blackS14Medium),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -244,10 +247,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
         children: [
           AppTextfieldWidget(controller: _emailController, hintText: 'Email'),
           const SizedBox(height: 8),
-          PasswordTextfieldWidget(
-            controller: _passwordController,
-            hintText: 'Password',
-          ),
+          PasswordTextfieldWidget(controller: _passwordController),
           const SizedBox(height: 16),
           Consumer(
             builder: (context, ref, _) {
@@ -259,8 +259,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                   child: CircularProgressIndicator(color: AppColors.red400),
                 );
               }
-              return InkWell(
-                borderRadius: BorderRadius.circular(16),
+              return TextButtonWidget(
                 onTap: _isLoginEnabled == false
                     ? null
                     : () async {
@@ -274,7 +273,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                             loginProvider.select((state) => state.loadStatus),
                           );
                           if (loginEmailState == LoadStatus.success) {
-                            context.goNamed('home');
+                            context.goNamed(RouteConfig.home);
                           } else {
                             final errorMessage = ref.read(
                               loginProvider.select(
@@ -292,22 +291,8 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                           }
                         }
                       },
-                radius: 16,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: _isLoginEnabled
-                        ? AppColors.red400
-                        : AppColors.red400.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    'Login',
-                    style: AppTextStyles.whiteS14Medium,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                text: AppLocalizations.of(context)!.sign_in_button,
+                isEnabled: _isLoginEnabled,
               );
             },
           ),

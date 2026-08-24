@@ -1,4 +1,4 @@
-import 'package:food_drink_delivery/local_data/secure_storage.dart';
+import 'package:food_drink_delivery/storage/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'secure_storage_provider.g.dart';
 

@@ -3,7 +3,7 @@ import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 
 class TextButtonWidget extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String text;
   final bool _isEnabled;
   const TextButtonWidget({super.key, required this.onTap, required this.text, required this._isEnabled});
@@ -19,7 +19,7 @@ class TextButtonWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: _isEnabled
                         ? AppColors.red400
-                        : AppColors.red400.withOpacity(0.5),
+                        : AppColors.red400Opacity50,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(

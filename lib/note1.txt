@@ -1,0 +1,23 @@
+behavior
+1. logo app: splash native
+2. xử lý loading không làm mất button
+3. xử lý loading riêng sau khi chọn account google
+4. thay đổi icon eye khi click
+5. khi điền giá trị hợp lệ thì tự mất error valid ở form 
+6. Khi đăng nhập lỗi thì không hiển thị snackbar mà hiển thị popup hoặc dòng chữ đỏ báo lỗi
+7. validate cho phone, tên phải là chữ, không có ký hiệu đặc biệt
+8. khi người dùng nhập pin code thì độ dài bằng 6 thì enable botton next, sau đó verify backend rồi mới trả về lỗi hoặc next
+
+
+
+code
+1. move component về common chính: done
+2. đổi firebase thành service để sau này dùng bên thứ 3 khác thì cũng đưa vào đó: done
+3. làm phần ngôn ngữ: done
+4. dùng RestApi cho api client, xử lý lại exception 
+5. dùng DI
+6. navigate thì gọi từ RouteConfig: done
+7. màn onboard chỉ đổi content, không có hiệu ứng: done
+8. khai báo color ở AppColor và gọi ở page: done
+9. logic xử lý để trong provider
+10. sửa lưu accessToken và refreshToken thành gọi đồng thời: done

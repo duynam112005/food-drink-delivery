@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'register_provider.dart';
+part of 'onboarding_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,52 +9,51 @@ part of 'register_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(Register)
-const registerProvider = RegisterProvider._();
+@ProviderFor(Onboarding)
+const onboardingProvider = OnboardingProvider._();
 
-final class RegisterProvider
-    extends $NotifierProvider<Register, RegisterState> {
-  const RegisterProvider._()
+final class OnboardingProvider extends $NotifierProvider<Onboarding, int> {
+  const OnboardingProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'registerProvider',
+        name: r'onboardingProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$registerHash();
+  String debugGetCreateSourceHash() => _$onboardingHash();
 
   @$internal
   @override
-  Register create() => Register();
+  Onboarding create() => Onboarding();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(RegisterState value) {
+  Override overrideWithValue(int value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<RegisterState>(value),
+      providerOverride: $SyncValueProvider<int>(value),
     );
   }
 }
 
-String _$registerHash() => r'65a60543ea9e67f4f7c2b5c329adf86b5bd839d4';
+String _$onboardingHash() => r'0f2e5c12d2188719af5a5de39cf954d6b38fe40e';
 
-abstract class _$Register extends $Notifier<RegisterState> {
-  RegisterState build();
+abstract class _$Onboarding extends $Notifier<int> {
+  int build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<RegisterState, RegisterState>;
+    final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<RegisterState, RegisterState>,
-              RegisterState,
+              AnyNotifier<int, int>,
+              int,
               Object?,
               Object?
             >;

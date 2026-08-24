@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/network/api_client.dart';
 import 'package:food_drink_delivery/network/dio_client.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/verify/enter_code_provider.dart';
-import 'package:food_drink_delivery/ui/widgets/text_button_widget.dart';
+import 'package:food_drink_delivery/common/text_button_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pinput/pinput.dart';
@@ -49,7 +51,7 @@ class _EnterCodePageState extends State<EnterCodePage> {
     await ref
         .read(enterCodeProvider.notifier)
         .onVerifyCode(widget.identifier, _codeController.text);
-    context.pushReplacementNamed('home');
+    context.pushReplacementNamed(RouteConfig.login);
   }
 
   @override
@@ -61,7 +63,7 @@ class _EnterCodePageState extends State<EnterCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 36),
         child: Column(
@@ -86,9 +88,12 @@ class _EnterCodePageState extends State<EnterCodePage> {
   Widget _buildTitle() {
     return Column(
       children: [
-        Text('Verify your identity', style: AppTextStyles.blackS24Bold),
         Text(
-          'We have just sent a code to ${widget.identifier}',
+          AppLocalizations.of(context)!.title_enter_code,
+          style: AppTextStyles.blackS24Bold,
+        ),
+        Text(
+          '${AppLocalizations.of(context)!.subtitle_enter_code} ${widget.identifier}',
           style: AppTextStyles.greyS14,
           textAlign: TextAlign.center,
         ),
@@ -102,14 +107,9 @@ class _EnterCodePageState extends State<EnterCodePage> {
       child: Column(
         children: [
           Pinput(
+            pinputAutovalidateMode: PinputAutovalidateMode.disabled,
             length: 6,
             controller: _codeController,
-            validator: (value) {
-              if (value == _validCode) {
-                return null;
-              }
-              return 'Invalid code';
-            },
             defaultPinTheme: PinTheme(
               width: 48,
               height: 48,
@@ -135,12 +135,16 @@ class _EnterCodePageState extends State<EnterCodePage> {
           const SizedBox(height: 40),
           Consumer(
             builder: (context, ref, _) {
-              final enterCode = ref.watch(enterCodeProvider.select((state) => state.loadStatus));
+              final enterCode = ref.watch(
+                enterCodeProvider.select((state) => state.loadStatus),
+              );
               if (enterCode == LoadStatus.loading) {
                 return const Center(child: CircularProgressIndicator());
               }
               if (enterCode == LoadStatus.failure) {
-                final enterCodeState = ref.read(enterCodeProvider.select((state) => state.errorMessage));
+                final enterCodeState = ref.read(
+                  enterCodeProvider.select((state) => state.errorMessage),
+                );
                 return Text(
                   enterCodeState ?? 'An error occurred',
                   style: AppTextStyles.errorS12Medium,
@@ -152,8 +156,8 @@ class _EnterCodePageState extends State<EnterCodePage> {
                     _verifyOTPWithPhoneNumber(context, ref);
                   }
                 },
-                text: 'Next',
-                isEnabled: false
+                text: AppLocalizations.of(context)!.next_button,
+                isEnabled: _codeController.text.trim().isNotEmpty,
               );
             },
           ),

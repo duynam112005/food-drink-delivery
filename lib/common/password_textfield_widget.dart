@@ -3,13 +3,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PasswordTextfieldWidget extends StatefulWidget {
-  const PasswordTextfieldWidget({super.key, required this.controller, required this.hintText});
+  const PasswordTextfieldWidget({super.key, required this.controller});
 
   final TextEditingController controller;
-  final String hintText;
   //final Function onChanged;
 
   @override
@@ -29,9 +29,8 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
   Widget build(BuildContext context) {
     return TextFormField(
             controller: widget.controller,
-            //onChanged: (value) => widget.onChanged(value),
             decoration: InputDecoration(
-              hintText: 'Password',
+              hintText: AppLocalizations.of(context)!.password_hint,
               hintStyle: AppTextStyles.greyS14,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,

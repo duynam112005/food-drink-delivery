@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:food_drink_delivery/ui/pages/app_start/onboarding_page.dart';
+import 'package:food_drink_delivery/ui/pages/onboarding/onboarding_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/forgot_password/enter_email/enter_email_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_page.dart';
@@ -16,7 +16,7 @@ class RouteConfig {
   static const String login = '/login';
   static const String enterEmail = '/enter_email';
   static const String enterCode = '/enter_code';
-  static const String resetPassword = 'reset_password';
+  static const String resetPassword = '/reset_password';
   static const String register = '/register';
 
   static const String home = '/home';
@@ -27,22 +27,22 @@ class RouteConfig {
     routes: [
       GoRoute(
         path: onboarding,
-        name: 'onboarding',
+        name: onboarding,
         builder: (context, state) => const OnboardingPage(),
       ),
       GoRoute(
         path: login,
-        name: 'login',
+        name: login,
         builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
         path: enterEmail,
-        name: 'enter_email',
+        name: enterEmail,
         builder: (context, state) => const EnterEmailPage(),
       ),
       GoRoute(
         path: enterCode,
-        name: 'enter_code',
+        name: enterCode,
         builder: (context, state) {
           final identifier = state.extra as String;
           return EnterCodePage(identifier: identifier);
@@ -50,10 +50,10 @@ class RouteConfig {
       ),
       GoRoute(
         path: register,
-        name: 'register',
+        name: register,
         builder: (context, state) => const RegisterPage(),
       ),
-      GoRoute(path: home, name: 'home', builder: (context, state)  => const HomePage()),
+      GoRoute(path: home, name: home, builder: (context, state)  => const HomePage()),
     ],
   );
 }

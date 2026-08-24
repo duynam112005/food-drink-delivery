@@ -53,6 +53,11 @@ dependencies:
   hooks_riverpod: ^3.0.3
   flutter_hooks: ^0.21.3
   riverpod_annotation: ^3.0.3
+  
+  flutter_localizations:
+    sdk: flutter
+
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -74,7 +79,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
-import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
-import 'package:food_drink_delivery/ui/widgets/text_button_widget.dart';
+import 'package:food_drink_delivery/common/app_textfield_widget.dart';
+import 'package:food_drink_delivery/common/text_button_widget.dart';
 import 'package:go_router/go_router.dart';
 
 class EnterEmailPage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _EnterEmailPageState extends State<EnterEmailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 36),

@@ -70,4 +70,10 @@ class ApiClient {
   Future<void> requestOTPWithPhoneNumber(String phoneNumber) async {
     await dio.post('/v1/auth/phone/request-otp', data: {'phone': phoneNumber});
   }
+
+  //refresh token
+  Future<AuthDTO> refreshToken(String refreshToken) async{
+    final response = await dio.post('/v1/auth/refresh', data: {'refreshToken': refreshToken});
+    return AuthDTO.fromJson(response.data['data']);
+  }
 }

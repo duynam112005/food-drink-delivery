@@ -1,13 +1,16 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_provider.dart';
-import 'package:food_drink_delivery/ui/widgets/app_textfield_widget.dart';
-import 'package:food_drink_delivery/ui/widgets/password_textfield_widget.dart';
-import 'package:food_drink_delivery/ui/widgets/text_button_widget.dart';
+import 'package:food_drink_delivery/common/app_textfield_widget.dart';
+import 'package:food_drink_delivery/common/password_textfield_widget.dart';
+import 'package:food_drink_delivery/common/text_button_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,7 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 36),
@@ -49,16 +52,16 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildTitle() {
     return Column(
       children: [
-        Text('Hello! Create Account', style: AppTextStyles.blackS24Bold),
+        Text(AppLocalizations.of(context)!.title_register, style: AppTextStyles.blackS24Bold),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Already have an account? ', style: AppTextStyles.greyS14),
+            Text(AppLocalizations.of(context)!.subtitle_register, style: AppTextStyles.greyS14),
             InkWell(
               onTap: () {
                 context.pop();
               },
-              child: Text('Sign In', style: AppTextStyles.redS14),
+              child: Text(AppLocalizations.of(context)!.sign_in_button, style: AppTextStyles.redS14),
             ),
           ],
         ),
@@ -130,7 +133,7 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
         .onRegister(fullName, phone, email, password);
     final registerState = ref.read(registerProvider.select((state) => state.loadStatus));
     if (registerState == LoadStatus.success) {
-      context.goNamed('enter_code', extra: phone);
+      context.goNamed(RouteConfig.enterCode, extra: phone);
     } else {
       final errorMessage = ref.read(registerProvider.select((state) => state.errorMessage));
       ScaffoldMessenger.of(context).showSnackBar(
@@ -151,23 +154,22 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
         children: [
           AppTextfieldWidget(
             controller: _nameController,
-            hintText: 'Your name',
+            hintText: AppLocalizations.of(context)!.your_name_hint,
           ),
           const SizedBox(height: 8),
           AppTextfieldWidget(
             controller: _phoneController,
-            hintText: 'Phone number',
+            hintText: AppLocalizations.of(context)!.phone_number_hint,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: AppTextfieldWidget(
               controller: _emailController,
-              hintText: 'Email',
+              hintText: AppLocalizations.of(context)!.email_hint,
             ),
           ),
           PasswordTextfieldWidget(
             controller: _passwordController,
-            hintText: 'Password',
           ),
           const SizedBox(height: 16),
           Consumer(
@@ -180,13 +182,13 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
               }
               return TextButtonWidget(
                 onTap: _isRegisterEnabled == false
-                    ? () {}
+                    ? null
                     : () {
                         if (_formKey.currentState!.validate()) {
                           _onRegister(context, ref);
                         }
                       },
-                text: 'Register',
+                text: AppLocalizations.of(context)!.register_button,
                 isEnabled: _isRegisterEnabled,
               );
             },

@@ -17,3 +17,20 @@
 
 3. Dùng package form_builder_validators để bắt lỗi FormField
    + Dùng .compose để có thể dùng nhiều validator thành 1 validator
+
+4. Interceptor
+- onRequest
+   + RequestOptions: gắn thêm các request để dio gửi lên server
+   + handler: để xử lý các request sau khi đã cấu hình xong. Kiểu bảo rằng request đã được interceptors xử lý xong, hãy cho request này tiếp tục
+
+- onError: xử lý khi server trả về lỗi. Khi request lên server và server trả về lỗi thì nó sẽ vào vào onError để xử lý
+   + DioException err: chứa thông tin lỗi 
+   + handler: 
+
+5. Màn onboarding
+- Xử lý next mà chỉ thay đổi content, không có hiệu ứng thì:
+   + vuốt: dùng GestureDetector + onHorizontalDragEnd
+   + xử lý thay đổi index
+
+6. Màn login
+- Xử lý 1 đoạn text trong đó có text thường và text button thì dùng text.rich + recognizer: TapGestureRecognizer của TextSpan
