@@ -28,7 +28,6 @@ class _EnterCodePageState extends State<EnterCodePage> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _codeController;
   late final _authRepository;
-  final String _validCode = '222222';
 
   @override
   void initState() {
@@ -48,10 +47,15 @@ class _EnterCodePageState extends State<EnterCodePage> {
     BuildContext context,
     WidgetRef ref,
   ) async {
-    await ref
+    ref
         .read(enterCodeProvider.notifier)
         .onVerifyCode(widget.identifier, _codeController.text);
-    context.pushReplacementNamed(RouteConfig.login);
+    final enterCodeStatus = ref.watch(
+      enterCodeProvider.select((state) => state.loadStatus),
+    );
+    if (enterCodeStatus == LoadStatus.success) {
+      context.pushReplacementNamed(RouteConfig.login);
+    }
   }
 
   @override
@@ -106,58 +110,81 @@ class _EnterCodePageState extends State<EnterCodePage> {
       key: _formKey,
       child: Column(
         children: [
-          Pinput(
-            pinputAutovalidateMode: PinputAutovalidateMode.disabled,
-            length: 6,
-            controller: _codeController,
-            defaultPinTheme: PinTheme(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.cardColor,
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            focusedPinTheme: PinTheme(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.cardColor,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.red400, width: 2),
-              ),
-            ),
-            errorBuilder: (errorText, pin) {
-              return Text('$errorText', style: AppTextStyles.errorS12Medium);
+          Consumer(
+            builder: (context, ref, _) {
+              return Pinput(
+                pinputAutovalidateMode: PinputAutovalidateMode.disabled,
+                length: 6,
+                onChanged: (value) {
+                  ref.read(enterCodeProvider.notifier).onCodeChanged(value);
+                },
+                controller: _codeController,
+                defaultPinTheme: PinTheme(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.cardColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                focusedPinTheme: PinTheme(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.cardColor,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.red400, width: 2),
+                  ),
+                ),
+                errorBuilder: (errorText, pin) {
+                  return Text(
+                    '$errorText',
+                    style: AppTextStyles.errorS12Medium,
+                  );
+                },
+                showCursor: false,
+              );
             },
-            showCursor: false,
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 10),
           Consumer(
             builder: (context, ref, _) {
               final enterCode = ref.watch(
                 enterCodeProvider.select((state) => state.loadStatus),
               );
-              if (enterCode == LoadStatus.loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (enterCode == LoadStatus.failure) {
-                final enterCodeState = ref.read(
-                  enterCodeProvider.select((state) => state.errorMessage),
-                );
-                return Text(
-                  enterCodeState ?? 'An error occurred',
-                  style: AppTextStyles.errorS12Medium,
-                );
-              }
-              return TextButtonWidget(
-                onTap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    _verifyOTPWithPhoneNumber(context, ref);
-                  }
-                },
-                text: AppLocalizations.of(context)!.next_button,
-                isEnabled: _codeController.text.trim().isNotEmpty,
+              final isEnable = ref.watch(
+                enterCodeProvider.select((state) => state.isEnable),
+              );
+              final errorMessage = ref.watch(
+                enterCodeProvider.select((state) => state.errorMessage),
+              );
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  enterCode == LoadStatus.failure
+                      ? Text(errorMessage!, style: AppTextStyles.errorS12Medium)
+                      : const SizedBox(height: 20),
+                      const SizedBox(height: 10),
+                  TextButtonWidget(
+                    onTap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _verifyOTPWithPhoneNumber(context, ref);
+                      }
+                    },
+                    text: AppLocalizations.of(context)!.next_button,
+                    widget: enterCode == LoadStatus.loading
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              color: AppColors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : null,
+                    isEnabled: isEnable,
+                  ),
+                ],
               );
             },
           ),

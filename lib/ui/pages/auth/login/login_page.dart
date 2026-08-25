@@ -25,60 +25,60 @@ class LoginPage extends ConsumerWidget {
     final loginSocial = ref.watch(
       loginProvider.select((state) => state.socialLoginStatus),
     );
-    ref.watch(
-      loginProvider.select((state) => state.loadStatus),
-    );
+    ref.watch(loginProvider.select((state) => state.loadStatus));
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36),
-              child: Column(
-                children: [
-                  _buildLogo(),
-                  _buildTitle(context),
-                  const SizedBox(height: 24),
-                  BuildLoginForm(),
-                  const SizedBox(height: 16),
-                  _buildForgotPassword(context),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.cardColor,
-                          thickness: 2,
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 36),
+                child: Column(
+                  children: [
+                    _buildLogo(),
+                    _buildTitle(context),
+                    const SizedBox(height: 24),
+                    BuildLoginForm(),
+                    const SizedBox(height: 16),
+                    _buildForgotPassword(context),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: AppColors.cardColor,
+                            thickness: 2,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 16,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 16,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.or,
+                            style: AppTextStyles.greyS14,
+                          ),
                         ),
-                        child: Text(
-                          AppLocalizations.of(context)!.or,
-                          style: AppTextStyles.greyS14,
+                        Expanded(
+                          child: Divider(
+                            color: AppColors.cardColor,
+                            thickness: 2,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.cardColor,
-                          thickness: 2,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  _buildSocialLogin(
-                    context,
-                    ref,
-                    AppSvgs.googleIcon,
-                    AppLocalizations.of(context)!.connect_google_button,
-                    AppColors.cardColor,
-                  ),
-                  const SizedBox(height: 8),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    _buildSocialLogin(
+                      context,
+                      ref,
+                      AppSvgs.googleIcon,
+                      AppLocalizations.of(context)!.connect_google_button,
+                      AppColors.cardColor,
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
               ),
             ),
             loginSocial == LoadStatus.loading
@@ -151,7 +151,13 @@ class LoginPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildSocialLogin(BuildContext context, WidgetRef ref, String iconPath, String text, Color color) {
+  Widget _buildSocialLogin(
+    BuildContext context,
+    WidgetRef ref,
+    String iconPath,
+    String text,
+    Color color,
+  ) {
     return InkWell(
       radius: 16,
       onTap: () async {
@@ -209,16 +215,11 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
-  late bool _isLoginEnabled;
-
   @override
   initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    _emailController.addListener(_checkForm);
-    _passwordController.addListener(_checkForm);
-    _isLoginEnabled = false;
   }
 
   @override
@@ -228,78 +229,90 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
     super.dispose();
   }
 
-  void _checkForm() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    bool enabled = email.isNotEmpty && password.isNotEmpty;
-    if (enabled != _isLoginEnabled) {
-      setState(() {
-        _isLoginEnabled = enabled;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          AppTextfieldWidget(controller: _emailController, hintText: 'Email'),
+          Consumer(
+            builder: (context, ref, _) {
+              return AppTextfieldWidget(
+                controller: _emailController,
+                hintText: 'Email',
+                onChanged: (value) {
+                  ref
+                      .read(loginProvider.notifier)
+                      .onEmailChanged(_emailController.text.trim());
+                },
+              );
+            },
+          ),
           const SizedBox(height: 8),
-          PasswordTextfieldWidget(controller: _passwordController),
+          Consumer(
+            builder: (context, ref, _) {
+              return PasswordTextfieldWidget(
+                controller: _passwordController,
+                onChanged: (value) {
+                  ref
+                      .read(loginProvider.notifier)
+                      .onPasswordChanged(_passwordController.text.trim());
+                },
+              );
+            },
+          ),
           const SizedBox(height: 16),
           Consumer(
             builder: (context, ref, _) {
-              final loginEmail = ref.watch(
+              final loginEmailStatus = ref.watch(
                 loginProvider.select((state) => state.loadStatus),
               );
-              return TextButtonWidget(
-                onTap: _isLoginEnabled == false
-                    ? null
-                    : () async {
-                        if (_formKey.currentState!.validate()) {
-                          final email = _emailController.text.trim();
-                          final password = _passwordController.text.trim();
-                          _isLoginEnabled = false;
-                          await ref
-                              .read(loginProvider.notifier)
-                              .onLoginEmailAndPassword(email, password);
-                          final loginEmailState = ref.read(
-                            loginProvider.select((state) => state.loadStatus),
-                          );
-                          if (loginEmailState == LoadStatus.success) {
-                            context.goNamed(RouteConfig.home);
-                          } else {
-                            _isLoginEnabled = true;
-                            final errorMessage = ref.read(
-                              loginProvider.select(
-                                (state) => state.errorMessage,
-                              ),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  errorMessage ??
-                                      'Login failed. Please try again.',
+              final isLoginEnabled = ref.watch(
+                loginProvider.select((state) => state.isEnable),
+              );
+              final errorMessage = ref.read(
+                loginProvider.select((state) => state.errorMessage),
+              );
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  loginEmailStatus == LoadStatus.failure
+                      ? Text(errorMessage!, style: AppTextStyles.errorS12Medium)
+                      : const SizedBox.shrink(),
+                  TextButtonWidget(
+                    onTap: isLoginEnabled == false
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              final email = _emailController.text.trim();
+                              final password = _passwordController.text.trim();
+                              await ref
+                                  .read(loginProvider.notifier)
+                                  .onLoginEmailAndPassword(email, password);
+                              final loginEmailState = ref.read(
+                                loginProvider.select(
+                                  (state) => state.loadStatus,
                                 ),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                text: AppLocalizations.of(context)!.sign_in_button,
-                widget: loginEmail == LoadStatus.loading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: AppColors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : null,
-                isEnabled: _isLoginEnabled,
+                              );
+                              if (loginEmailState == LoadStatus.success) {
+                                context.goNamed(RouteConfig.home);
+                              }
+                            }
+                          },
+                    text: AppLocalizations.of(context)!.sign_in_button,
+                    widget: loginEmailStatus == LoadStatus.loading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: AppColors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : null,
+                    isEnabled: isLoginEnabled,
+                  ),
+                ],
               );
             },
           ),

@@ -1,6 +1,7 @@
 import 'package:food_drink_delivery/models/entities/auth/auth_results/auth_entity.dart';
 import 'package:food_drink_delivery/models/entities/auth/user/user_entity.dart';
 import 'package:food_drink_delivery/network/api_client.dart';
+import 'package:food_drink_delivery/network/api_exception.dart';
 
 class AuthRepository {
   final ApiClient apiClient;
@@ -25,7 +26,7 @@ class AuthRepository {
         expiresIn: response.expiresIn,
       );
     } catch (e) {
-      throw Exception('Login with social failed: $e');
+      throw ApiException(e.toString());
     }
   }
 

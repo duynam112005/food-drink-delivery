@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
+import 'package:food_drink_delivery/network/api_exception.dart';
 
 class ApiClient {
   final Dio dio;
@@ -26,7 +27,7 @@ class ApiClient {
     );
     return AuthDTO.fromJson(response.data['data']);
     } on DioException catch(e){
-      throw Exception(e.response!.data['error']['message']);
+      throw ApiException(e.response!.data['error']['message']);
     }
   }
 
@@ -50,7 +51,7 @@ class ApiClient {
     );
     return AuthDTO.fromJson(response.data['data']);
     } on DioException catch (e){
-      throw Exception(e.response!.data['error']['message']);
+      throw ApiException(e.response!.data['error']['message']);
     }
   }
 
@@ -59,11 +60,15 @@ class ApiClient {
     String phoneNumber,
     String code,
   ) async {
-    final response = await dio.post(
+    try{
+      final response = await dio.post(
       '/v1/auth/phone/verify-otp',
       data: {'phone': phoneNumber, 'code': code},
     );
     return AuthDTO.fromJson(response.data['data']);
+    } on DioException catch (e){
+      throw ApiException(e.response!.data['error']['message']);
+    }
   }
 
   //request otp phone

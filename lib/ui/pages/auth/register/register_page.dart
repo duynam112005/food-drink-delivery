@@ -24,18 +24,22 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
+    final viewInsetOf = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 36),
-          child: Column(
-            children: [
-              _buildLogo(),
-              _buildTitle(),
-              const SizedBox(height: 36),
-              BuildRegisterForm(),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 36),
+            child: Column(
+              children: [
+                _buildLogo(),
+                _buildTitle(),
+                const SizedBox(height: 36),
+                BuildRegisterForm(),
+                SizedBox(height: viewInsetOf > 0 ? 36 : 0),
+              ],
+            ),
           ),
         ),
       ),
@@ -52,16 +56,25 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildTitle() {
     return Column(
       children: [
-        Text(AppLocalizations.of(context)!.title_register, style: AppTextStyles.blackS24Bold),
+        Text(
+          AppLocalizations.of(context)!.title_register,
+          style: AppTextStyles.blackS24Bold,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(AppLocalizations.of(context)!.subtitle_register, style: AppTextStyles.greyS14),
+            Text(
+              AppLocalizations.of(context)!.subtitle_register,
+              style: AppTextStyles.greyS14,
+            ),
             InkWell(
               onTap: () {
                 context.pop();
               },
-              child: Text(AppLocalizations.of(context)!.sign_in_button, style: AppTextStyles.redS14),
+              child: Text(
+                AppLocalizations.of(context)!.sign_in_button,
+                style: AppTextStyles.redS14,
+              ),
             ),
           ],
         ),
@@ -84,8 +97,6 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
   late final TextEditingController _passwordController;
   final _formKey = GlobalKey<FormState>();
 
-  late bool _isRegisterEnabled;
-
   @override
   void initState() {
     super.initState();
@@ -93,24 +104,6 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
     _phoneController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    _nameController.addListener(_checkRegisterEnabled);
-    _phoneController.addListener(_checkRegisterEnabled);
-    _emailController.addListener(_checkRegisterEnabled);
-    _passwordController.addListener(_checkRegisterEnabled);
-    _isRegisterEnabled = false;
-  }
-
-  void _checkRegisterEnabled() {
-    bool enabled =
-        _nameController.text.trim().isNotEmpty &&
-        _phoneController.text.trim().isNotEmpty &&
-        _emailController.text.trim().isNotEmpty &&
-        _passwordController.text.trim().isNotEmpty;
-    if (enabled != _isRegisterEnabled) {
-      setState(() {
-        _isRegisterEnabled = enabled;
-      });
-    }
   }
 
   @override
@@ -131,18 +124,11 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
     await ref
         .read(registerProvider.notifier)
         .onRegister(fullName, phone, email, password);
-    final registerState = ref.read(registerProvider.select((state) => state.loadStatus));
+    final registerState = ref.read(
+      registerProvider.select((state) => state.loadStatus),
+    );
     if (registerState == LoadStatus.success) {
-      context.goNamed(RouteConfig.enterCode, extra: phone);
-    } else {
-      final errorMessage = ref.read(registerProvider.select((state) => state.errorMessage));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            errorMessage ?? 'Failed to register. Please try again.',
-          ),
-        ),
-      );
+      context.pushNamed(RouteConfig.enterCode, extra: phone);
     }
   }
 
@@ -152,24 +138,60 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
       key: _formKey,
       child: Column(
         children: [
-          AppTextfieldWidget(
-            controller: _nameController,
-            hintText: AppLocalizations.of(context)!.your_name_hint,
+          Consumer(
+            builder: (context, ref, _) {
+              return AppTextfieldWidget(
+                controller: _nameController,
+                hintText: AppLocalizations.of(context)!.your_name_hint,
+                onChanged: (value) {
+                  ref
+                      .read(registerProvider.notifier)
+                      .onNameChanged(value.trim());
+                },
+              );
+            },
           ),
           const SizedBox(height: 8),
-          AppTextfieldWidget(
-            controller: _phoneController,
-            hintText: AppLocalizations.of(context)!.phone_number_hint,
+          Consumer(
+            builder: (context, ref, _) {
+              return AppTextfieldWidget(
+                controller: _phoneController,
+                hintText: AppLocalizations.of(context)!.phone_number_hint,
+                onChanged: (value) {
+                  ref
+                      .read(registerProvider.notifier)
+                      .onPhoneChanged(value.trim());
+                },
+              );
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: AppTextfieldWidget(
-              controller: _emailController,
-              hintText: AppLocalizations.of(context)!.email_hint,
-            ),
+          Consumer(
+            builder: (context, ref, _) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: AppTextfieldWidget(
+                  controller: _emailController,
+                  hintText: AppLocalizations.of(context)!.email_hint,
+                  onChanged: (value) {
+                    ref
+                        .read(registerProvider.notifier)
+                        .onEmailChanged(value.trim());
+                  },
+                ),
+              );
+            },
           ),
-          PasswordTextfieldWidget(
-            controller: _passwordController,
+          Consumer(
+            builder: (context, ref, _) {
+              return PasswordTextfieldWidget(
+                controller: _passwordController,
+                onChanged: (value) {
+                  ref
+                      .read(registerProvider.notifier)
+                      .onPasswordChanged(value.trim());
+                },
+              );
+            },
           ),
           const SizedBox(height: 16),
           Consumer(
@@ -177,19 +199,40 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
               final registerStatus = ref.watch(
                 registerProvider.select((state) => state.loadStatus),
               );
-              if (registerStatus == LoadStatus.loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return TextButtonWidget(
-                onTap: _isRegisterEnabled == false
-                    ? null
-                    : () {
-                        if (_formKey.currentState!.validate()) {
-                          _onRegister(context, ref);
-                        }
-                      },
-                text: AppLocalizations.of(context)!.register_button,
-                isEnabled: _isRegisterEnabled,
+              final errorMessage = ref.watch(
+                registerProvider.select((state) => state.errorMessage),
+              );
+              final isRegisterEnabled = ref.watch(
+                registerProvider.select((state) => state.isEnable),
+              );
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  registerStatus == LoadStatus.failure
+                      ? Text(errorMessage!, style: AppTextStyles.errorS12Medium)
+                      : const SizedBox.shrink(),
+                  TextButtonWidget(
+                    onTap: isRegisterEnabled == false
+                        ? null
+                        : () {
+                            if (_formKey.currentState!.validate()) {
+                              _onRegister(context, ref);
+                            }
+                          },
+                    text: AppLocalizations.of(context)!.register_button,
+                    widget: registerStatus == LoadStatus.loading
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: AppColors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : null,
+                    isEnabled: isRegisterEnabled,
+                  ),
+                ],
               );
             },
           ),

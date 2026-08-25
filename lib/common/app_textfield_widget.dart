@@ -10,12 +10,12 @@ class AppTextfieldWidget extends StatefulWidget {
     super.key,
     required this.controller,
     required this.hintText,
-    //required this.onChanged,
+    required this.onChanged,
   });
 
   final String hintText;
   final TextEditingController controller;
-  //final Function onChanged;
+  final Function(String)? onChanged;
 
   @override
   State<AppTextfieldWidget> createState() => _AppTextfieldWidgetState();
@@ -31,7 +31,8 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
 
         return TextFormField(
           controller: widget.controller,
-          //onChanged: (value) => widget.onChanged(value),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onChanged: widget.onChanged,
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: AppTextStyles.greyS14,
@@ -52,19 +53,32 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
                   )
                 : null,
           ),
-          keyboardType: TextInputType.emailAddress,
-          validator: switch (widget.hintText){
-            'Email' => FormBuilderValidators.compose([
+          validator: switch (widget.hintText) {
+            "Email" => FormBuilderValidators.compose([
               FormBuilderValidators.email(errorText: 'Invalid email address'),
             ]),
-            'Your name' => FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'Name is required'),
+            "Your name" || "Tên của bạn" => FormBuilderValidators.compose([
+              FormBuilderValidators.match(
+                RegExp(r'^[\p{L}]+(?:\s[\p{L}]+)*$', unicode: true),
+                errorText: 'Name must contain only letters',
+              ),
+              FormBuilderValidators.minLength(
+                2,
+                errorText: 'Name must be at least 2 characters long',
+              ),
             ]),
-            'Phone number' => FormBuilderValidators.compose([
-              FormBuilderValidators.numeric(errorText: 'Invalid phone number'),
+            "Phone number" || "Số điện thoại" => FormBuilderValidators.compose([
+              FormBuilderValidators.match(
+                RegExp(r'^\+84'),
+                errorText: 'Phone number must start with +84',
+              ),
+              FormBuilderValidators.match(
+                RegExp(r'^\+84[0-9]{9}$'),
+                errorText: 'Phone number must be 9 digits after +84',
+              )
             ]),
-            _ => null
-          }
+            _ => null,
+          },
         );
       },
     );

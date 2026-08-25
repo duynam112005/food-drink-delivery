@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginState {
 
- LoadStatus get loadStatus; LoadStatus get socialLoginStatus; String? get errorMessage;
+ LoadStatus get loadStatus; LoadStatus get socialLoginStatus; String get email; String get password; bool get isEnable; String? get errorMessage;
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LoginStateCopyWith<LoginState> get copyWith => _$LoginStateCopyWithImpl<LoginSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.socialLoginStatus, socialLoginStatus) || other.socialLoginStatus == socialLoginStatus)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.socialLoginStatus, socialLoginStatus) || other.socialLoginStatus == socialLoginStatus)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.isEnable, isEnable) || other.isEnable == isEnable)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,socialLoginStatus,errorMessage);
+int get hashCode => Object.hash(runtimeType,loadStatus,socialLoginStatus,email,password,isEnable,errorMessage);
 
 @override
 String toString() {
-  return 'LoginState(loadStatus: $loadStatus, socialLoginStatus: $socialLoginStatus, errorMessage: $errorMessage)';
+  return 'LoginState(loadStatus: $loadStatus, socialLoginStatus: $socialLoginStatus, email: $email, password: $password, isEnable: $isEnable, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LoginStateCopyWith<$Res>  {
   factory $LoginStateCopyWith(LoginState value, $Res Function(LoginState) _then) = _$LoginStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus loadStatus, LoadStatus socialLoginStatus, String? errorMessage
+ LoadStatus loadStatus, LoadStatus socialLoginStatus, String email, String password, bool isEnable, String? errorMessage
 });
 
 
@@ -62,11 +62,14 @@ class _$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? socialLoginStatus = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? socialLoginStatus = null,Object? email = null,Object? password = null,Object? isEnable = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,socialLoginStatus: null == socialLoginStatus ? _self.socialLoginStatus : socialLoginStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as LoadStatus,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
+as String,isEnable: null == isEnable ? _self.isEnable : isEnable // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -152,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  LoadStatus socialLoginStatus,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  LoadStatus socialLoginStatus,  String email,  String password,  bool isEnable,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.loadStatus,_that.socialLoginStatus,_that.errorMessage);case _:
+return $default(_that.loadStatus,_that.socialLoginStatus,_that.email,_that.password,_that.isEnable,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -173,10 +176,10 @@ return $default(_that.loadStatus,_that.socialLoginStatus,_that.errorMessage);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  LoadStatus socialLoginStatus,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  LoadStatus socialLoginStatus,  String email,  String password,  bool isEnable,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _LoginState():
-return $default(_that.loadStatus,_that.socialLoginStatus,_that.errorMessage);case _:
+return $default(_that.loadStatus,_that.socialLoginStatus,_that.email,_that.password,_that.isEnable,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +196,10 @@ return $default(_that.loadStatus,_that.socialLoginStatus,_that.errorMessage);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus loadStatus,  LoadStatus socialLoginStatus,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus loadStatus,  LoadStatus socialLoginStatus,  String email,  String password,  bool isEnable,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginState() when $default != null:
-return $default(_that.loadStatus,_that.socialLoginStatus,_that.errorMessage);case _:
+return $default(_that.loadStatus,_that.socialLoginStatus,_that.email,_that.password,_that.isEnable,_that.errorMessage);case _:
   return null;
 
 }
@@ -207,12 +210,15 @@ return $default(_that.loadStatus,_that.socialLoginStatus,_that.errorMessage);cas
 /// @nodoc
 
 
-class _LoginState implements LoginState {
-  const _LoginState({this.loadStatus = LoadStatus.initial, this.socialLoginStatus = LoadStatus.initial, this.errorMessage});
+class _LoginState extends LoginState {
+  const _LoginState({this.loadStatus = LoadStatus.initial, this.socialLoginStatus = LoadStatus.initial, this.email = '', this.password = '', this.isEnable = false, this.errorMessage}): super._();
   
 
 @override@JsonKey() final  LoadStatus loadStatus;
 @override@JsonKey() final  LoadStatus socialLoginStatus;
+@override@JsonKey() final  String email;
+@override@JsonKey() final  String password;
+@override@JsonKey() final  bool isEnable;
 @override final  String? errorMessage;
 
 /// Create a copy of LoginState
@@ -225,16 +231,16 @@ _$LoginStateCopyWith<_LoginState> get copyWith => __$LoginStateCopyWithImpl<_Log
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.socialLoginStatus, socialLoginStatus) || other.socialLoginStatus == socialLoginStatus)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.socialLoginStatus, socialLoginStatus) || other.socialLoginStatus == socialLoginStatus)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.isEnable, isEnable) || other.isEnable == isEnable)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,socialLoginStatus,errorMessage);
+int get hashCode => Object.hash(runtimeType,loadStatus,socialLoginStatus,email,password,isEnable,errorMessage);
 
 @override
 String toString() {
-  return 'LoginState(loadStatus: $loadStatus, socialLoginStatus: $socialLoginStatus, errorMessage: $errorMessage)';
+  return 'LoginState(loadStatus: $loadStatus, socialLoginStatus: $socialLoginStatus, email: $email, password: $password, isEnable: $isEnable, errorMessage: $errorMessage)';
 }
 
 
@@ -245,7 +251,7 @@ abstract mixin class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$
   factory _$LoginStateCopyWith(_LoginState value, $Res Function(_LoginState) _then) = __$LoginStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus loadStatus, LoadStatus socialLoginStatus, String? errorMessage
+ LoadStatus loadStatus, LoadStatus socialLoginStatus, String email, String password, bool isEnable, String? errorMessage
 });
 
 
@@ -262,11 +268,14 @@ class __$LoginStateCopyWithImpl<$Res>
 
 /// Create a copy of LoginState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? socialLoginStatus = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? socialLoginStatus = null,Object? email = null,Object? password = null,Object? isEnable = null,Object? errorMessage = freezed,}) {
   return _then(_LoginState(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,socialLoginStatus: null == socialLoginStatus ? _self.socialLoginStatus : socialLoginStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as LoadStatus,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
+as String,isEnable: null == isEnable ? _self.isEnable : isEnable // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

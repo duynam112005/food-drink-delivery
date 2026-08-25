@@ -7,10 +7,10 @@ import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PasswordTextfieldWidget extends StatefulWidget {
-  const PasswordTextfieldWidget({super.key, required this.controller});
+  const PasswordTextfieldWidget({super.key, required this.controller, required this.onChanged});
 
   final TextEditingController controller;
-  //final Function onChanged;
+  final Function(String)? onChanged;
 
   @override
   State<PasswordTextfieldWidget> createState() => _PasswordTextfieldWidgetState();
@@ -29,6 +29,7 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
   Widget build(BuildContext context) {
     return TextFormField(
             controller: widget.controller,
+            onChanged: widget.onChanged,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.password_hint,
               hintStyle: AppTextStyles.greyS14,
@@ -50,7 +51,7 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
                       toggleObscure();
                     }
                   },
-                  child: SvgPicture.asset(AppSvgs.eyeIcon),
+                  child: _isObscure ? SvgPicture.asset(AppSvgs.eyeIcon) : Icon(Icons.visibility_off, color: AppColors.neutral100),
                 ),
               ),
             ),
@@ -58,7 +59,7 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'Password is required'),
               FormBuilderValidators.minLength(8, errorText: 'Password must be at least 8 characters'),
-              FormBuilderValidators.password(errorText: 'Include uppercase letter, lowercase letter'),
+              FormBuilderValidators.password(errorText: 'Include uppercase, lowercase, number and special character'),
             ])
           );
   }

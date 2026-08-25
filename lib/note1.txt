@@ -1,12 +1,12 @@
 behavior
 1. logo app: splash native
-2. xử lý loading không làm mất button
+2. xử lý loading không làm mất button: done
 3. xử lý loading riêng sau khi chọn account google: done
-4. thay đổi icon eye khi click
-5. khi điền giá trị hợp lệ thì tự mất error valid ở form 
-6. Khi đăng nhập lỗi thì không hiển thị snackbar mà hiển thị popup hoặc dòng chữ đỏ báo lỗi
-7. validate cho phone, tên phải là chữ, không có ký hiệu đặc biệt
-8. khi người dùng nhập pin code thì độ dài bằng 6 thì enable botton next, sau đó verify backend rồi mới trả về lỗi hoặc next
+4. thay đổi icon eye khi click: done
+5. khi điền giá trị hợp lệ thì tự mất error valid ở form: done
+6. Khi đăng nhập lỗi thì không hiển thị snackbar mà hiển thị popup hoặc dòng chữ đỏ báo lỗi: done
+7. validate cho phone (phải là số, không có ký tự đặc biệt, bắt đầu là +84), tên phải là chữ, không có ký hiệu đặc biệt: done
+8. khi người dùng nhập pin code thì độ dài bằng 6 thì enable botton next, sau đó verify backend rồi mới trả về lỗi hoặc next: done
 
 
 

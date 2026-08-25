@@ -34,3 +34,7 @@
 
 6. Màn login
 - Xử lý 1 đoạn text trong đó có text thường và text button thì dùng text.rich + recognizer: TapGestureRecognizer của TextSpan
+
+7. Validate lỗi, tự động mất error khi điền đúng form
+- Dùng FormBuilderValidators.match là bắt lỗi chuẩn nhất
+- Tự động mất error: dùng autovalidateMode: AutovalidateMode.onUserInteraction của TextFormField

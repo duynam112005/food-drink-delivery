@@ -33,7 +33,7 @@ class Login extends _$Login {
         storage.write('accessToken', accessToken!),
         storage.write('refreshToken', refreshToken!),
       ]);
-
+      
       state = state.copyWith(socialLoginStatus: LoadStatus.success);
     } catch (e) {
       state = state.copyWith(
@@ -44,7 +44,7 @@ class Login extends _$Login {
   }
 
   Future<void> onLoginEmailAndPassword(String email, String password) async {
-    state = state.copyWith(loadStatus: LoadStatus.loading);
+    state = state.copyWith(loadStatus: LoadStatus.loading, isEnable: false);
     try {
       final authRepository = ref.read(authRepositoryProvider);
       final storage = ref.read(secureStorageProvider);
@@ -60,12 +60,23 @@ class Login extends _$Login {
         storage.write('refreshToken', refreshToken!),
       ]);
 
-      state = state.copyWith(loadStatus: LoadStatus.success);
+      state = state.copyWith(loadStatus: LoadStatus.success, isEnable: true);
     } catch (e) {
       state = state.copyWith(
         loadStatus: LoadStatus.failure,
         errorMessage: e.toString(),
+        isEnable: true,
       );
+      await Future.delayed(const Duration(seconds: 2));
+      state = state.copyWith(loadStatus: LoadStatus.initial);
     }
+  }
+
+  void onEmailChanged(String email) {
+    state = state.copyWith(email: email, isEnable: email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+  }
+
+  void onPasswordChanged(String password) {
+    state = state.copyWith(password: password, isEnable: state.email.trim().isNotEmpty && password.trim().isNotEmpty);
   }
 }

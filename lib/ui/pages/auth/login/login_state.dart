@@ -7,6 +7,11 @@ abstract class LoginState with _$LoginState{
   const factory LoginState({
     @Default(LoadStatus.initial) LoadStatus loadStatus,
     @Default(LoadStatus.initial) LoadStatus socialLoginStatus,
+    @Default('') String email,
+    @Default('') String password,
+    @Default(false) bool isEnable,
     String? errorMessage,
   })= _LoginState;
+
+  const LoginState._();
 }

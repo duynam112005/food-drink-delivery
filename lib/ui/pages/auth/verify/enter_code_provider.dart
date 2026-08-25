@@ -13,7 +13,7 @@ class EnterCode extends _$EnterCode {
   }
 
   Future<void> onVerifyCode(String phone, String code) async {
-    state = state.copyWith(loadStatus: LoadStatus.loading);
+    state = state.copyWith(loadStatus: LoadStatus.loading, isEnable: false);
     try {
       final authRepository = ref.read(authRepositoryProvider);
       final storage = ref.read(secureStorageProvider);
@@ -27,12 +27,19 @@ class EnterCode extends _$EnterCode {
         storage.write('refreshToken', refreshToken!),
       ]);
 
-      state = state.copyWith(loadStatus: LoadStatus.success);
+      state = state.copyWith(loadStatus: LoadStatus.success, isEnable: true);
     } catch (e) {
       state = state.copyWith(
         loadStatus: LoadStatus.failure,
         errorMessage: e.toString(),
+        isEnable: true,
       );
+      await Future.delayed(const Duration(seconds: 2));
+      state = state.copyWith(loadStatus: LoadStatus.initial);
     }
+  }
+
+  void onCodeChanged(String code){
+    state = state.copyWith(code: code, isEnable: code.trim().length==6);
   }
 }

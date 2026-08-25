@@ -6,6 +6,8 @@ part 'enter_code_state.freezed.dart';
 abstract class EnterCodeState with _$EnterCodeState{
   const factory EnterCodeState({
     @Default(LoadStatus.initial) LoadStatus loadStatus,
+    @Default('') String code,
+    @Default(false) bool isEnable,
     String? errorMessage,
   })= _EnterCodeState;
 }

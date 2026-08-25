@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EnterCodeState {
 
- LoadStatus get loadStatus; String? get errorMessage;
+ LoadStatus get loadStatus; String get code; bool get isEnable; String? get errorMessage;
 /// Create a copy of EnterCodeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EnterCodeStateCopyWith<EnterCodeState> get copyWith => _$EnterCodeStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnterCodeState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EnterCodeState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.code, code) || other.code == code)&&(identical(other.isEnable, isEnable) || other.isEnable == isEnable)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,errorMessage);
+int get hashCode => Object.hash(runtimeType,loadStatus,code,isEnable,errorMessage);
 
 @override
 String toString() {
-  return 'EnterCodeState(loadStatus: $loadStatus, errorMessage: $errorMessage)';
+  return 'EnterCodeState(loadStatus: $loadStatus, code: $code, isEnable: $isEnable, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $EnterCodeStateCopyWith<$Res>  {
   factory $EnterCodeStateCopyWith(EnterCodeState value, $Res Function(EnterCodeState) _then) = _$EnterCodeStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus loadStatus, String? errorMessage
+ LoadStatus loadStatus, String code, bool isEnable, String? errorMessage
 });
 
 
@@ -62,10 +62,12 @@ class _$EnterCodeStateCopyWithImpl<$Res>
 
 /// Create a copy of EnterCodeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? loadStatus = null,Object? code = null,Object? isEnable = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as LoadStatus,code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
+as String,isEnable: null == isEnable ? _self.isEnable : isEnable // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -151,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  String code,  bool isEnable,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EnterCodeState() when $default != null:
-return $default(_that.loadStatus,_that.errorMessage);case _:
+return $default(_that.loadStatus,_that.code,_that.isEnable,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -172,10 +174,10 @@ return $default(_that.loadStatus,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus loadStatus,  String code,  bool isEnable,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _EnterCodeState():
-return $default(_that.loadStatus,_that.errorMessage);case _:
+return $default(_that.loadStatus,_that.code,_that.isEnable,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +194,10 @@ return $default(_that.loadStatus,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus loadStatus,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus loadStatus,  String code,  bool isEnable,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _EnterCodeState() when $default != null:
-return $default(_that.loadStatus,_that.errorMessage);case _:
+return $default(_that.loadStatus,_that.code,_that.isEnable,_that.errorMessage);case _:
   return null;
 
 }
@@ -207,10 +209,12 @@ return $default(_that.loadStatus,_that.errorMessage);case _:
 
 
 class _EnterCodeState implements EnterCodeState {
-  const _EnterCodeState({this.loadStatus = LoadStatus.initial, this.errorMessage});
+  const _EnterCodeState({this.loadStatus = LoadStatus.initial, this.code = '', this.isEnable = false, this.errorMessage});
   
 
 @override@JsonKey() final  LoadStatus loadStatus;
+@override@JsonKey() final  String code;
+@override@JsonKey() final  bool isEnable;
 @override final  String? errorMessage;
 
 /// Create a copy of EnterCodeState
@@ -223,16 +227,16 @@ _$EnterCodeStateCopyWith<_EnterCodeState> get copyWith => __$EnterCodeStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnterCodeState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EnterCodeState&&(identical(other.loadStatus, loadStatus) || other.loadStatus == loadStatus)&&(identical(other.code, code) || other.code == code)&&(identical(other.isEnable, isEnable) || other.isEnable == isEnable)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,loadStatus,errorMessage);
+int get hashCode => Object.hash(runtimeType,loadStatus,code,isEnable,errorMessage);
 
 @override
 String toString() {
-  return 'EnterCodeState(loadStatus: $loadStatus, errorMessage: $errorMessage)';
+  return 'EnterCodeState(loadStatus: $loadStatus, code: $code, isEnable: $isEnable, errorMessage: $errorMessage)';
 }
 
 
@@ -243,7 +247,7 @@ abstract mixin class _$EnterCodeStateCopyWith<$Res> implements $EnterCodeStateCo
   factory _$EnterCodeStateCopyWith(_EnterCodeState value, $Res Function(_EnterCodeState) _then) = __$EnterCodeStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus loadStatus, String? errorMessage
+ LoadStatus loadStatus, String code, bool isEnable, String? errorMessage
 });
 
 
@@ -260,10 +264,12 @@ class __$EnterCodeStateCopyWithImpl<$Res>
 
 /// Create a copy of EnterCodeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? loadStatus = null,Object? code = null,Object? isEnable = null,Object? errorMessage = freezed,}) {
   return _then(_EnterCodeState(
 loadStatus: null == loadStatus ? _self.loadStatus : loadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as LoadStatus,code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
+as String,isEnable: null == isEnable ? _self.isEnable : isEnable // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

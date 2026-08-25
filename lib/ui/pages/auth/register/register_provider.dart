@@ -18,7 +18,7 @@ class Register extends _$Register {
     String email,
     String password,
   ) async {
-    state = state.copyWith(loadStatus: LoadStatus.loading);
+    state = state.copyWith(loadStatus: LoadStatus.loading,isEnable: false);
     try {
       final authRepository = ref.read(authRepositoryProvider);
       final storage = ref.read(secureStorageProvider);
@@ -37,12 +37,32 @@ class Register extends _$Register {
         storage.write('refreshToken', refreshToken!),
       ]);
 
-      state = state.copyWith(loadStatus: LoadStatus.success);
+      state = state.copyWith(loadStatus: LoadStatus.success, isEnable: true);
     } catch (e) {
       state = state.copyWith(
         loadStatus: LoadStatus.failure,
         errorMessage: e.toString(),
+        isEnable: true,
       );
+      await Future.delayed(const Duration(seconds: 2));
+      state = state.copyWith(loadStatus: LoadStatus.initial);
     }
   }
+
+  void onNameChanged(String name){
+    state = state.copyWith(name: name, isEnable: name.trim().isNotEmpty && state.phone.trim().isNotEmpty && state.email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+  }
+
+  void onPhoneChanged(String phone){
+    state = state.copyWith(phone: phone, isEnable: state.name.trim().isNotEmpty && phone.trim().isNotEmpty && state.email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+  }
+
+  void onEmailChanged(String email){
+    state = state.copyWith(email: email, isEnable: state.name.trim().isNotEmpty && state.phone.trim().isNotEmpty && email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+  }
+
+  void onPasswordChanged(String password){
+    state = state.copyWith(password: password, isEnable: state.name.trim().isNotEmpty && state.phone.trim().isNotEmpty && state.email.trim().isNotEmpty && password.trim().isNotEmpty);
+  }
+  
 }

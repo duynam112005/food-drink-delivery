@@ -99,6 +99,7 @@ class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
           AppTextfieldWidget(
             controller: _emailController,
             hintText: 'Email',
+            onChanged: (value){},
           ),
           const SizedBox(height: 24),
           TextButtonWidget(
