@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
 import 'package:food_drink_delivery/network/api_exception.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 class ApiClient {
   final Dio dio;
   ApiClient({required this.dio});

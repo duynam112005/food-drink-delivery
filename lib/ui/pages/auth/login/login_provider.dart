@@ -1,13 +1,18 @@
+import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/services/auth_service.dart';
-import 'package:food_drink_delivery/storage/secure_storage_provider.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
-import 'package:food_drink_delivery/repositories/auth/auth_repository_provider.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../../di/injection.dart';
+import '../../../../network/api_exception.dart';
+import '../../../../storage/secure_storage.dart';
 part 'login_provider.g.dart';
 
 @riverpod
 class Login extends _$Login {
+  final authRepository = sl<AuthRepository>();
+  final storage = sl<SecureStorage>();
   @override
   LoginState build() {
     return const LoginState();
@@ -15,13 +20,11 @@ class Login extends _$Login {
 
   Future<void> onLoginWithGoogle() async {
     try {
-      final AuthService authService = AuthService();
-      final authRepository = ref.read(authRepositoryProvider);
-      final storage = ref.read(secureStorageProvider);
+      final authService = sl<AuthService>();
 
       final firebaseIdToken = await authService.signInWithGoogle();
       if (firebaseIdToken == null) {
-        throw Exception('You have not signed in with Google');
+        throw ApiException('You have not signed in with Google');
       }
       state = state.copyWith(socialLoginStatus: LoadStatus.loading);
       final result = await authRepository.loginWithSocial(firebaseIdToken);
@@ -46,8 +49,6 @@ class Login extends _$Login {
   Future<void> onLoginEmailAndPassword(String email, String password) async {
     state = state.copyWith(loadStatus: LoadStatus.loading, isEnable: false);
     try {
-      final authRepository = ref.read(authRepositoryProvider);
-      final storage = ref.read(secureStorageProvider);
       final result = await authRepository.loginWithEmailAndPassword(
         email,
         password,

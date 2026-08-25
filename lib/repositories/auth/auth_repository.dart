@@ -2,7 +2,9 @@ import 'package:food_drink_delivery/models/entities/auth/auth_results/auth_entit
 import 'package:food_drink_delivery/models/entities/auth/user/user_entity.dart';
 import 'package:food_drink_delivery/network/api_client.dart';
 import 'package:food_drink_delivery/network/api_exception.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 class AuthRepository {
   final ApiClient apiClient;
   AuthRepository({required this.apiClient});

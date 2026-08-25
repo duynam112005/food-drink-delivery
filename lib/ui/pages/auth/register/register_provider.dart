@@ -1,12 +1,16 @@
-import 'package:food_drink_delivery/storage/secure_storage_provider.dart';
+import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
-import 'package:food_drink_delivery/repositories/auth/auth_repository_provider.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../../di/injection.dart';
+import '../../../../storage/secure_storage.dart';
 part 'register_provider.g.dart';
 
 @riverpod
 class Register extends _$Register {
+  final authRepository = sl<AuthRepository>();
+  final storage = sl<SecureStorage>();
   @override
   RegisterState build() {
     return const RegisterState();
@@ -20,8 +24,6 @@ class Register extends _$Register {
   ) async {
     state = state.copyWith(loadStatus: LoadStatus.loading,isEnable: false);
     try {
-      final authRepository = ref.read(authRepositoryProvider);
-      final storage = ref.read(secureStorageProvider);
       final result = await authRepository.register(
         name,
         phone,

@@ -15,7 +15,7 @@ code
 2. đổi firebase thành service để sau này dùng bên thứ 3 khác thì cũng đưa vào đó: done
 3. làm phần ngôn ngữ: done
 4. dùng RestApi cho api client, xử lý lại exception 
-5. dùng DI
+5. dùng DI: done
 6. navigate thì gọi từ RouteConfig: done
 7. màn onboard chỉ đổi content, không có hiệu ứng: done
 8. khai báo color ở AppColor và gọi ở page: done
