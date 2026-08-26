@@ -1,5 +1,5 @@
 behavior
-1. logo app: splash native
+1. logo app: splash native: done
 2. xử lý loading không làm mất button: done
 3. xử lý loading riêng sau khi chọn account google: done
 4. thay đổi icon eye khi click: done
@@ -14,7 +14,7 @@ code
 1. move component về common chính: done
 2. đổi firebase thành service để sau này dùng bên thứ 3 khác thì cũng đưa vào đó: done
 3. làm phần ngôn ngữ: done
-4. dùng RestApi cho api client, xử lý lại exception 
+4. dùng RestApi cho api client, xử lý lại exception: done
 5. dùng DI: done
 6. navigate thì gọi từ RouteConfig: done
 7. màn onboard chỉ đổi content, không có hiệu ứng: done

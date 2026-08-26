@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:food_drink_delivery/models/entities/auth/auth_results/auth_entity.dart';
 import 'package:food_drink_delivery/models/entities/auth/user/user_entity.dart';
 import 'package:food_drink_delivery/network/api_client.dart';
@@ -12,20 +13,21 @@ class AuthRepository {
   //login with social
   Future<AuthEntity> loginWithSocial(String firebaseIdToken) async {
     try {
-      final response = await apiClient.loginWithSocial(firebaseIdToken);
+      final response = await apiClient.loginWithSocial({'firebaseIdToken': firebaseIdToken});
+      final results = response.data;
       return AuthEntity(
         user: UserEntity(
-          id: response.user.id,
-          fullName: response.user.fullName,
-          email: response.user.email,
-          phone: response.user.phone,
-          avatarUrl: response.user.avatarUrl,
-          emailVerified: response.user.emailVerified,
+          id: results.user.id,
+          fullName: results.user.fullName,
+          email: results.user.email,
+          phone: results.user.phone,
+          avatarUrl: results.user.avatarUrl,
+          emailVerified: results.user.emailVerified,
         ),
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-        tokenType: response.tokenType,
-        expiresIn: response.expiresIn,
+        accessToken: results.accessToken,
+        refreshToken: results.refreshToken,
+        tokenType: results.tokenType,
+        expiresIn: results.expiresIn,
       );
     } catch (e) {
       throw ApiException(e.toString());
@@ -34,21 +36,26 @@ class AuthRepository {
 
   //login with email and password
   Future<AuthEntity> loginWithEmailAndPassword(String email, String password) async{
-    final response = await apiClient.loginWithEmailAndPassword(email, password);
+    try{
+      final response = await apiClient.loginWithEmailAndPassword({'identifier': email, 'password': password});
+      final results = response.data;
     return AuthEntity(
       user: UserEntity(
-        id: response.user.id,
-        fullName: response.user.fullName,
-        email: response.user.email,
-        phone: response.user.phone,
-        avatarUrl: response.user.avatarUrl,
-        emailVerified: response.user.emailVerified,
+        id: results.user.id,
+        fullName: results.user.fullName,
+        email: results.user.email,
+        phone: results.user.phone,
+        avatarUrl: results.user.avatarUrl,
+        emailVerified: results.user.emailVerified,
       ),
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
-      tokenType: response.tokenType,
-      expiresIn: response.expiresIn,
+      accessToken: results.accessToken,
+      refreshToken: results.refreshToken,
+      tokenType: results.tokenType,
+      expiresIn: results.expiresIn,
     );
+    }on DioException catch(e){
+      throw ApiExceptionMapper().map(e);
+    }
   }
 
   //verify otp with phone number
@@ -56,24 +63,28 @@ class AuthRepository {
     String phoneNumber,
     String code,
   ) async {
-    final response = await apiClient.verifyOTPWithPhoneNumber(
-      phoneNumber,
-      code,
+    try{
+      final response = await apiClient.verifyOTPWithPhoneNumber(
+      {'phone': phoneNumber, 'code': code}
     );
+    final results = response.data;
     return AuthEntity(
       user: UserEntity(
-        id: response.user.id,
-        fullName: response.user.fullName,
-        email: response.user.email,
-        phone: response.user.phone,
-        avatarUrl: response.user.avatarUrl,
-        emailVerified: response.user.emailVerified,
+        id: results.user.id,
+        fullName: results.user.fullName,
+        email: results.user.email,
+        phone: results.user.phone,
+        avatarUrl: results.user.avatarUrl,
+        emailVerified: results.user.emailVerified,
       ),
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
-      tokenType: response.tokenType,
-      expiresIn: response.expiresIn,
+      accessToken: results.accessToken,
+      refreshToken: results.refreshToken,
+      tokenType: results.tokenType,
+      expiresIn: results.expiresIn,
     );
+    } on DioException catch(e){
+      throw ApiExceptionMapper().map(e);
+    }
   }
 
   //register
@@ -83,29 +94,38 @@ class AuthRepository {
     String email,
     String password,
   ) async {
-    final response = await apiClient.register(fullName, phone, email, password);
+    try{
+      final response = await apiClient.register({'fullName': fullName,
+        'phone': phone,
+        'email': email,
+        'password': password,
+        'refferalCode': 'DVZZXF',});
+        final results = response.data;
     return AuthEntity(
       user: UserEntity(
-        id: response.user.id,
-        fullName: response.user.fullName,
-        email: response.user.email,
-        phone: response.user.phone,
-        avatarUrl: response.user.avatarUrl,
-        emailVerified: response.user.emailVerified,
+        id: results.user.id,
+        fullName: results.user.fullName,
+        email: results.user.email,
+        phone: results.user.phone,
+        avatarUrl: results.user.avatarUrl,
+        emailVerified: results.user.emailVerified,
       ),
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
-      tokenType: response.tokenType,
-      expiresIn: response.expiresIn,
+      accessToken: results.accessToken,
+      refreshToken: results.refreshToken,
+      tokenType: results.tokenType,
+      expiresIn: results.expiresIn,
     );
+    } on DioException catch(e){
+      throw ApiExceptionMapper().map(e);
+    }
   }
 
   //request otp phone
   Future<void> requestOTPPhone(String phoneNumber) async {
     try {
-      await apiClient.requestOTPWithPhoneNumber(phoneNumber);
-    } catch (e) {
-      throw Exception('Request OTP with phone number failed: $e');
+      await apiClient.requestOTPWithPhoneNumber({'phone': phoneNumber});
+    } on DioException catch(e){
+      throw ApiExceptionMapper().map(e);
     }
   }
 }

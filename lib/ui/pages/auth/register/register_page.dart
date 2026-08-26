@@ -123,13 +123,13 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
 
     await ref
         .read(registerProvider.notifier)
-        .onRegister(fullName, phone, email, password);
-    final registerState = ref.read(
-      registerProvider.select((state) => state.loadStatus),
-    );
-    if (registerState == LoadStatus.success) {
-      context.pushNamed(RouteConfig.enterCode, extra: phone);
-    }
+        .onRegister(fullName, phone, email, password, ref, context);
+    // final registerState = ref.read(
+    //   registerProvider.select((state) => state.loadStatus),
+    // );
+    // if (registerState == LoadStatus.success) {
+    //   context.pushNamed(RouteConfig.enterCode, extra: phone);
+    // }
   }
 
   @override

@@ -288,15 +288,12 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                               final password = _passwordController.text.trim();
                               await ref
                                   .read(loginProvider.notifier)
-                                  .onLoginEmailAndPassword(email, password);
-                              final loginEmailState = ref.read(
-                                loginProvider.select(
-                                  (state) => state.loadStatus,
-                                ),
-                              );
-                              if (loginEmailState == LoadStatus.success) {
-                                context.goNamed(RouteConfig.home);
-                              }
+                                  .onLoginEmailAndPassword(
+                                    email,
+                                    password,
+                                    context,
+                                    ref
+                                  );
                             }
                           },
                     text: AppLocalizations.of(context)!.sign_in_button,

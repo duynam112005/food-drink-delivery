@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/services/auth_service.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_state.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../di/injection.dart';
@@ -36,7 +40,7 @@ class Login extends _$Login {
         storage.write('accessToken', accessToken!),
         storage.write('refreshToken', refreshToken!),
       ]);
-      
+
       state = state.copyWith(socialLoginStatus: LoadStatus.success);
     } catch (e) {
       state = state.copyWith(
@@ -46,7 +50,7 @@ class Login extends _$Login {
     }
   }
 
-  Future<void> onLoginEmailAndPassword(String email, String password) async {
+  Future<void> onLoginEmailAndPassword(String email, String password, BuildContext context, WidgetRef ref) async {
     state = state.copyWith(loadStatus: LoadStatus.loading, isEnable: false);
     try {
       final result = await authRepository.loginWithEmailAndPassword(
@@ -71,13 +75,26 @@ class Login extends _$Login {
       await Future.delayed(const Duration(seconds: 2));
       state = state.copyWith(loadStatus: LoadStatus.initial);
     }
+
+    final loginEmailState = ref.read(
+      loginProvider.select((state) => state.loadStatus),
+    );
+    if (loginEmailState == LoadStatus.success) {
+      context.goNamed(RouteConfig.home);
+    }
   }
 
   void onEmailChanged(String email) {
-    state = state.copyWith(email: email, isEnable: email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+    state = state.copyWith(
+      email: email,
+      isEnable: email.trim().isNotEmpty && state.password.trim().isNotEmpty,
+    );
   }
 
   void onPasswordChanged(String password) {
-    state = state.copyWith(password: password, isEnable: state.email.trim().isNotEmpty && password.trim().isNotEmpty);
+    state = state.copyWith(
+      password: password,
+      isEnable: state.email.trim().isNotEmpty && password.trim().isNotEmpty,
+    );
   }
 }

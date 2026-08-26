@@ -1,6 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/verify/enter_code_state.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../di/injection.dart';
@@ -16,7 +20,7 @@ class EnterCode extends _$EnterCode {
     return const EnterCodeState();
   }
 
-  Future<void> onVerifyCode(String phone, String code) async {
+  Future<void> onVerifyCode(String phone, String code, BuildContext context, WidgetRef ref) async {
     state = state.copyWith(loadStatus: LoadStatus.loading, isEnable: false);
     try {
       final result = await authRepository.verifyOTPWithPhoneNumber(phone, code);
@@ -38,6 +42,13 @@ class EnterCode extends _$EnterCode {
       );
       await Future.delayed(const Duration(seconds: 2));
       state = state.copyWith(loadStatus: LoadStatus.initial);
+    }
+
+    final enterCodeStatus = ref.watch(
+      enterCodeProvider.select((state) => state.loadStatus),
+    );
+    if (enterCodeStatus == LoadStatus.success) {
+      context.pushReplacementNamed(RouteConfig.login);
     }
   }
 

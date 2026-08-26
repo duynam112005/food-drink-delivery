@@ -61,6 +61,8 @@ dependencies:
   flutter_native_splash: ^2.4.8
   get_it: ^9.2.1
   injectable: ^2.5.0
+  retrofit: ^4.10.0
+  retrofit_generator: ^10.2.1
 
 dev_dependencies:
   flutter_test:

@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/di/injection.dart';
 import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
-import 'package:food_drink_delivery/network/api_client.dart';
-import 'package:food_drink_delivery/network/dio_client.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/verify/enter_code_provider.dart';
@@ -33,9 +32,7 @@ class _EnterCodePageState extends State<EnterCodePage> {
   void initState() {
     super.initState();
     _codeController = TextEditingController();
-    _authRepository = AuthRepository(
-      apiClient: ApiClient(dio: DioClient().dio),
-    );
+    _authRepository = sl<AuthRepository>();
     _requestOTPPhone();
   }
 
@@ -49,13 +46,7 @@ class _EnterCodePageState extends State<EnterCodePage> {
   ) async {
     ref
         .read(enterCodeProvider.notifier)
-        .onVerifyCode(widget.identifier, _codeController.text);
-    final enterCodeStatus = ref.watch(
-      enterCodeProvider.select((state) => state.loadStatus),
-    );
-    if (enterCodeStatus == LoadStatus.success) {
-      context.pushReplacementNamed(RouteConfig.login);
-    }
+        .onVerifyCode(widget.identifier, _codeController.text,context, ref);
   }
 
   @override
@@ -188,6 +179,20 @@ class _EnterCodePageState extends State<EnterCodePage> {
               );
             },
           ),
+          const SizedBox(height:16),
+          // Consumer(
+          //   builder:(context, ref, _){
+          //     return InkWell(
+          //       onTap:(){},
+          //       child: Container(
+          //         height: double.infinity,
+          //         width: double.infinity,
+          //         alignment: Alignment.center,
+          //         child: Text('Send again', )
+          //       )
+          //     );
+          //   }
+          // )
         ],
       ),
     );

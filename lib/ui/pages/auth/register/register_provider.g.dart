@@ -41,7 +41,7 @@ final class RegisterProvider
   }
 }
 
-String _$registerHash() => r'261e82fe9bf3d611efad2840ba03ebeff20fca23';
+String _$registerHash() => r'f1f4a0967933790f39b5436e30eac3c02873d549';
 
 abstract class _$Register extends $Notifier<RegisterState> {
   RegisterState build();

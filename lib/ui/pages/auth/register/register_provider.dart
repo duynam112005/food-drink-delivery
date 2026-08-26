@@ -1,6 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_state.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../di/injection.dart';
@@ -21,8 +25,10 @@ class Register extends _$Register {
     String phone,
     String email,
     String password,
+    WidgetRef ref,
+    BuildContext context,
   ) async {
-    state = state.copyWith(loadStatus: LoadStatus.loading,isEnable: false);
+    state = state.copyWith(loadStatus: LoadStatus.loading, isEnable: false);
     try {
       final result = await authRepository.register(
         name,
@@ -49,22 +55,56 @@ class Register extends _$Register {
       await Future.delayed(const Duration(seconds: 2));
       state = state.copyWith(loadStatus: LoadStatus.initial);
     }
+    
+    final registerState = ref.read(
+      registerProvider.select((state) => state.loadStatus),
+    );
+    if (registerState == LoadStatus.success) {
+      context.pushNamed(RouteConfig.enterCode, extra: phone);
+    }
   }
 
-  void onNameChanged(String name){
-    state = state.copyWith(name: name, isEnable: name.trim().isNotEmpty && state.phone.trim().isNotEmpty && state.email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+  void onNameChanged(String name) {
+    state = state.copyWith(
+      name: name,
+      isEnable:
+          name.trim().isNotEmpty &&
+          state.phone.trim().isNotEmpty &&
+          state.email.trim().isNotEmpty &&
+          state.password.trim().isNotEmpty,
+    );
   }
 
-  void onPhoneChanged(String phone){
-    state = state.copyWith(phone: phone, isEnable: state.name.trim().isNotEmpty && phone.trim().isNotEmpty && state.email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+  void onPhoneChanged(String phone) {
+    state = state.copyWith(
+      phone: phone,
+      isEnable:
+          state.name.trim().isNotEmpty &&
+          phone.trim().isNotEmpty &&
+          state.email.trim().isNotEmpty &&
+          state.password.trim().isNotEmpty,
+    );
   }
 
-  void onEmailChanged(String email){
-    state = state.copyWith(email: email, isEnable: state.name.trim().isNotEmpty && state.phone.trim().isNotEmpty && email.trim().isNotEmpty && state.password.trim().isNotEmpty);
+  void onEmailChanged(String email) {
+    state = state.copyWith(
+      email: email,
+      isEnable:
+          state.name.trim().isNotEmpty &&
+          state.phone.trim().isNotEmpty &&
+          email.trim().isNotEmpty &&
+          state.password.trim().isNotEmpty,
+    );
   }
 
-  void onPasswordChanged(String password){
-    state = state.copyWith(password: password, isEnable: state.name.trim().isNotEmpty && state.phone.trim().isNotEmpty && state.email.trim().isNotEmpty && password.trim().isNotEmpty);
+  void onPasswordChanged(String password) {
+    state = state.copyWith(
+      password: password,
+      isEnable:
+          state.name.trim().isNotEmpty &&
+          state.phone.trim().isNotEmpty &&
+          state.email.trim().isNotEmpty &&
+          password.trim().isNotEmpty,
+    );
   }
-  
 }
