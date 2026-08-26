@@ -128,4 +128,38 @@ class AuthRepository {
       throw ApiExceptionMapper().map(e);
     }
   }
+
+  //request otp email
+  Future<void> requestOTPEmail(String email) async{
+    try{
+      await apiClient.requestOTPWithEmail({'identifier': email});
+    } on DioException catch(e){
+      throw ApiExceptionMapper().map(e);
+    }
+  }
+
+
+  //verify otp with email
+  Future<AuthEntity> verifyOTPWithEmail(String email, String code) async{
+    try{
+      final response = await apiClient.verifyOTPWithEmail({'identifier': email, 'code': code});
+      final results = response.data;
+      return AuthEntity(
+      user: UserEntity(
+        id: results.user.id,
+        fullName: results.user.fullName,
+        email: results.user.email,
+        phone: results.user.phone,
+        avatarUrl: results.user.avatarUrl,
+        emailVerified: results.user.emailVerified,
+      ),
+      accessToken: results.accessToken,
+      refreshToken: results.refreshToken,
+      tokenType: results.tokenType,
+      expiresIn: results.expiresIn,
+    );
+    } on DioException catch(e){
+      throw ApiExceptionMapper().map(e);
+    }
+  }
 }

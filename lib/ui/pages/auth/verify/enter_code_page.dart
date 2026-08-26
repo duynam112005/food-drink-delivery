@@ -8,10 +8,8 @@ import 'package:food_drink_delivery/di/injection.dart';
 import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
-import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/verify/enter_code_provider.dart';
 import 'package:food_drink_delivery/common/text_button_widget.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pinput/pinput.dart';
 
@@ -33,20 +31,42 @@ class _EnterCodePageState extends State<EnterCodePage> {
     super.initState();
     _codeController = TextEditingController();
     _authRepository = sl<AuthRepository>();
-    _requestOTPPhone();
+    widget.identifier.contains('@gmail.com')
+        ? _requestOTPEmail()
+        : _requestOTPPhone();
   }
 
   Future<void> _requestOTPPhone() async {
     await _authRepository.requestOTPPhone(widget.identifier);
   }
 
+  Future<void> _requestOTPEmail() async {
+    await _authRepository.requestOTPEmail(widget.identifier);
+  }
+
   Future<void> _verifyOTPWithPhoneNumber(
     BuildContext context,
     WidgetRef ref,
   ) async {
-    ref
-        .read(enterCodeProvider.notifier)
-        .onVerifyCode(widget.identifier, _codeController.text,context, ref);
+    if (widget.identifier.contains('@gmail.com')) {
+      ref
+          .read(enterCodeProvider.notifier)
+          .onVerifyCodeWithEmail(
+            widget.identifier,
+            _codeController.text,
+            context,
+            ref,
+          );
+    } else {
+      ref
+          .read(enterCodeProvider.notifier)
+          .onVerifyCodeWithPhone(
+            widget.identifier,
+            _codeController.text,
+            context,
+            ref,
+          );
+    }
   }
 
   @override
@@ -141,10 +161,10 @@ class _EnterCodePageState extends State<EnterCodePage> {
           Consumer(
             builder: (context, ref, _) {
               final enterCode = ref.watch(
-                enterCodeProvider.select((state) => state.loadStatus),
+                enterCodeProvider.select((state) => state.nextButtonLoadStatus),
               );
-              final isEnable = ref.watch(
-                enterCodeProvider.select((state) => state.isEnable),
+              final isEnableNextButton = ref.watch(
+                enterCodeProvider.select((state) => state.isEnableNextButton),
               );
               final errorMessage = ref.watch(
                 enterCodeProvider.select((state) => state.errorMessage),
@@ -155,7 +175,7 @@ class _EnterCodePageState extends State<EnterCodePage> {
                   enterCode == LoadStatus.failure
                       ? Text(errorMessage!, style: AppTextStyles.errorS12Medium)
                       : const SizedBox(height: 20),
-                      const SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextButtonWidget(
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
@@ -173,26 +193,67 @@ class _EnterCodePageState extends State<EnterCodePage> {
                             ),
                           )
                         : null,
-                    isEnabled: isEnable,
+                    isEnabled: isEnableNextButton,
                   ),
                 ],
               );
             },
           ),
-          const SizedBox(height:16),
-          // Consumer(
-          //   builder:(context, ref, _){
-          //     return InkWell(
-          //       onTap:(){},
-          //       child: Container(
-          //         height: double.infinity,
-          //         width: double.infinity,
-          //         alignment: Alignment.center,
-          //         child: Text('Send again', )
-          //       )
-          //     );
-          //   }
-          // )
+          const SizedBox(height: 16),
+          Consumer(
+            builder: (context, ref, _) {
+              final resendOtpStatus = ref.watch(
+                enterCodeProvider.select((state) => state.resendOtpLoadStatus),
+              );
+              final isEnableResendButton = ref.watch(
+                enterCodeProvider.select((state) => state.isEnableResendButton),
+              );
+              return InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: isEnableResendButton
+                    ? () {
+                        widget.identifier.contains('@gmail.com')
+                            ? ref
+                                  .read(enterCodeProvider.notifier)
+                                  .resendOtpWithEmail(widget.identifier)
+                            : ref
+                                  .read(enterCodeProvider.notifier)
+                                  .resendOtpWithPhone(widget.identifier);
+                      }
+                    : null,
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Send again',
+                        style: isEnableResendButton
+                            ? AppTextStyles.blackS14Medium
+                            : AppTextStyles.blackS14Medium.copyWith(
+                                color: AppColors.neutral100,
+                              ),
+                      ),
+                      const SizedBox(width: 8),
+                      resendOtpStatus == LoadStatus.loading
+                          ? const SizedBox(
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

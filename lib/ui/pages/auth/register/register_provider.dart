@@ -55,13 +55,6 @@ class Register extends _$Register {
       await Future.delayed(const Duration(seconds: 2));
       state = state.copyWith(loadStatus: LoadStatus.initial);
     }
-    
-    final registerState = ref.read(
-      registerProvider.select((state) => state.loadStatus),
-    );
-    if (registerState == LoadStatus.success) {
-      context.pushNamed(RouteConfig.enterCode, extra: phone);
-    }
   }
 
   void onNameChanged(String name) {

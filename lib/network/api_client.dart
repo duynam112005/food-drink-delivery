@@ -31,4 +31,12 @@ abstract class ApiClient {
   //request otp phone
   @POST("/v1/auth/phone/request-otp")
   Future<void> requestOTPWithPhoneNumber(@Body() Map<String, dynamic> body);
+
+  //request otp email
+  @POST("/v1/auth/password/forgot")
+  Future<void> requestOTPWithEmail(@Body() Map<String, dynamic> body);
+
+  //verify otp with email
+  @POST("/v1/auth/password/verify-otp")
+  Future<ApiResponseDTO> verifyOTPWithEmail(@Body() Map<String, dynamic> body);
 }

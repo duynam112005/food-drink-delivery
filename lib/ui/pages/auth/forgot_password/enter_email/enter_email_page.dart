@@ -105,7 +105,7 @@ class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
           TextButtonWidget(
             onTap:(){
               if(_formKey.currentState!.validate()){
-                //context.pushNamed('enter_code', extra: _emailController.text.trim());
+                context.pushNamed('enter_code', extra: _emailController.text.trim());
                 context.pushNamed('login');
               }
             },

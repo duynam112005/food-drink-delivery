@@ -38,3 +38,13 @@
 7. Validate lỗi, tự động mất error khi điền đúng form
 - Dùng FormBuilderValidators.match là bắt lỗi chuẩn nhất
 - Tự động mất error: dùng autovalidateMode: AutovalidateMode.onUserInteraction của TextFormField
+
+8. splash: tạo 1 file native_splash.yaml rồi cấu hình trong đó (DÙng thư viện flutter_native_splash)
+
+9. Dùng RestApi (Retrofit)
+- Dữ liệu trả về đúng dạng backend trả về nên phải có ApiResponseDTO để nhận dữ liệu trả về
+
+10. đổi icon app. Dùng package flutter_launcher_icons
+- Gõ lệnh này: dart run flutter_launcher_icons:generate để flutter tự tạo và cấu hình file flutter_launcher_icons.yaml
+- Sau đó vào sửa cấu hình như path ảnh
+- Sau khi config xong thì chạy lệnh flutter pub get và dart run flutter_launcher_icons để nó áp dụng 

@@ -142,7 +142,7 @@ class LoginPage extends ConsumerWidget {
   Widget _buildForgotPassword(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushReplacementNamed(RouteConfig.enterCode);
+        context.pushReplacementNamed(RouteConfig.enterEmail);
       },
       child: Text(
         AppLocalizations.of(context)!.forgot_password_button,
