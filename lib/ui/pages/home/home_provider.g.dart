@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'enter_code_provider.dart';
+part of 'home_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,52 +9,51 @@ part of 'enter_code_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(EnterCode)
-const enterCodeProvider = EnterCodeProvider._();
+@ProviderFor(Home)
+const homeProvider = HomeProvider._();
 
-final class EnterCodeProvider
-    extends $NotifierProvider<EnterCode, EnterCodeState> {
-  const EnterCodeProvider._()
+final class HomeProvider extends $NotifierProvider<Home, HomeState> {
+  const HomeProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'enterCodeProvider',
-        isAutoDispose: true,
+        name: r'homeProvider',
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$enterCodeHash();
+  String debugGetCreateSourceHash() => _$homeHash();
 
   @$internal
   @override
-  EnterCode create() => EnterCode();
+  Home create() => Home();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(EnterCodeState value) {
+  Override overrideWithValue(HomeState value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<EnterCodeState>(value),
+      providerOverride: $SyncValueProvider<HomeState>(value),
     );
   }
 }
 
-String _$enterCodeHash() => r'0093c5f5ab2fffdf64672c269d9805cecdab386f';
+String _$homeHash() => r'299aa4062a38dea156017c998ef5784166dfd88c';
 
-abstract class _$EnterCode extends $Notifier<EnterCodeState> {
-  EnterCodeState build();
+abstract class _$Home extends $Notifier<HomeState> {
+  HomeState build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<EnterCodeState, EnterCodeState>;
+    final ref = this.ref as $Ref<HomeState, HomeState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<EnterCodeState, EnterCodeState>,
-              EnterCodeState,
+              AnyNotifier<HomeState, HomeState>,
+              HomeState,
               Object?,
               Object?
             >;

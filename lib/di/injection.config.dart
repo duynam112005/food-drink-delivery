@@ -14,6 +14,8 @@ import 'package:food_drink_delivery/di/register_module.dart' as _i738;
 import 'package:food_drink_delivery/network/api_client.dart' as _i228;
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart'
     as _i770;
+import 'package:food_drink_delivery/repositories/catalog/catalog_repository.dart'
+    as _i218;
 import 'package:food_drink_delivery/services/auth_service.dart' as _i853;
 import 'package:food_drink_delivery/storage/secure_storage.dart' as _i48;
 import 'package:get_it/get_it.dart' as _i174;
@@ -33,6 +35,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i228.ApiClient>(() => _i228.ApiClient(gh<_i361.Dio>()));
     gh.lazySingleton<_i770.AuthRepository>(
       () => _i770.AuthRepository(apiClient: gh<_i228.ApiClient>()),
+    );
+    gh.lazySingleton<_i218.CatalogRepository>(
+      () => _i218.CatalogRepository(apiClient: gh<_i228.ApiClient>()),
     );
     return this;
   }

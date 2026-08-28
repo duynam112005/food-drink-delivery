@@ -22,7 +22,7 @@ class RouteConfig {
   static const String home = '/home';
 
   static final routes = GoRouter(
-    initialLocation: onboarding,
+    initialLocation: home,
     navigatorKey: navigationKey,
     routes: [
       GoRoute(

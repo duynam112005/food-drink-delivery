@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
-import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_state.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

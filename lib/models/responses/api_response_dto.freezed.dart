@@ -13,80 +13,84 @@ part of 'api_response_dto.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$ApiResponseDTO {
+mixin _$ApiResponseDTO<T> {
 
- AuthDTO get data; bool get success;
+ T get data; bool get success; MetaDTO? get meta;
 /// Create a copy of ApiResponseDTO
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$ApiResponseDTOCopyWith<ApiResponseDTO> get copyWith => _$ApiResponseDTOCopyWithImpl<ApiResponseDTO>(this as ApiResponseDTO, _$identity);
+$ApiResponseDTOCopyWith<T, ApiResponseDTO<T>> get copyWith => _$ApiResponseDTOCopyWithImpl<T, ApiResponseDTO<T>>(this as ApiResponseDTO<T>, _$identity);
 
   /// Serializes this ApiResponseDTO to a JSON map.
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson(Object? Function(T) toJsonT);
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ApiResponseDTO&&(identical(other.data, data) || other.data == data)&&(identical(other.success, success) || other.success == success));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ApiResponseDTO<T>&&const DeepCollectionEquality().equals(other.data, data)&&(identical(other.success, success) || other.success == success)&&(identical(other.meta, meta) || other.meta == meta));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,data,success);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(data),success,meta);
 
 @override
 String toString() {
-  return 'ApiResponseDTO(data: $data, success: $success)';
+  return 'ApiResponseDTO<$T>(data: $data, success: $success, meta: $meta)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ApiResponseDTOCopyWith<$Res>  {
-  factory $ApiResponseDTOCopyWith(ApiResponseDTO value, $Res Function(ApiResponseDTO) _then) = _$ApiResponseDTOCopyWithImpl;
+abstract mixin class $ApiResponseDTOCopyWith<T,$Res>  {
+  factory $ApiResponseDTOCopyWith(ApiResponseDTO<T> value, $Res Function(ApiResponseDTO<T>) _then) = _$ApiResponseDTOCopyWithImpl;
 @useResult
 $Res call({
- AuthDTO data, bool success
+ T data, bool success, MetaDTO? meta
 });
 
 
-$AuthDTOCopyWith<$Res> get data;
+$MetaDTOCopyWith<$Res>? get meta;
 
 }
 /// @nodoc
-class _$ApiResponseDTOCopyWithImpl<$Res>
-    implements $ApiResponseDTOCopyWith<$Res> {
+class _$ApiResponseDTOCopyWithImpl<T,$Res>
+    implements $ApiResponseDTOCopyWith<T, $Res> {
   _$ApiResponseDTOCopyWithImpl(this._self, this._then);
 
-  final ApiResponseDTO _self;
-  final $Res Function(ApiResponseDTO) _then;
+  final ApiResponseDTO<T> _self;
+  final $Res Function(ApiResponseDTO<T>) _then;
 
 /// Create a copy of ApiResponseDTO
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? data = null,Object? success = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? data = freezed,Object? success = null,Object? meta = freezed,}) {
   return _then(_self.copyWith(
-data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as AuthDTO,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
-as bool,
+data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as T,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,meta: freezed == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
+as MetaDTO?,
   ));
 }
 /// Create a copy of ApiResponseDTO
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$AuthDTOCopyWith<$Res> get data {
-  
-  return $AuthDTOCopyWith<$Res>(_self.data, (value) {
-    return _then(_self.copyWith(data: value));
+$MetaDTOCopyWith<$Res>? get meta {
+    if (_self.meta == null) {
+    return null;
+  }
+
+  return $MetaDTOCopyWith<$Res>(_self.meta!, (value) {
+    return _then(_self.copyWith(meta: value));
   });
 }
 }
 
 
 /// Adds pattern-matching-related methods to [ApiResponseDTO].
-extension ApiResponseDTOPatterns on ApiResponseDTO {
+extension ApiResponseDTOPatterns<T> on ApiResponseDTO<T> {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -99,7 +103,7 @@ extension ApiResponseDTOPatterns on ApiResponseDTO {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ApiResponseDTO value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ApiResponseDTO<T> value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ApiResponseDTO() when $default != null:
@@ -121,7 +125,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ApiResponseDTO value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ApiResponseDTO<T> value)  $default,){
 final _that = this;
 switch (_that) {
 case _ApiResponseDTO():
@@ -142,7 +146,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ApiResponseDTO value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ApiResponseDTO<T> value)?  $default,){
 final _that = this;
 switch (_that) {
 case _ApiResponseDTO() when $default != null:
@@ -163,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AuthDTO data,  bool success)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( T data,  bool success,  MetaDTO? meta)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApiResponseDTO() when $default != null:
-return $default(_that.data,_that.success);case _:
+return $default(_that.data,_that.success,_that.meta);case _:
   return orElse();
 
 }
@@ -184,10 +188,10 @@ return $default(_that.data,_that.success);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AuthDTO data,  bool success)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( T data,  bool success,  MetaDTO? meta)  $default,) {final _that = this;
 switch (_that) {
 case _ApiResponseDTO():
-return $default(_that.data,_that.success);case _:
+return $default(_that.data,_that.success,_that.meta);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +208,10 @@ return $default(_that.data,_that.success);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AuthDTO data,  bool success)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( T data,  bool success,  MetaDTO? meta)?  $default,) {final _that = this;
 switch (_that) {
 case _ApiResponseDTO() when $default != null:
-return $default(_that.data,_that.success);case _:
+return $default(_that.data,_that.success,_that.meta);case _:
   return null;
 
 }
@@ -216,70 +220,72 @@ return $default(_that.data,_that.success);case _:
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(genericArgumentFactories: true)
 
-class _ApiResponseDTO implements ApiResponseDTO {
-  const _ApiResponseDTO({required this.data, required this.success});
-  factory _ApiResponseDTO.fromJson(Map<String, dynamic> json) => _$ApiResponseDTOFromJson(json);
+class _ApiResponseDTO<T> implements ApiResponseDTO<T> {
+  const _ApiResponseDTO({required this.data, required this.success, this.meta});
+  factory _ApiResponseDTO.fromJson(Map<String, dynamic> json,T Function(Object?) fromJsonT) => _$ApiResponseDTOFromJson(json,fromJsonT);
 
-@override final  AuthDTO data;
+@override final  T data;
 @override final  bool success;
+@override final  MetaDTO? meta;
 
 /// Create a copy of ApiResponseDTO
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ApiResponseDTOCopyWith<_ApiResponseDTO> get copyWith => __$ApiResponseDTOCopyWithImpl<_ApiResponseDTO>(this, _$identity);
+_$ApiResponseDTOCopyWith<T, _ApiResponseDTO<T>> get copyWith => __$ApiResponseDTOCopyWithImpl<T, _ApiResponseDTO<T>>(this, _$identity);
 
 @override
-Map<String, dynamic> toJson() {
-  return _$ApiResponseDTOToJson(this, );
+Map<String, dynamic> toJson(Object? Function(T) toJsonT) {
+  return _$ApiResponseDTOToJson<T>(this, toJsonT);
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApiResponseDTO&&(identical(other.data, data) || other.data == data)&&(identical(other.success, success) || other.success == success));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApiResponseDTO<T>&&const DeepCollectionEquality().equals(other.data, data)&&(identical(other.success, success) || other.success == success)&&(identical(other.meta, meta) || other.meta == meta));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,data,success);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(data),success,meta);
 
 @override
 String toString() {
-  return 'ApiResponseDTO(data: $data, success: $success)';
+  return 'ApiResponseDTO<$T>(data: $data, success: $success, meta: $meta)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$ApiResponseDTOCopyWith<$Res> implements $ApiResponseDTOCopyWith<$Res> {
-  factory _$ApiResponseDTOCopyWith(_ApiResponseDTO value, $Res Function(_ApiResponseDTO) _then) = __$ApiResponseDTOCopyWithImpl;
+abstract mixin class _$ApiResponseDTOCopyWith<T,$Res> implements $ApiResponseDTOCopyWith<T, $Res> {
+  factory _$ApiResponseDTOCopyWith(_ApiResponseDTO<T> value, $Res Function(_ApiResponseDTO<T>) _then) = __$ApiResponseDTOCopyWithImpl;
 @override @useResult
 $Res call({
- AuthDTO data, bool success
+ T data, bool success, MetaDTO? meta
 });
 
 
-@override $AuthDTOCopyWith<$Res> get data;
+@override $MetaDTOCopyWith<$Res>? get meta;
 
 }
 /// @nodoc
-class __$ApiResponseDTOCopyWithImpl<$Res>
-    implements _$ApiResponseDTOCopyWith<$Res> {
+class __$ApiResponseDTOCopyWithImpl<T,$Res>
+    implements _$ApiResponseDTOCopyWith<T, $Res> {
   __$ApiResponseDTOCopyWithImpl(this._self, this._then);
 
-  final _ApiResponseDTO _self;
-  final $Res Function(_ApiResponseDTO) _then;
+  final _ApiResponseDTO<T> _self;
+  final $Res Function(_ApiResponseDTO<T>) _then;
 
 /// Create a copy of ApiResponseDTO
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? data = null,Object? success = null,}) {
-  return _then(_ApiResponseDTO(
-data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as AuthDTO,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
-as bool,
+@override @pragma('vm:prefer-inline') $Res call({Object? data = freezed,Object? success = null,Object? meta = freezed,}) {
+  return _then(_ApiResponseDTO<T>(
+data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+as T,success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
+as bool,meta: freezed == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
+as MetaDTO?,
   ));
 }
 
@@ -287,10 +293,13 @@ as bool,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$AuthDTOCopyWith<$Res> get data {
-  
-  return $AuthDTOCopyWith<$Res>(_self.data, (value) {
-    return _then(_self.copyWith(data: value));
+$MetaDTOCopyWith<$Res>? get meta {
+    if (_self.meta == null) {
+    return null;
+  }
+
+  return $MetaDTOCopyWith<$Res>(_self.meta!, (value) {
+    return _then(_self.copyWith(meta: value));
   });
 }
 }

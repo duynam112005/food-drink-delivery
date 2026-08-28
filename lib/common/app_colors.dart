@@ -21,4 +21,8 @@ class AppColors{
 
   static const Color black = Colors.black;
   static Color blackOpacity50 = Colors.black.withOpacity(0.5);
+
+  static const Color backgroundItemCategory = Color(0xFFFFFAE5);
+
+  static const Color green400 = Color(0xFF00875A);
 }

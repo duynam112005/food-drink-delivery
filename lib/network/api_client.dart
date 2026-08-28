@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/category/category_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/partner/partner_dto.dart';
 import 'package:food_drink_delivery/models/responses/api_response_dto.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
@@ -12,21 +15,22 @@ abstract class ApiClient {
   @factoryMethod
   factory ApiClient(Dio dio) = _ApiClient;
 
+  //AUTH
   //login with social
   @POST("/v1/auth/social")
-  Future<ApiResponseDTO> loginWithSocial(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> loginWithSocial(@Body() Map<String, dynamic> body);
 
   //login with email and password
   @POST("/v1/auth/login")
-  Future<ApiResponseDTO> loginWithEmailAndPassword(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> loginWithEmailAndPassword(@Body() Map<String, dynamic> body);
 
   //register
   @POST("/v1/auth/register")
-  Future<ApiResponseDTO> register(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> register(@Body() Map<String, dynamic> body);
 
   //verify otp with phone number
   @POST("/v1/auth/phone/verify-otp")
-  Future<ApiResponseDTO> verifyOTPWithPhoneNumber(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithPhoneNumber(@Body() Map<String, dynamic> body);
 
   //request otp phone
   @POST("/v1/auth/phone/request-otp")
@@ -38,5 +42,15 @@ abstract class ApiClient {
 
   //verify otp with email
   @POST("/v1/auth/password/verify-otp")
-  Future<ApiResponseDTO> verifyOTPWithEmail(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithEmail(@Body() Map<String, dynamic> body);
+
+
+  //CATALOG
+  //get categories
+  @GET("/v1/categories")
+  Future<ApiResponseDTO<List<CategoryDTO>>> getCategories();
+
+  //get best partners
+  @GET('/v1/restaurants/best-partners')
+  Future<ApiResponseDTO<List<PartnerDTO>>> getBestPartners();
 }

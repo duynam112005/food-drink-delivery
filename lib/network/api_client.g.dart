@@ -20,13 +20,15 @@ class _ApiClient implements ApiClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ApiResponseDTO> loginWithSocial(Map<String, dynamic> body) async {
+  Future<ApiResponseDTO<AuthDTO>> loginWithSocial(
+    Map<String, dynamic> body,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponseDTO>(
+    final _options = _setStreamType<ApiResponseDTO<AuthDTO>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -37,9 +39,12 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseDTO _value;
+    late ApiResponseDTO<AuthDTO> _value;
     try {
-      _value = ApiResponseDTO.fromJson(_result.data!);
+      _value = ApiResponseDTO<AuthDTO>.fromJson(
+        _result.data!,
+        (json) => AuthDTO.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -48,7 +53,7 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<ApiResponseDTO> loginWithEmailAndPassword(
+  Future<ApiResponseDTO<AuthDTO>> loginWithEmailAndPassword(
     Map<String, dynamic> body,
   ) async {
     final _extra = <String, dynamic>{};
@@ -56,7 +61,7 @@ class _ApiClient implements ApiClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponseDTO>(
+    final _options = _setStreamType<ApiResponseDTO<AuthDTO>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -67,9 +72,12 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseDTO _value;
+    late ApiResponseDTO<AuthDTO> _value;
     try {
-      _value = ApiResponseDTO.fromJson(_result.data!);
+      _value = ApiResponseDTO<AuthDTO>.fromJson(
+        _result.data!,
+        (json) => AuthDTO.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -78,13 +86,13 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<ApiResponseDTO> register(Map<String, dynamic> body) async {
+  Future<ApiResponseDTO<AuthDTO>> register(Map<String, dynamic> body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponseDTO>(
+    final _options = _setStreamType<ApiResponseDTO<AuthDTO>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -95,9 +103,12 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseDTO _value;
+    late ApiResponseDTO<AuthDTO> _value;
     try {
-      _value = ApiResponseDTO.fromJson(_result.data!);
+      _value = ApiResponseDTO<AuthDTO>.fromJson(
+        _result.data!,
+        (json) => AuthDTO.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -106,7 +117,7 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<ApiResponseDTO> verifyOTPWithPhoneNumber(
+  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithPhoneNumber(
     Map<String, dynamic> body,
   ) async {
     final _extra = <String, dynamic>{};
@@ -114,7 +125,7 @@ class _ApiClient implements ApiClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponseDTO>(
+    final _options = _setStreamType<ApiResponseDTO<AuthDTO>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -125,9 +136,12 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseDTO _value;
+    late ApiResponseDTO<AuthDTO> _value;
     try {
-      _value = ApiResponseDTO.fromJson(_result.data!);
+      _value = ApiResponseDTO<AuthDTO>.fromJson(
+        _result.data!,
+        (json) => AuthDTO.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -176,13 +190,15 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<ApiResponseDTO> verifyOTPWithEmail(Map<String, dynamic> body) async {
+  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithEmail(
+    Map<String, dynamic> body,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ApiResponseDTO>(
+    final _options = _setStreamType<ApiResponseDTO<AuthDTO>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -193,9 +209,84 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseDTO _value;
+    late ApiResponseDTO<AuthDTO> _value;
     try {
-      _value = ApiResponseDTO.fromJson(_result.data!);
+      _value = ApiResponseDTO<AuthDTO>.fromJson(
+        _result.data!,
+        (json) => AuthDTO.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResponseDTO<List<CategoryDTO>>> getCategories() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResponseDTO<List<CategoryDTO>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/v1/categories',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResponseDTO<List<CategoryDTO>> _value;
+    try {
+      _value = ApiResponseDTO<List<CategoryDTO>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                  .map<CategoryDTO>(
+                    (i) => CategoryDTO.fromJson(i as Map<String, dynamic>),
+                  )
+                  .toList()
+            : List.empty(),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResponseDTO<List<PartnerDTO>>> getBestPartners() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResponseDTO<List<PartnerDTO>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/v1/restaurants/best-partners',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResponseDTO<List<PartnerDTO>> _value;
+    try {
+      _value = ApiResponseDTO<List<PartnerDTO>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                  .map<PartnerDTO>(
+                    (i) => PartnerDTO.fromJson(i as Map<String, dynamic>),
+                  )
+                  .toList()
+            : List.empty(),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
