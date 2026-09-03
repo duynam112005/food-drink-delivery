@@ -11,11 +11,13 @@ class AppTextfieldWidget extends StatefulWidget {
     required this.controller,
     required this.hintText,
     required this.onChanged,
+    required this.prefixIcon,
   });
 
   final String hintText;
   final TextEditingController controller;
   final Function(String)? onChanged;
+  final Widget? prefixIcon;
 
   @override
   State<AppTextfieldWidget> createState() => _AppTextfieldWidgetState();
@@ -46,6 +48,7 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide.none,
             ),
+            prefixIcon: widget.prefixIcon,
             suffixIcon: emailText.contains('@gmail.com')
                 ? Padding(
                     padding: const EdgeInsets.all(10),

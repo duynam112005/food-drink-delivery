@@ -14,7 +14,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- LoadStatus get categoryLoadStatus; LoadStatus get bestPartnersLoadStatus; List<CategoryEntity> get categories; List<PartnerEntity> get bestPartners; int get selectedItem; String? get errorMessage;
+//categories
+ LoadStatus get categoryLoadStatus; List<CategoryEntity> get categories;//best partners
+ LoadStatus get bestPartnersLoadStatus; List<RestaurantEntity> get bestPartners;//restaurants
+ RestaurantSort get selectedRestaurantSort; Map<RestaurantSort, List<RestaurantEntity>> get restaurants; Map<RestaurantSort, LoadStatus> get restaurantLoadStatus;//selected item bottom navigation
+ int get selectedItem; String? get errorMessage;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +29,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.categoryLoadStatus, categoryLoadStatus) || other.categoryLoadStatus == categoryLoadStatus)&&(identical(other.bestPartnersLoadStatus, bestPartnersLoadStatus) || other.bestPartnersLoadStatus == bestPartnersLoadStatus)&&const DeepCollectionEquality().equals(other.categories, categories)&&const DeepCollectionEquality().equals(other.bestPartners, bestPartners)&&(identical(other.selectedItem, selectedItem) || other.selectedItem == selectedItem)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.categoryLoadStatus, categoryLoadStatus) || other.categoryLoadStatus == categoryLoadStatus)&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.bestPartnersLoadStatus, bestPartnersLoadStatus) || other.bestPartnersLoadStatus == bestPartnersLoadStatus)&&const DeepCollectionEquality().equals(other.bestPartners, bestPartners)&&(identical(other.selectedRestaurantSort, selectedRestaurantSort) || other.selectedRestaurantSort == selectedRestaurantSort)&&const DeepCollectionEquality().equals(other.restaurants, restaurants)&&const DeepCollectionEquality().equals(other.restaurantLoadStatus, restaurantLoadStatus)&&(identical(other.selectedItem, selectedItem) || other.selectedItem == selectedItem)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,categoryLoadStatus,bestPartnersLoadStatus,const DeepCollectionEquality().hash(categories),const DeepCollectionEquality().hash(bestPartners),selectedItem,errorMessage);
+int get hashCode => Object.hash(runtimeType,categoryLoadStatus,const DeepCollectionEquality().hash(categories),bestPartnersLoadStatus,const DeepCollectionEquality().hash(bestPartners),selectedRestaurantSort,const DeepCollectionEquality().hash(restaurants),const DeepCollectionEquality().hash(restaurantLoadStatus),selectedItem,errorMessage);
 
 @override
 String toString() {
-  return 'HomeState(categoryLoadStatus: $categoryLoadStatus, bestPartnersLoadStatus: $bestPartnersLoadStatus, categories: $categories, bestPartners: $bestPartners, selectedItem: $selectedItem, errorMessage: $errorMessage)';
+  return 'HomeState(categoryLoadStatus: $categoryLoadStatus, categories: $categories, bestPartnersLoadStatus: $bestPartnersLoadStatus, bestPartners: $bestPartners, selectedRestaurantSort: $selectedRestaurantSort, restaurants: $restaurants, restaurantLoadStatus: $restaurantLoadStatus, selectedItem: $selectedItem, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +49,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus categoryLoadStatus, LoadStatus bestPartnersLoadStatus, List<CategoryEntity> categories, List<PartnerEntity> bestPartners, int selectedItem, String? errorMessage
+ LoadStatus categoryLoadStatus, List<CategoryEntity> categories, LoadStatus bestPartnersLoadStatus, List<RestaurantEntity> bestPartners, RestaurantSort selectedRestaurantSort, Map<RestaurantSort, List<RestaurantEntity>> restaurants, Map<RestaurantSort, LoadStatus> restaurantLoadStatus, int selectedItem, String? errorMessage
 });
 
 
@@ -62,13 +66,16 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? categoryLoadStatus = null,Object? bestPartnersLoadStatus = null,Object? categories = null,Object? bestPartners = null,Object? selectedItem = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? categoryLoadStatus = null,Object? categories = null,Object? bestPartnersLoadStatus = null,Object? bestPartners = null,Object? selectedRestaurantSort = null,Object? restaurants = null,Object? restaurantLoadStatus = null,Object? selectedItem = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 categoryLoadStatus: null == categoryLoadStatus ? _self.categoryLoadStatus : categoryLoadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,bestPartnersLoadStatus: null == bestPartnersLoadStatus ? _self.bestPartnersLoadStatus : bestPartnersLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
-as List<CategoryEntity>,bestPartners: null == bestPartners ? _self.bestPartners : bestPartners // ignore: cast_nullable_to_non_nullable
-as List<PartnerEntity>,selectedItem: null == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
+as List<CategoryEntity>,bestPartnersLoadStatus: null == bestPartnersLoadStatus ? _self.bestPartnersLoadStatus : bestPartnersLoadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,bestPartners: null == bestPartners ? _self.bestPartners : bestPartners // ignore: cast_nullable_to_non_nullable
+as List<RestaurantEntity>,selectedRestaurantSort: null == selectedRestaurantSort ? _self.selectedRestaurantSort : selectedRestaurantSort // ignore: cast_nullable_to_non_nullable
+as RestaurantSort,restaurants: null == restaurants ? _self.restaurants : restaurants // ignore: cast_nullable_to_non_nullable
+as Map<RestaurantSort, List<RestaurantEntity>>,restaurantLoadStatus: null == restaurantLoadStatus ? _self.restaurantLoadStatus : restaurantLoadStatus // ignore: cast_nullable_to_non_nullable
+as Map<RestaurantSort, LoadStatus>,selectedItem: null == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
 as int,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -155,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus categoryLoadStatus,  LoadStatus bestPartnersLoadStatus,  List<CategoryEntity> categories,  List<PartnerEntity> bestPartners,  int selectedItem,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus categoryLoadStatus,  List<CategoryEntity> categories,  LoadStatus bestPartnersLoadStatus,  List<RestaurantEntity> bestPartners,  RestaurantSort selectedRestaurantSort,  Map<RestaurantSort, List<RestaurantEntity>> restaurants,  Map<RestaurantSort, LoadStatus> restaurantLoadStatus,  int selectedItem,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.categoryLoadStatus,_that.bestPartnersLoadStatus,_that.categories,_that.bestPartners,_that.selectedItem,_that.errorMessage);case _:
+return $default(_that.categoryLoadStatus,_that.categories,_that.bestPartnersLoadStatus,_that.bestPartners,_that.selectedRestaurantSort,_that.restaurants,_that.restaurantLoadStatus,_that.selectedItem,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -176,10 +183,10 @@ return $default(_that.categoryLoadStatus,_that.bestPartnersLoadStatus,_that.cate
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus categoryLoadStatus,  LoadStatus bestPartnersLoadStatus,  List<CategoryEntity> categories,  List<PartnerEntity> bestPartners,  int selectedItem,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus categoryLoadStatus,  List<CategoryEntity> categories,  LoadStatus bestPartnersLoadStatus,  List<RestaurantEntity> bestPartners,  RestaurantSort selectedRestaurantSort,  Map<RestaurantSort, List<RestaurantEntity>> restaurants,  Map<RestaurantSort, LoadStatus> restaurantLoadStatus,  int selectedItem,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.categoryLoadStatus,_that.bestPartnersLoadStatus,_that.categories,_that.bestPartners,_that.selectedItem,_that.errorMessage);case _:
+return $default(_that.categoryLoadStatus,_that.categories,_that.bestPartnersLoadStatus,_that.bestPartners,_that.selectedRestaurantSort,_that.restaurants,_that.restaurantLoadStatus,_that.selectedItem,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +203,10 @@ return $default(_that.categoryLoadStatus,_that.bestPartnersLoadStatus,_that.cate
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus categoryLoadStatus,  LoadStatus bestPartnersLoadStatus,  List<CategoryEntity> categories,  List<PartnerEntity> bestPartners,  int selectedItem,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus categoryLoadStatus,  List<CategoryEntity> categories,  LoadStatus bestPartnersLoadStatus,  List<RestaurantEntity> bestPartners,  RestaurantSort selectedRestaurantSort,  Map<RestaurantSort, List<RestaurantEntity>> restaurants,  Map<RestaurantSort, LoadStatus> restaurantLoadStatus,  int selectedItem,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.categoryLoadStatus,_that.bestPartnersLoadStatus,_that.categories,_that.bestPartners,_that.selectedItem,_that.errorMessage);case _:
+return $default(_that.categoryLoadStatus,_that.categories,_that.bestPartnersLoadStatus,_that.bestPartners,_that.selectedRestaurantSort,_that.restaurants,_that.restaurantLoadStatus,_that.selectedItem,_that.errorMessage);case _:
   return null;
 
 }
@@ -211,11 +218,11 @@ return $default(_that.categoryLoadStatus,_that.bestPartnersLoadStatus,_that.cate
 
 
 class _HomeState implements HomeState {
-  const _HomeState({this.categoryLoadStatus = LoadStatus.initial, this.bestPartnersLoadStatus = LoadStatus.initial, final  List<CategoryEntity> categories = const [], final  List<PartnerEntity> bestPartners = const [], this.selectedItem = 0, this.errorMessage}): _categories = categories,_bestPartners = bestPartners;
+  const _HomeState({this.categoryLoadStatus = LoadStatus.initial, final  List<CategoryEntity> categories = const [], this.bestPartnersLoadStatus = LoadStatus.initial, final  List<RestaurantEntity> bestPartners = const [], this.selectedRestaurantSort = RestaurantSort.nearby, final  Map<RestaurantSort, List<RestaurantEntity>> restaurants = const {}, final  Map<RestaurantSort, LoadStatus> restaurantLoadStatus = const {}, this.selectedItem = 0, this.errorMessage}): _categories = categories,_bestPartners = bestPartners,_restaurants = restaurants,_restaurantLoadStatus = restaurantLoadStatus;
   
 
+//categories
 @override@JsonKey() final  LoadStatus categoryLoadStatus;
-@override@JsonKey() final  LoadStatus bestPartnersLoadStatus;
  final  List<CategoryEntity> _categories;
 @override@JsonKey() List<CategoryEntity> get categories {
   if (_categories is EqualUnmodifiableListView) return _categories;
@@ -223,13 +230,32 @@ class _HomeState implements HomeState {
   return EqualUnmodifiableListView(_categories);
 }
 
- final  List<PartnerEntity> _bestPartners;
-@override@JsonKey() List<PartnerEntity> get bestPartners {
+//best partners
+@override@JsonKey() final  LoadStatus bestPartnersLoadStatus;
+ final  List<RestaurantEntity> _bestPartners;
+@override@JsonKey() List<RestaurantEntity> get bestPartners {
   if (_bestPartners is EqualUnmodifiableListView) return _bestPartners;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_bestPartners);
 }
 
+//restaurants
+@override@JsonKey() final  RestaurantSort selectedRestaurantSort;
+ final  Map<RestaurantSort, List<RestaurantEntity>> _restaurants;
+@override@JsonKey() Map<RestaurantSort, List<RestaurantEntity>> get restaurants {
+  if (_restaurants is EqualUnmodifiableMapView) return _restaurants;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_restaurants);
+}
+
+ final  Map<RestaurantSort, LoadStatus> _restaurantLoadStatus;
+@override@JsonKey() Map<RestaurantSort, LoadStatus> get restaurantLoadStatus {
+  if (_restaurantLoadStatus is EqualUnmodifiableMapView) return _restaurantLoadStatus;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_restaurantLoadStatus);
+}
+
+//selected item bottom navigation
 @override@JsonKey() final  int selectedItem;
 @override final  String? errorMessage;
 
@@ -243,16 +269,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.categoryLoadStatus, categoryLoadStatus) || other.categoryLoadStatus == categoryLoadStatus)&&(identical(other.bestPartnersLoadStatus, bestPartnersLoadStatus) || other.bestPartnersLoadStatus == bestPartnersLoadStatus)&&const DeepCollectionEquality().equals(other._categories, _categories)&&const DeepCollectionEquality().equals(other._bestPartners, _bestPartners)&&(identical(other.selectedItem, selectedItem) || other.selectedItem == selectedItem)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.categoryLoadStatus, categoryLoadStatus) || other.categoryLoadStatus == categoryLoadStatus)&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.bestPartnersLoadStatus, bestPartnersLoadStatus) || other.bestPartnersLoadStatus == bestPartnersLoadStatus)&&const DeepCollectionEquality().equals(other._bestPartners, _bestPartners)&&(identical(other.selectedRestaurantSort, selectedRestaurantSort) || other.selectedRestaurantSort == selectedRestaurantSort)&&const DeepCollectionEquality().equals(other._restaurants, _restaurants)&&const DeepCollectionEquality().equals(other._restaurantLoadStatus, _restaurantLoadStatus)&&(identical(other.selectedItem, selectedItem) || other.selectedItem == selectedItem)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,categoryLoadStatus,bestPartnersLoadStatus,const DeepCollectionEquality().hash(_categories),const DeepCollectionEquality().hash(_bestPartners),selectedItem,errorMessage);
+int get hashCode => Object.hash(runtimeType,categoryLoadStatus,const DeepCollectionEquality().hash(_categories),bestPartnersLoadStatus,const DeepCollectionEquality().hash(_bestPartners),selectedRestaurantSort,const DeepCollectionEquality().hash(_restaurants),const DeepCollectionEquality().hash(_restaurantLoadStatus),selectedItem,errorMessage);
 
 @override
 String toString() {
-  return 'HomeState(categoryLoadStatus: $categoryLoadStatus, bestPartnersLoadStatus: $bestPartnersLoadStatus, categories: $categories, bestPartners: $bestPartners, selectedItem: $selectedItem, errorMessage: $errorMessage)';
+  return 'HomeState(categoryLoadStatus: $categoryLoadStatus, categories: $categories, bestPartnersLoadStatus: $bestPartnersLoadStatus, bestPartners: $bestPartners, selectedRestaurantSort: $selectedRestaurantSort, restaurants: $restaurants, restaurantLoadStatus: $restaurantLoadStatus, selectedItem: $selectedItem, errorMessage: $errorMessage)';
 }
 
 
@@ -263,7 +289,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus categoryLoadStatus, LoadStatus bestPartnersLoadStatus, List<CategoryEntity> categories, List<PartnerEntity> bestPartners, int selectedItem, String? errorMessage
+ LoadStatus categoryLoadStatus, List<CategoryEntity> categories, LoadStatus bestPartnersLoadStatus, List<RestaurantEntity> bestPartners, RestaurantSort selectedRestaurantSort, Map<RestaurantSort, List<RestaurantEntity>> restaurants, Map<RestaurantSort, LoadStatus> restaurantLoadStatus, int selectedItem, String? errorMessage
 });
 
 
@@ -280,13 +306,16 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? categoryLoadStatus = null,Object? bestPartnersLoadStatus = null,Object? categories = null,Object? bestPartners = null,Object? selectedItem = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? categoryLoadStatus = null,Object? categories = null,Object? bestPartnersLoadStatus = null,Object? bestPartners = null,Object? selectedRestaurantSort = null,Object? restaurants = null,Object? restaurantLoadStatus = null,Object? selectedItem = null,Object? errorMessage = freezed,}) {
   return _then(_HomeState(
 categoryLoadStatus: null == categoryLoadStatus ? _self.categoryLoadStatus : categoryLoadStatus // ignore: cast_nullable_to_non_nullable
-as LoadStatus,bestPartnersLoadStatus: null == bestPartnersLoadStatus ? _self.bestPartnersLoadStatus : bestPartnersLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<CategoryEntity>,bestPartners: null == bestPartners ? _self._bestPartners : bestPartners // ignore: cast_nullable_to_non_nullable
-as List<PartnerEntity>,selectedItem: null == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
+as List<CategoryEntity>,bestPartnersLoadStatus: null == bestPartnersLoadStatus ? _self.bestPartnersLoadStatus : bestPartnersLoadStatus // ignore: cast_nullable_to_non_nullable
+as LoadStatus,bestPartners: null == bestPartners ? _self._bestPartners : bestPartners // ignore: cast_nullable_to_non_nullable
+as List<RestaurantEntity>,selectedRestaurantSort: null == selectedRestaurantSort ? _self.selectedRestaurantSort : selectedRestaurantSort // ignore: cast_nullable_to_non_nullable
+as RestaurantSort,restaurants: null == restaurants ? _self._restaurants : restaurants // ignore: cast_nullable_to_non_nullable
+as Map<RestaurantSort, List<RestaurantEntity>>,restaurantLoadStatus: null == restaurantLoadStatus ? _self._restaurantLoadStatus : restaurantLoadStatus // ignore: cast_nullable_to_non_nullable
+as Map<RestaurantSort, LoadStatus>,selectedItem: null == selectedItem ? _self.selectedItem : selectedItem // ignore: cast_nullable_to_non_nullable
 as int,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

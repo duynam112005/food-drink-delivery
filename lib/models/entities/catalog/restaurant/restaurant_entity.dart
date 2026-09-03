@@ -1,6 +1,6 @@
-import 'package:food_drink_delivery/models/entities/catalog/partner/delivery_fee/delivery_fee_entity.dart';
+import 'package:food_drink_delivery/models/entities/catalog/delivery_fee/delivery_fee_entity.dart';
 
-class PartnerEntity{
+class RestaurantEntity{
   final String id;
   final String name;
   final String slug;
@@ -17,7 +17,7 @@ class PartnerEntity{
   final List<String> categories;
   final bool isFavorite;
 
-  PartnerEntity({
+  RestaurantEntity({
     required this.id,
     required this.name,
     required this.slug,

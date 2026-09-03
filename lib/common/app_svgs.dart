@@ -14,4 +14,7 @@ class AppSvgs {
   static const String compressIcon = '$_svgPath/ic_compass.svg';
   static const String orderIcon = '$_svgPath/ic_order.svg';
   static const String profileIcon = '$_svgPath/ic_profile.svg';
+  static const String locationIcon = '$_svgPath/ic_location.svg';
+  static const String locationMarkerIcon = '$_svgPath/ic_location_marker.svg';
+  static const String filterIcon = '$_svgPath/ic_filter.svg';
 }

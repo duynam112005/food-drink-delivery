@@ -259,12 +259,12 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<ApiResponseDTO<List<PartnerDTO>>> getBestPartners() async {
+  Future<ApiResponseDTO<List<RestaurantDTO>>> getBestPartners() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ApiResponseDTO<List<PartnerDTO>>>(
+    final _options = _setStreamType<ApiResponseDTO<List<RestaurantDTO>>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -275,17 +275,98 @@ class _ApiClient implements ApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseDTO<List<PartnerDTO>> _value;
+    late ApiResponseDTO<List<RestaurantDTO>> _value;
     try {
-      _value = ApiResponseDTO<List<PartnerDTO>>.fromJson(
+      _value = ApiResponseDTO<List<RestaurantDTO>>.fromJson(
         _result.data!,
         (json) => json is List<dynamic>
             ? json
-                  .map<PartnerDTO>(
-                    (i) => PartnerDTO.fromJson(i as Map<String, dynamic>),
+                  .map<RestaurantDTO>(
+                    (i) => RestaurantDTO.fromJson(i as Map<String, dynamic>),
                   )
                   .toList()
             : List.empty(),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResponseDTO<List<RestaurantDTO>>> getRestaurants({
+    required String sort,
+    double? lat,
+    double? lng,
+    String? category,
+    int? maxDeliveryFee,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'sort': sort,
+      r'lat': lat,
+      r'lng': lng,
+      r'category': category,
+      r'maxDeliveryFee': maxDeliveryFee,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResponseDTO<List<RestaurantDTO>>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/v1/restaurants',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResponseDTO<List<RestaurantDTO>> _value;
+    try {
+      _value = ApiResponseDTO<List<RestaurantDTO>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                  .map<RestaurantDTO>(
+                    (i) => RestaurantDTO.fromJson(i as Map<String, dynamic>),
+                  )
+                  .toList()
+            : List.empty(),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResponseDTO<RestaurantDetailDTO>> getRestaurantDetail(
+    String restaurantId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResponseDTO<RestaurantDetailDTO>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/v1/restaurants/${restaurantId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResponseDTO<RestaurantDetailDTO> _value;
+    try {
+      _value = ApiResponseDTO<RestaurantDetailDTO>.fromJson(
+        _result.data!,
+        (json) => RestaurantDetailDTO.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);

@@ -97,6 +97,7 @@ class _BuildEnterEmailFormState extends State<BuildEnterEmailForm> {
       child: Column(
         children: [
           AppTextfieldWidget(
+            prefixIcon: null,
             controller: _emailController,
             hintText: 'Email',
             onChanged: (value){},

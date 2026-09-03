@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:food_drink_delivery/ui/pages/home/restaurant_detail/restaurant_detail_page.dart';
 import 'package:food_drink_delivery/ui/pages/onboarding/onboarding_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/forgot_password/enter_email/enter_email_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_page.dart';
@@ -20,6 +21,7 @@ class RouteConfig {
   static const String register = '/register';
 
   static const String home = '/home';
+  static const String restaurantDetail = '/restaurant_detail';
 
   static final routes = GoRouter(
     initialLocation: home,
@@ -53,7 +55,19 @@ class RouteConfig {
         name: register,
         builder: (context, state) => const RegisterPage(),
       ),
-      GoRoute(path: home, name: home, builder: (context, state)  => const HomePage()),
+      GoRoute(
+        path: home,
+        name: home,
+        builder: (context, state) => const HomePage(),
+        routes: [
+          GoRoute(path: restaurantDetail, name: restaurantDetail, builder: (context, state){
+            final extra = state.extra as Map<String, String>;
+            final restaurantId = extra['restaurantId'] as String;
+            final restaurantImage = extra['restaurantImage'] as String;
+            return RestaurantDetailPage(restaurantId: restaurantId, restaurantImage: restaurantImage);
+          })
+        ]
+      ),
     ],
   );
 }

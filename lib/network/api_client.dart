@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/category/category_dto.dart';
-import 'package:food_drink_delivery/models/dto/catalog/partner/partner_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_detail_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_dto.dart';
 import 'package:food_drink_delivery/models/responses/api_response_dto.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
@@ -52,5 +53,21 @@ abstract class ApiClient {
 
   //get best partners
   @GET('/v1/restaurants/best-partners')
-  Future<ApiResponseDTO<List<PartnerDTO>>> getBestPartners();
+  Future<ApiResponseDTO<List<RestaurantDTO>>> getBestPartners();
+
+  //get restaurants by category
+  @GET('/v1/restaurants')
+  Future<ApiResponseDTO<List<RestaurantDTO>>> getRestaurants({
+    @Query('sort') required String sort,
+    @Query('lat') double? lat,
+    @Query('lng') double? lng,
+    @Query('category') String? category,
+    @Query('maxDeliveryFee') int? maxDeliveryFee,
+  });
+
+  //get restaurant detail
+  @GET('/v1/restaurants/{id}')
+  Future<ApiResponseDTO<RestaurantDetailDTO>> getRestaurantDetail(
+    @Path('id') String restaurantId,
+  );
 }

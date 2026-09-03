@@ -142,6 +142,7 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
             builder: (context, ref, _) {
               return AppTextfieldWidget(
                 controller: _nameController,
+                prefixIcon: null,
                 hintText: AppLocalizations.of(context)!.your_name_hint,
                 onChanged: (value) {
                   ref
@@ -156,6 +157,7 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
             builder: (context, ref, _) {
               return AppTextfieldWidget(
                 controller: _phoneController,
+                prefixIcon: null,
                 hintText: AppLocalizations.of(context)!.phone_number_hint,
                 onChanged: (value) {
                   ref
@@ -171,6 +173,7 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: AppTextfieldWidget(
                   controller: _emailController,
+                  prefixIcon: null,
                   hintText: AppLocalizations.of(context)!.email_hint,
                   onChanged: (value) {
                     ref

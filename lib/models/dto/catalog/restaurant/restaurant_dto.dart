@@ -1,11 +1,11 @@
-import 'package:food_drink_delivery/models/dto/catalog/partner/delivery_fee/delivery_fee_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/delivery_fee/delivery_fee_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-part 'partner_dto.freezed.dart';
-part 'partner_dto.g.dart';
+part 'restaurant_dto.freezed.dart';
+part 'restaurant_dto.g.dart';
 
 @freezed
-abstract class PartnerDTO with _$PartnerDTO{
-  const factory PartnerDTO({
+abstract class RestaurantDTO with _$RestaurantDTO{
+  const factory RestaurantDTO({
     required String id,
     required String name,
     required String slug,
@@ -18,10 +18,11 @@ abstract class PartnerDTO with _$PartnerDTO{
     required bool isFreeShipping,
     required int etaMinutes,
     required String status,
+    required bool hasTakeAway,
     required List<String> tags,
     required List<String> categories,
     required bool isFavorite
-  })= _PartnerDTO;
+  })= _RestaurantDTO;
 
-  factory PartnerDTO.fromJson(Map<String, dynamic> json) => _$PartnerDTOFromJson(json);
+  factory RestaurantDTO.fromJson(Map<String, dynamic> json) => _$RestaurantDTOFromJson(json);
 }
