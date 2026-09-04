@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/di/injection.dart';
 import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/l10n/l10n.dart';
@@ -18,11 +19,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      localizationsDelegates: const[
+      theme: ThemeData(fontFamily: 'DM Sans', primaryColor: AppColors.red400),
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

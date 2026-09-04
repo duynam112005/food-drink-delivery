@@ -9,7 +9,7 @@ class RestaurantDetailMapper{
   static RestaurantDetailEntity toEntity(RestaurantDetailDTO dto){
     return RestaurantDetailEntity(
       id: dto.id,
-      name: dto.name,
+      name: dto.name ?? 'Unknown Restaurant',
       slug: dto.slug,
       coverUrl: dto.coverUrl,
       addressLine: dto.addressLine,
@@ -23,6 +23,7 @@ class RestaurantDetailMapper{
       ),
       isFreeShipping: dto.isFreeShipping,
       etaMinutes: dto.etaMinutes,
+      isOpen: dto.isOpen,
       status: dto.status,
       hasTakeAway: dto.hasTakeAway,
       tags: dto.tags,
@@ -38,10 +39,10 @@ class RestaurantDetailMapper{
         formatted: dto.minOrderTotal!.formatted
       ) : null,
       promotions: dto.promotions?.map((promotion) => PromotionEntity(
-        id: promotion.id,
-        title: promotion.title,
-        subTitle: promotion.subTitle,
-        voucherCode: promotion.voucherCode,
+        id: promotion.id ?? "",
+        title: promotion.title ?? "",
+        subTitle: promotion.subtitle ?? "",
+        voucherCode: promotion.voucherCode ?? "",
       )).toList(),
       ratingSummary: dto.ratingSummary != null ? RatingSummaryEntity(
         average: dto.ratingSummary!.average,

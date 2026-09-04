@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RestaurantDetailDTO {
 
- String get id; String get name; String get slug; String get coverUrl; String get addressLine; String get city; double get rating; int get ratingCount; DeliveryFeeDTO get deliveryFee; bool get isFreeShipping; int get etaMinutes; String get status; bool? get hasTakeAway; List<String> get tags; List<String> get categories; bool get isFavorite; String? get description; String? get phone; String? get openTime; String? get closeTime; MoneyDTO? get minOrderTotal; List<PromotionDTO>? get promotions; RatingSummaryDTO? get ratingSummary;
+ String get id; String? get name; String get slug; String get coverUrl; String get addressLine; String get city; double get rating; int get ratingCount; DeliveryFeeDTO get deliveryFee; bool get isFreeShipping; int get etaMinutes; bool get isOpen; String get status; bool? get hasTakeAway; List<String> get tags; List<String> get categories; bool get isFavorite; String? get description; String? get phone; String? get openTime; String? get closeTime; MoneyDTO? get minOrderTotal; List<PromotionDTO>? get promotions; RatingSummaryDTO? get ratingSummary;
 /// Create a copy of RestaurantDetailDTO
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RestaurantDetailDTOCopyWith<RestaurantDetailDTO> get copyWith => _$RestaurantDe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RestaurantDetailDTO&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.city, city) || other.city == city)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&(identical(other.deliveryFee, deliveryFee) || other.deliveryFee == deliveryFee)&&(identical(other.isFreeShipping, isFreeShipping) || other.isFreeShipping == isFreeShipping)&&(identical(other.etaMinutes, etaMinutes) || other.etaMinutes == etaMinutes)&&(identical(other.status, status) || other.status == status)&&(identical(other.hasTakeAway, hasTakeAway) || other.hasTakeAway == hasTakeAway)&&const DeepCollectionEquality().equals(other.tags, tags)&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.description, description) || other.description == description)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.openTime, openTime) || other.openTime == openTime)&&(identical(other.closeTime, closeTime) || other.closeTime == closeTime)&&(identical(other.minOrderTotal, minOrderTotal) || other.minOrderTotal == minOrderTotal)&&const DeepCollectionEquality().equals(other.promotions, promotions)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RestaurantDetailDTO&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.city, city) || other.city == city)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&(identical(other.deliveryFee, deliveryFee) || other.deliveryFee == deliveryFee)&&(identical(other.isFreeShipping, isFreeShipping) || other.isFreeShipping == isFreeShipping)&&(identical(other.etaMinutes, etaMinutes) || other.etaMinutes == etaMinutes)&&(identical(other.isOpen, isOpen) || other.isOpen == isOpen)&&(identical(other.status, status) || other.status == status)&&(identical(other.hasTakeAway, hasTakeAway) || other.hasTakeAway == hasTakeAway)&&const DeepCollectionEquality().equals(other.tags, tags)&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.description, description) || other.description == description)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.openTime, openTime) || other.openTime == openTime)&&(identical(other.closeTime, closeTime) || other.closeTime == closeTime)&&(identical(other.minOrderTotal, minOrderTotal) || other.minOrderTotal == minOrderTotal)&&const DeepCollectionEquality().equals(other.promotions, promotions)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,name,slug,coverUrl,addressLine,city,rating,ratingCount,deliveryFee,isFreeShipping,etaMinutes,status,hasTakeAway,const DeepCollectionEquality().hash(tags),const DeepCollectionEquality().hash(categories),isFavorite,description,phone,openTime,closeTime,minOrderTotal,const DeepCollectionEquality().hash(promotions),ratingSummary]);
+int get hashCode => Object.hashAll([runtimeType,id,name,slug,coverUrl,addressLine,city,rating,ratingCount,deliveryFee,isFreeShipping,etaMinutes,isOpen,status,hasTakeAway,const DeepCollectionEquality().hash(tags),const DeepCollectionEquality().hash(categories),isFavorite,description,phone,openTime,closeTime,minOrderTotal,const DeepCollectionEquality().hash(promotions),ratingSummary]);
 
 @override
 String toString() {
-  return 'RestaurantDetailDTO(id: $id, name: $name, slug: $slug, coverUrl: $coverUrl, addressLine: $addressLine, city: $city, rating: $rating, ratingCount: $ratingCount, deliveryFee: $deliveryFee, isFreeShipping: $isFreeShipping, etaMinutes: $etaMinutes, status: $status, hasTakeAway: $hasTakeAway, tags: $tags, categories: $categories, isFavorite: $isFavorite, description: $description, phone: $phone, openTime: $openTime, closeTime: $closeTime, minOrderTotal: $minOrderTotal, promotions: $promotions, ratingSummary: $ratingSummary)';
+  return 'RestaurantDetailDTO(id: $id, name: $name, slug: $slug, coverUrl: $coverUrl, addressLine: $addressLine, city: $city, rating: $rating, ratingCount: $ratingCount, deliveryFee: $deliveryFee, isFreeShipping: $isFreeShipping, etaMinutes: $etaMinutes, isOpen: $isOpen, status: $status, hasTakeAway: $hasTakeAway, tags: $tags, categories: $categories, isFavorite: $isFavorite, description: $description, phone: $phone, openTime: $openTime, closeTime: $closeTime, minOrderTotal: $minOrderTotal, promotions: $promotions, ratingSummary: $ratingSummary)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RestaurantDetailDTOCopyWith<$Res>  {
   factory $RestaurantDetailDTOCopyWith(RestaurantDetailDTO value, $Res Function(RestaurantDetailDTO) _then) = _$RestaurantDetailDTOCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String slug, String coverUrl, String addressLine, String city, double rating, int ratingCount, DeliveryFeeDTO deliveryFee, bool isFreeShipping, int etaMinutes, String status, bool? hasTakeAway, List<String> tags, List<String> categories, bool isFavorite, String? description, String? phone, String? openTime, String? closeTime, MoneyDTO? minOrderTotal, List<PromotionDTO>? promotions, RatingSummaryDTO? ratingSummary
+ String id, String? name, String slug, String coverUrl, String addressLine, String city, double rating, int ratingCount, DeliveryFeeDTO deliveryFee, bool isFreeShipping, int etaMinutes, bool isOpen, String status, bool? hasTakeAway, List<String> tags, List<String> categories, bool isFavorite, String? description, String? phone, String? openTime, String? closeTime, MoneyDTO? minOrderTotal, List<PromotionDTO>? promotions, RatingSummaryDTO? ratingSummary
 });
 
 
@@ -65,11 +65,11 @@ class _$RestaurantDetailDTOCopyWithImpl<$Res>
 
 /// Create a copy of RestaurantDetailDTO
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? coverUrl = null,Object? addressLine = null,Object? city = null,Object? rating = null,Object? ratingCount = null,Object? deliveryFee = null,Object? isFreeShipping = null,Object? etaMinutes = null,Object? status = null,Object? hasTakeAway = freezed,Object? tags = null,Object? categories = null,Object? isFavorite = null,Object? description = freezed,Object? phone = freezed,Object? openTime = freezed,Object? closeTime = freezed,Object? minOrderTotal = freezed,Object? promotions = freezed,Object? ratingSummary = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? slug = null,Object? coverUrl = null,Object? addressLine = null,Object? city = null,Object? rating = null,Object? ratingCount = null,Object? deliveryFee = null,Object? isFreeShipping = null,Object? etaMinutes = null,Object? isOpen = null,Object? status = null,Object? hasTakeAway = freezed,Object? tags = null,Object? categories = null,Object? isFavorite = null,Object? description = freezed,Object? phone = freezed,Object? openTime = freezed,Object? closeTime = freezed,Object? minOrderTotal = freezed,Object? promotions = freezed,Object? ratingSummary = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,coverUrl: null == coverUrl ? _self.coverUrl : coverUrl // ignore: cast_nullable_to_non_nullable
 as String,addressLine: null == addressLine ? _self.addressLine : addressLine // ignore: cast_nullable_to_non_nullable
 as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
@@ -78,7 +78,8 @@ as double,ratingCount: null == ratingCount ? _self.ratingCount : ratingCount // 
 as int,deliveryFee: null == deliveryFee ? _self.deliveryFee : deliveryFee // ignore: cast_nullable_to_non_nullable
 as DeliveryFeeDTO,isFreeShipping: null == isFreeShipping ? _self.isFreeShipping : isFreeShipping // ignore: cast_nullable_to_non_nullable
 as bool,etaMinutes: null == etaMinutes ? _self.etaMinutes : etaMinutes // ignore: cast_nullable_to_non_nullable
-as int,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as int,isOpen: null == isOpen ? _self.isOpen : isOpen // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,hasTakeAway: freezed == hasTakeAway ? _self.hasTakeAway : hasTakeAway // ignore: cast_nullable_to_non_nullable
 as bool?,tags: null == tags ? _self.tags : tags // ignore: cast_nullable_to_non_nullable
 as List<String>,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
@@ -208,10 +209,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String coverUrl,  String addressLine,  String city,  double rating,  int ratingCount,  DeliveryFeeDTO deliveryFee,  bool isFreeShipping,  int etaMinutes,  String status,  bool? hasTakeAway,  List<String> tags,  List<String> categories,  bool isFavorite,  String? description,  String? phone,  String? openTime,  String? closeTime,  MoneyDTO? minOrderTotal,  List<PromotionDTO>? promotions,  RatingSummaryDTO? ratingSummary)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? name,  String slug,  String coverUrl,  String addressLine,  String city,  double rating,  int ratingCount,  DeliveryFeeDTO deliveryFee,  bool isFreeShipping,  int etaMinutes,  bool isOpen,  String status,  bool? hasTakeAway,  List<String> tags,  List<String> categories,  bool isFavorite,  String? description,  String? phone,  String? openTime,  String? closeTime,  MoneyDTO? minOrderTotal,  List<PromotionDTO>? promotions,  RatingSummaryDTO? ratingSummary)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RestaurantDetailDTO() when $default != null:
-return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,_that.city,_that.rating,_that.ratingCount,_that.deliveryFee,_that.isFreeShipping,_that.etaMinutes,_that.status,_that.hasTakeAway,_that.tags,_that.categories,_that.isFavorite,_that.description,_that.phone,_that.openTime,_that.closeTime,_that.minOrderTotal,_that.promotions,_that.ratingSummary);case _:
+return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,_that.city,_that.rating,_that.ratingCount,_that.deliveryFee,_that.isFreeShipping,_that.etaMinutes,_that.isOpen,_that.status,_that.hasTakeAway,_that.tags,_that.categories,_that.isFavorite,_that.description,_that.phone,_that.openTime,_that.closeTime,_that.minOrderTotal,_that.promotions,_that.ratingSummary);case _:
   return orElse();
 
 }
@@ -229,10 +230,10 @@ return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String slug,  String coverUrl,  String addressLine,  String city,  double rating,  int ratingCount,  DeliveryFeeDTO deliveryFee,  bool isFreeShipping,  int etaMinutes,  String status,  bool? hasTakeAway,  List<String> tags,  List<String> categories,  bool isFavorite,  String? description,  String? phone,  String? openTime,  String? closeTime,  MoneyDTO? minOrderTotal,  List<PromotionDTO>? promotions,  RatingSummaryDTO? ratingSummary)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? name,  String slug,  String coverUrl,  String addressLine,  String city,  double rating,  int ratingCount,  DeliveryFeeDTO deliveryFee,  bool isFreeShipping,  int etaMinutes,  bool isOpen,  String status,  bool? hasTakeAway,  List<String> tags,  List<String> categories,  bool isFavorite,  String? description,  String? phone,  String? openTime,  String? closeTime,  MoneyDTO? minOrderTotal,  List<PromotionDTO>? promotions,  RatingSummaryDTO? ratingSummary)  $default,) {final _that = this;
 switch (_that) {
 case _RestaurantDetailDTO():
-return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,_that.city,_that.rating,_that.ratingCount,_that.deliveryFee,_that.isFreeShipping,_that.etaMinutes,_that.status,_that.hasTakeAway,_that.tags,_that.categories,_that.isFavorite,_that.description,_that.phone,_that.openTime,_that.closeTime,_that.minOrderTotal,_that.promotions,_that.ratingSummary);case _:
+return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,_that.city,_that.rating,_that.ratingCount,_that.deliveryFee,_that.isFreeShipping,_that.etaMinutes,_that.isOpen,_that.status,_that.hasTakeAway,_that.tags,_that.categories,_that.isFavorite,_that.description,_that.phone,_that.openTime,_that.closeTime,_that.minOrderTotal,_that.promotions,_that.ratingSummary);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -249,10 +250,10 @@ return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String slug,  String coverUrl,  String addressLine,  String city,  double rating,  int ratingCount,  DeliveryFeeDTO deliveryFee,  bool isFreeShipping,  int etaMinutes,  String status,  bool? hasTakeAway,  List<String> tags,  List<String> categories,  bool isFavorite,  String? description,  String? phone,  String? openTime,  String? closeTime,  MoneyDTO? minOrderTotal,  List<PromotionDTO>? promotions,  RatingSummaryDTO? ratingSummary)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? name,  String slug,  String coverUrl,  String addressLine,  String city,  double rating,  int ratingCount,  DeliveryFeeDTO deliveryFee,  bool isFreeShipping,  int etaMinutes,  bool isOpen,  String status,  bool? hasTakeAway,  List<String> tags,  List<String> categories,  bool isFavorite,  String? description,  String? phone,  String? openTime,  String? closeTime,  MoneyDTO? minOrderTotal,  List<PromotionDTO>? promotions,  RatingSummaryDTO? ratingSummary)?  $default,) {final _that = this;
 switch (_that) {
 case _RestaurantDetailDTO() when $default != null:
-return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,_that.city,_that.rating,_that.ratingCount,_that.deliveryFee,_that.isFreeShipping,_that.etaMinutes,_that.status,_that.hasTakeAway,_that.tags,_that.categories,_that.isFavorite,_that.description,_that.phone,_that.openTime,_that.closeTime,_that.minOrderTotal,_that.promotions,_that.ratingSummary);case _:
+return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,_that.city,_that.rating,_that.ratingCount,_that.deliveryFee,_that.isFreeShipping,_that.etaMinutes,_that.isOpen,_that.status,_that.hasTakeAway,_that.tags,_that.categories,_that.isFavorite,_that.description,_that.phone,_that.openTime,_that.closeTime,_that.minOrderTotal,_that.promotions,_that.ratingSummary);case _:
   return null;
 
 }
@@ -264,11 +265,11 @@ return $default(_that.id,_that.name,_that.slug,_that.coverUrl,_that.addressLine,
 @JsonSerializable()
 
 class _RestaurantDetailDTO implements RestaurantDetailDTO {
-  const _RestaurantDetailDTO({required this.id, required this.name, required this.slug, required this.coverUrl, required this.addressLine, required this.city, required this.rating, required this.ratingCount, required this.deliveryFee, required this.isFreeShipping, required this.etaMinutes, required this.status, required this.hasTakeAway, required final  List<String> tags, required final  List<String> categories, required this.isFavorite, required this.description, required this.phone, required this.openTime, required this.closeTime, required this.minOrderTotal, required final  List<PromotionDTO>? promotions, required this.ratingSummary}): _tags = tags,_categories = categories,_promotions = promotions;
+  const _RestaurantDetailDTO({required this.id, required this.name, required this.slug, required this.coverUrl, required this.addressLine, required this.city, required this.rating, required this.ratingCount, required this.deliveryFee, required this.isFreeShipping, required this.etaMinutes, required this.isOpen, required this.status, required this.hasTakeAway, required final  List<String> tags, required final  List<String> categories, required this.isFavorite, required this.description, required this.phone, required this.openTime, required this.closeTime, required this.minOrderTotal, required final  List<PromotionDTO>? promotions, required this.ratingSummary}): _tags = tags,_categories = categories,_promotions = promotions;
   factory _RestaurantDetailDTO.fromJson(Map<String, dynamic> json) => _$RestaurantDetailDTOFromJson(json);
 
 @override final  String id;
-@override final  String name;
+@override final  String? name;
 @override final  String slug;
 @override final  String coverUrl;
 @override final  String addressLine;
@@ -278,6 +279,7 @@ class _RestaurantDetailDTO implements RestaurantDetailDTO {
 @override final  DeliveryFeeDTO deliveryFee;
 @override final  bool isFreeShipping;
 @override final  int etaMinutes;
+@override final  bool isOpen;
 @override final  String status;
 @override final  bool? hasTakeAway;
  final  List<String> _tags;
@@ -324,16 +326,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RestaurantDetailDTO&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.city, city) || other.city == city)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&(identical(other.deliveryFee, deliveryFee) || other.deliveryFee == deliveryFee)&&(identical(other.isFreeShipping, isFreeShipping) || other.isFreeShipping == isFreeShipping)&&(identical(other.etaMinutes, etaMinutes) || other.etaMinutes == etaMinutes)&&(identical(other.status, status) || other.status == status)&&(identical(other.hasTakeAway, hasTakeAway) || other.hasTakeAway == hasTakeAway)&&const DeepCollectionEquality().equals(other._tags, _tags)&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.description, description) || other.description == description)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.openTime, openTime) || other.openTime == openTime)&&(identical(other.closeTime, closeTime) || other.closeTime == closeTime)&&(identical(other.minOrderTotal, minOrderTotal) || other.minOrderTotal == minOrderTotal)&&const DeepCollectionEquality().equals(other._promotions, _promotions)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RestaurantDetailDTO&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.city, city) || other.city == city)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.ratingCount, ratingCount) || other.ratingCount == ratingCount)&&(identical(other.deliveryFee, deliveryFee) || other.deliveryFee == deliveryFee)&&(identical(other.isFreeShipping, isFreeShipping) || other.isFreeShipping == isFreeShipping)&&(identical(other.etaMinutes, etaMinutes) || other.etaMinutes == etaMinutes)&&(identical(other.isOpen, isOpen) || other.isOpen == isOpen)&&(identical(other.status, status) || other.status == status)&&(identical(other.hasTakeAway, hasTakeAway) || other.hasTakeAway == hasTakeAway)&&const DeepCollectionEquality().equals(other._tags, _tags)&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.description, description) || other.description == description)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.openTime, openTime) || other.openTime == openTime)&&(identical(other.closeTime, closeTime) || other.closeTime == closeTime)&&(identical(other.minOrderTotal, minOrderTotal) || other.minOrderTotal == minOrderTotal)&&const DeepCollectionEquality().equals(other._promotions, _promotions)&&(identical(other.ratingSummary, ratingSummary) || other.ratingSummary == ratingSummary));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,name,slug,coverUrl,addressLine,city,rating,ratingCount,deliveryFee,isFreeShipping,etaMinutes,status,hasTakeAway,const DeepCollectionEquality().hash(_tags),const DeepCollectionEquality().hash(_categories),isFavorite,description,phone,openTime,closeTime,minOrderTotal,const DeepCollectionEquality().hash(_promotions),ratingSummary]);
+int get hashCode => Object.hashAll([runtimeType,id,name,slug,coverUrl,addressLine,city,rating,ratingCount,deliveryFee,isFreeShipping,etaMinutes,isOpen,status,hasTakeAway,const DeepCollectionEquality().hash(_tags),const DeepCollectionEquality().hash(_categories),isFavorite,description,phone,openTime,closeTime,minOrderTotal,const DeepCollectionEquality().hash(_promotions),ratingSummary]);
 
 @override
 String toString() {
-  return 'RestaurantDetailDTO(id: $id, name: $name, slug: $slug, coverUrl: $coverUrl, addressLine: $addressLine, city: $city, rating: $rating, ratingCount: $ratingCount, deliveryFee: $deliveryFee, isFreeShipping: $isFreeShipping, etaMinutes: $etaMinutes, status: $status, hasTakeAway: $hasTakeAway, tags: $tags, categories: $categories, isFavorite: $isFavorite, description: $description, phone: $phone, openTime: $openTime, closeTime: $closeTime, minOrderTotal: $minOrderTotal, promotions: $promotions, ratingSummary: $ratingSummary)';
+  return 'RestaurantDetailDTO(id: $id, name: $name, slug: $slug, coverUrl: $coverUrl, addressLine: $addressLine, city: $city, rating: $rating, ratingCount: $ratingCount, deliveryFee: $deliveryFee, isFreeShipping: $isFreeShipping, etaMinutes: $etaMinutes, isOpen: $isOpen, status: $status, hasTakeAway: $hasTakeAway, tags: $tags, categories: $categories, isFavorite: $isFavorite, description: $description, phone: $phone, openTime: $openTime, closeTime: $closeTime, minOrderTotal: $minOrderTotal, promotions: $promotions, ratingSummary: $ratingSummary)';
 }
 
 
@@ -344,7 +346,7 @@ abstract mixin class _$RestaurantDetailDTOCopyWith<$Res> implements $RestaurantD
   factory _$RestaurantDetailDTOCopyWith(_RestaurantDetailDTO value, $Res Function(_RestaurantDetailDTO) _then) = __$RestaurantDetailDTOCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String slug, String coverUrl, String addressLine, String city, double rating, int ratingCount, DeliveryFeeDTO deliveryFee, bool isFreeShipping, int etaMinutes, String status, bool? hasTakeAway, List<String> tags, List<String> categories, bool isFavorite, String? description, String? phone, String? openTime, String? closeTime, MoneyDTO? minOrderTotal, List<PromotionDTO>? promotions, RatingSummaryDTO? ratingSummary
+ String id, String? name, String slug, String coverUrl, String addressLine, String city, double rating, int ratingCount, DeliveryFeeDTO deliveryFee, bool isFreeShipping, int etaMinutes, bool isOpen, String status, bool? hasTakeAway, List<String> tags, List<String> categories, bool isFavorite, String? description, String? phone, String? openTime, String? closeTime, MoneyDTO? minOrderTotal, List<PromotionDTO>? promotions, RatingSummaryDTO? ratingSummary
 });
 
 
@@ -361,11 +363,11 @@ class __$RestaurantDetailDTOCopyWithImpl<$Res>
 
 /// Create a copy of RestaurantDetailDTO
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? slug = null,Object? coverUrl = null,Object? addressLine = null,Object? city = null,Object? rating = null,Object? ratingCount = null,Object? deliveryFee = null,Object? isFreeShipping = null,Object? etaMinutes = null,Object? status = null,Object? hasTakeAway = freezed,Object? tags = null,Object? categories = null,Object? isFavorite = null,Object? description = freezed,Object? phone = freezed,Object? openTime = freezed,Object? closeTime = freezed,Object? minOrderTotal = freezed,Object? promotions = freezed,Object? ratingSummary = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? slug = null,Object? coverUrl = null,Object? addressLine = null,Object? city = null,Object? rating = null,Object? ratingCount = null,Object? deliveryFee = null,Object? isFreeShipping = null,Object? etaMinutes = null,Object? isOpen = null,Object? status = null,Object? hasTakeAway = freezed,Object? tags = null,Object? categories = null,Object? isFavorite = null,Object? description = freezed,Object? phone = freezed,Object? openTime = freezed,Object? closeTime = freezed,Object? minOrderTotal = freezed,Object? promotions = freezed,Object? ratingSummary = freezed,}) {
   return _then(_RestaurantDetailDTO(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,coverUrl: null == coverUrl ? _self.coverUrl : coverUrl // ignore: cast_nullable_to_non_nullable
 as String,addressLine: null == addressLine ? _self.addressLine : addressLine // ignore: cast_nullable_to_non_nullable
 as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
@@ -374,7 +376,8 @@ as double,ratingCount: null == ratingCount ? _self.ratingCount : ratingCount // 
 as int,deliveryFee: null == deliveryFee ? _self.deliveryFee : deliveryFee // ignore: cast_nullable_to_non_nullable
 as DeliveryFeeDTO,isFreeShipping: null == isFreeShipping ? _self.isFreeShipping : isFreeShipping // ignore: cast_nullable_to_non_nullable
 as bool,etaMinutes: null == etaMinutes ? _self.etaMinutes : etaMinutes // ignore: cast_nullable_to_non_nullable
-as int,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as int,isOpen: null == isOpen ? _self.isOpen : isOpen // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,hasTakeAway: freezed == hasTakeAway ? _self.hasTakeAway : hasTakeAway // ignore: cast_nullable_to_non_nullable
 as bool?,tags: null == tags ? _self._tags : tags // ignore: cast_nullable_to_non_nullable
 as List<String>,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable

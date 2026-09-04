@@ -10,6 +10,7 @@ import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/models/enums/restaurant_sort.dart';
 import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/home/home_provider.dart';
+import 'package:food_drink_delivery/ui/widgets/dot_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -58,25 +59,53 @@ class _HomePageState extends ConsumerState<HomePage> {
       backgroundColor: AppColors.cardColor,
       body: Column(
         children: [
-          _buildTopBar(),
-          const SizedBox(height: 16),
+          _buildTopBar(context),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  _buildCategory(categoryLoadStatus, categories),
-                  const SizedBox(height: 16),
-                  _buildBestPartners(
-                    bestPartnersStatus,
-                    bestPartners,
-                    bodyHeight,
+            child: DefaultTabController(
+              length: 4,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, innerIsScroll) {
+                    return [
+                      SliverToBoxAdapter(
+                        child: _buildCategory(categoryLoadStatus, categories),
+                      ),
+                      SliverToBoxAdapter(child: const SizedBox(height: 16)),
+                      SliverToBoxAdapter(
+                        child: _buildBestPartners(
+                          bestPartnersStatus,
+                          bestPartners,
+                          bodyHeight,
+                        ),
+                      ),
+                      SliverToBoxAdapter(child: const SizedBox(height: 16)),
+                      //SliverToBoxAdapter(child: const SizedBox(height: 16)),
+                      SliverToBoxAdapter(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                            ),
+                          ),
+                          child: _buildTabBar(),
+                        ),
+                      ),
+                    ];
+                  },
+                  body: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                    ),
+                    child: _buildTabBarView(),
                   ),
-                  const SizedBox(height: 16),
-                  _buildAllRestaurants(),
-                  const SizedBox(height: 16),
-                ],
+                ),
               ),
             ),
           ),
@@ -86,7 +115,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildTopBar() {
+  Widget _buildTopBar(BuildContext context) {
     return Container(
       height: 212,
       width: double.infinity,
@@ -120,14 +149,80 @@ class _HomePageState extends ConsumerState<HomePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Delivery to', style: AppTextStyles.redS12Medium),
+                  Text('Delivery to', style: AppTextStyles.red400S12Medium),
                   const SizedBox(height: 2),
                   Text('1014 Prospect Valley', style: AppTextStyles.blackS14),
                 ],
               ),
               const Spacer(),
-              GestureDetector(
-                onTap: () {},
+              InkWell(
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 16),
+                        height: 400,
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: DefaultTabController(
+                          length: 3,
+                          child: Column(
+                            children: [
+                              TabBar(
+                                labelStyle: AppTextStyles.red400S14Medium,
+                                unselectedLabelStyle:
+                                    AppTextStyles.blackS14Medium,
+                                indicatorColor: AppColors.red400,
+                                labelColor: AppColors.red400,
+                                unselectedLabelColor: AppColors.black,
+                                overlayColor: MaterialStateProperty.all(
+                                  AppColors.red400Opacity10,
+                                ),
+                                dividerColor: AppColors.cardColor,
+                                tabs: [
+                                  Tab(text: 'Category'),
+                                  Tab(text: 'Sort by'),
+                                  Tab(text: 'Price'),
+                                ],
+                              ),
+                              Expanded(
+                                child: TabBarView(
+                                  children: [
+                                    _buildCategoryFilter(),
+                                    _buildSortFilter(),
+                                    _buildPriceFilter(),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 20,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.red400,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  'Complete',
+                                  style: AppTextStyles.whiteS14Medium,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(10, 8, 14, 8),
                   decoration: BoxDecoration(
@@ -168,9 +263,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     List<CategoryEntity> categories,
   ) {
     return Container(
+      margin: const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         children: [
@@ -186,7 +282,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           Container(height: 1, color: AppColors.cardColor),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 20, 0, 20),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             height: 138,
             child: categoryLoadStatus == LoadStatus.loading
                 ? const Center(child: CircularProgressIndicator())
@@ -196,7 +292,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.only(right: 20),
+                        padding: EdgeInsets.only(
+                          right: 20,
+                          left: index == 0 ? 20 : 0,
+                        ),
                         child: Column(
                           children: [
                             Container(
@@ -238,7 +337,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         children: [
@@ -266,7 +365,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           Container(height: 1, color: AppColors.cardColor),
           Container(
             height: 238,
-            margin: const EdgeInsets.fromLTRB(20, 20, 16, 0),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 6),
             child: bestPartnersStatus == LoadStatus.loading
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
@@ -275,7 +374,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.only(right: 16),
+                        padding: EdgeInsets.only(
+                          right: 20,
+                          left: index == 0 ? 20 : 0,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -303,11 +405,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                Text(
-                                  bestPartners[index].status,
-                                  style: AppTextStyles.greenS12Medium,
-                                ),
-                                _buildDot(),
+                                bestPartners[index].isOpen == true
+                                    ? Text(
+                                        "Open",
+                                        style: AppTextStyles.greenS12Medium,
+                                      )
+                                    : Text("Closed", style: AppTextStyles.red),
+                                DotWidget(),
                                 Text(
                                   bestPartners[index].addressLine,
                                   style: AppTextStyles.greyS12Medium,
@@ -337,12 +441,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     ],
                                   ),
                                 ),
-                                _buildDot(),
+                                DotWidget(),
                                 Text(
                                   '1.5km',
                                   style: AppTextStyles.blackS12Medium,
                                 ),
-                                _buildDot(),
+                                DotWidget(),
                                 Text(
                                   bestPartners[index].isFreeShipping
                                       ? 'Free Shipping'
@@ -409,7 +513,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       homeProvider.select((state) => state.bestPartners),
     );
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.only(top: 16),
       height: bodyHeight,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -419,48 +523,50 @@ class _HomePageState extends ConsumerState<HomePage> {
           topRight: Radius.circular(30),
         ),
       ),
-      child: Column(
-        children: [
-          Container(
-            height: 5,
-            width: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: AppColors.blackOpacity5,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
-            child: Text('Best Partners', style: AppTextStyles.blackS16Bold),
-          ),
-          Container(
-            height: 1,
-            width: double.infinity,
-            color: AppColors.cardColor,
-          ),
-          const SizedBox(height: 24),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 34),
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: bestPartners.length,
-                itemBuilder: (context, index) {
-                  final tags = bestPartners[index].tags;
-                  return _restaurantInfor(bestPartners, tags, index);
-                },
+      child: SafeArea(
+        top: false,
+        bottom: true,
+        left: false,
+        right: false,
+        child: Column(
+          children: [
+            Container(
+              height: 5,
+              width: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: AppColors.blackOpacity5,
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
+              child: Text('Best Partners', style: AppTextStyles.blackS16Bold),
+            ),
+            Container(
+              height: 1,
+              width: double.infinity,
+              color: AppColors.cardColor,
+            ),
+            //const SizedBox(height: 24),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 34),
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: bestPartners.length,
+                  itemBuilder: (context, index) {
+                    final tags = bestPartners[index].tags;
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: _restaurantInfor(bestPartners, tags, index),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget _buildDot() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Container(height: 2, width: 2, color: AppColors.neutral50),
     );
   }
 
@@ -473,10 +579,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     final restaurantImage = restaurants[index].coverUrl;
     return GestureDetector(
       onTap: () {
-        context.pushNamed(RouteConfig.restaurantDetail, extra: {
-          'restaurantId': restaurantId,
-          'restaurantImage': restaurantImage,
-        });
+        context.pushNamed(
+          RouteConfig.restaurantDetail,
+          extra: {
+            'restaurantId': restaurantId,
+            'restaurantImage': restaurantImage,
+          },
+        );
       },
       child: SizedBox(
         width: double.infinity,
@@ -506,11 +615,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             const SizedBox(height: 4),
             Row(
               children: [
-                Text(
-                  restaurants[index].status,
-                  style: AppTextStyles.greenS12Medium,
-                ),
-                _buildDot(),
+                restaurants[index].isOpen == true
+                    ? Text("Open", style: AppTextStyles.greenS12Medium)
+                    : Text("Closed", style: AppTextStyles.redS12Medium),
+                DotWidget(),
                 Expanded(
                   child: SizedBox(
                     height: 20,
@@ -522,7 +630,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         );
                       },
                       separatorBuilder: (context, index) {
-                        return Center(child: _buildDot());
+                        return Center(child: DotWidget());
                       },
                       itemCount: tags.length,
                       scrollDirection: Axis.horizontal,
@@ -554,9 +662,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ],
                   ),
                 ),
-                _buildDot(),
+                DotWidget(),
+                SvgPicture.asset(AppSvgs.locationIcon),
                 Text('1.5km', style: AppTextStyles.blackS12Medium),
-                _buildDot(),
+                DotWidget(),
                 Text(
                   restaurants[index].isFreeShipping
                       ? 'Free Shipping'
@@ -572,47 +681,32 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildAllRestaurants() {
-    return Container(
-      height: 698,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: DefaultTabController(
-        length: 4,
-        child: Column(
-          children: [
-            TabBar(
-              onTap: (index) {
-                final sort = RestaurantSort.values[index];
-                ref.read(homeProvider.notifier).getRestaurantsBySort(sort);
-              },
-              indicatorColor: AppColors.red400,
-              labelColor: AppColors.red400,
-              overlayColor: MaterialStateProperty.all(
-                AppColors.red400Opacity10,
-              ),
-              tabs: [
-                Tab(text: 'Nearby'),
-                Tab(text: 'Sales'),
-                Tab(text: 'Rate'),
-                Tab(text: 'Fast'),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _buildRestaurantList(RestaurantSort.nearby),
-                  _buildRestaurantList(RestaurantSort.sales),
-                  _buildRestaurantList(RestaurantSort.rate),
-                  _buildRestaurantList(RestaurantSort.fast),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget _buildTabBarView() {
+    return TabBarView(
+      children: [
+        _buildRestaurantList(RestaurantSort.nearby),
+        _buildRestaurantList(RestaurantSort.sales),
+        _buildRestaurantList(RestaurantSort.rate),
+        _buildRestaurantList(RestaurantSort.fast),
+      ],
+    );
+  }
+
+  Widget _buildTabBar() {
+    return TabBar(
+      onTap: (index) {
+        final sort = RestaurantSort.values[index];
+        ref.read(homeProvider.notifier).getRestaurantsBySort(sort);
+      },
+      indicatorColor: AppColors.red400,
+      labelColor: AppColors.red400,
+      overlayColor: MaterialStateProperty.all(AppColors.red400Opacity10),
+      tabs: [
+        Tab(text: 'Nearby'),
+        Tab(text: 'Sales'),
+        Tab(text: 'Rate'),
+        Tab(text: 'Fast'),
+      ],
     );
   }
 
@@ -642,6 +736,174 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: _restaurantInfor(restaurant, restaurant[index].tags, index),
         );
       },
+    );
+  }
+
+  Widget _buildCategoryFilter() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final categoryLoadStatus = ref.watch(
+          homeProvider.select((state) => state.categoryLoadStatus),
+        );
+        final categories = ref.watch(
+          homeProvider.select((state) => state.categories),
+        );
+        final selectedCategoryId = ref.watch(
+          homeProvider.select((state) => state.selectedCategoryId),
+        );
+        return categoryLoadStatus == LoadStatus.loading
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: categories.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        right: 20,
+                        left: index == 0 ? 20 : 0,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          ref
+                              .read(homeProvider.notifier)
+                              .changeSelectedCategoryId(categories[index].id);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundItemCategory,
+                                borderRadius: BorderRadius.circular(50),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    categories[index].iconUrl,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              categories[index].name,
+                              style: categories[index].id == selectedCategoryId
+                                  ? AppTextStyles.red400S12Medium
+                                  : AppTextStyles.blackS12Medium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+      },
+    );
+  }
+
+  Widget _buildSortFilter() {
+    return Consumer(builder: (context, ref, _){
+       String? sort;
+      final selectedSort = ref.watch(
+        homeProvider.select((state) => state.selectedSort),
+      );
+      return Column(
+      children: List.generate(3, (index) {
+        return GestureDetector(
+          onTap:(){
+            if(index == 0){
+              sort = 'recommended';
+            } else if(index == 1){
+              sort = 'fastest';
+            } else {
+              sort = 'popular';
+            }
+            if(index == 0){
+              ref.read(homeProvider.notifier).changeSelectedSort('recommended');
+            } else if(index == 1){
+              ref.read(homeProvider.notifier).changeSelectedSort('fastest');
+            } else {
+              ref.read(homeProvider.notifier).changeSelectedSort('popular');
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColors.cardColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  index == 0
+                      ? AppSvgs.bookmarkIcon
+                      : index == 1
+                      ? AppSvgs.clockIcon
+                      : AppSvgs.fireIcon,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  index == 0
+                      ? 'Recommended'
+                      : index == 1
+                      ? 'Fastest Delivery'
+                      : 'Most Popular',
+                  style: AppTextStyles.blackS14,
+                ),
+                const Spacer(),
+                selectedSort == sort ? SvgPicture.asset(AppSvgs.tickIcon) : const SizedBox(),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+    },);
+  }
+
+  Widget _buildPriceFilter() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Max Delivery Fee', style: AppTextStyles.blackS14Bold),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: AppColors.cardColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text('\$50', style: AppTextStyles.blackS14),
+                    const Spacer(),
+                    Text('\$100', style: AppTextStyles.blackS14),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Slider(
+                  activeColor: AppColors.red400,
+                  padding: EdgeInsets.zero,
+                  value: 30,
+                  min: 0,
+                  max: 100,
+                  onChanged: (value) {},
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

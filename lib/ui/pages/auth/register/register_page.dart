@@ -73,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
               },
               child: Text(
                 AppLocalizations.of(context)!.sign_in_button,
-                style: AppTextStyles.redS14,
+                style: AppTextStyles.red400S14,
               ),
             ),
           ],

@@ -9,7 +9,7 @@ part of 'restaurant_detail_dto.dart';
 _RestaurantDetailDTO _$RestaurantDetailDTOFromJson(Map<String, dynamic> json) =>
     _RestaurantDetailDTO(
       id: json['id'] as String,
-      name: json['name'] as String,
+      name: json['name'] as String?,
       slug: json['slug'] as String,
       coverUrl: json['coverUrl'] as String,
       addressLine: json['addressLine'] as String,
@@ -21,6 +21,7 @@ _RestaurantDetailDTO _$RestaurantDetailDTOFromJson(Map<String, dynamic> json) =>
       ),
       isFreeShipping: json['isFreeShipping'] as bool,
       etaMinutes: (json['etaMinutes'] as num).toInt(),
+      isOpen: json['isOpen'] as bool,
       status: json['status'] as String,
       hasTakeAway: json['hasTakeAway'] as bool?,
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
@@ -59,6 +60,7 @@ Map<String, dynamic> _$RestaurantDetailDTOToJson(
   'deliveryFee': instance.deliveryFee,
   'isFreeShipping': instance.isFreeShipping,
   'etaMinutes': instance.etaMinutes,
+  'isOpen': instance.isOpen,
   'status': instance.status,
   'hasTakeAway': instance.hasTakeAway,
   'tags': instance.tags,

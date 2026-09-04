@@ -9,9 +9,14 @@ class AppColors{
   static const Color neutral100 = Color(0xFF7A869A);
   static const Color neutral800 = Color(0xFF172B4D);
 
+  static const Color red = Color(0xFFDE350B);
+
   static const Color red400 = Color(0xFFEF9F27);
   static Color red400Opacity50 = red400.withOpacity(0.5);
   static Color red400Opacity10 = red400.withOpacity(0.1);
+
+  static const Color red50 = Color(0xFFFFEBE5);
+  static Color red50Opacity20 = red50.withOpacity(0.2);
 
   static const Color cardColor = Color(0xFFF4F5F7);
   

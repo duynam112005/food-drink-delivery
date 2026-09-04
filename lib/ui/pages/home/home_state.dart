@@ -21,6 +21,12 @@ abstract class HomeState with _$HomeState{
     @Default({}) Map<RestaurantSort, List<RestaurantEntity>> restaurants,
     @Default({}) Map<RestaurantSort, LoadStatus> restaurantLoadStatus,
 
+    //filters
+    String? selectedCategoryId,
+    String? selectedSort,
+    double? selectedMaxDeliveryFee,
+    @Default([]) List<RestaurantEntity> filteredRestaurants,
+
     //selected item bottom navigation
     @Default(0) int selectedItem,
     String? errorMessage,

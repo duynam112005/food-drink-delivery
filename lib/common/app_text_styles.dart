@@ -14,6 +14,7 @@ class AppTextStyles {
   //S14
   static final blackS14 = black.copyWith(fontSize: 14);
   static final blackS14Medium = black.copyWith(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: -0.4);
+  static final blackS14Bold = black.copyWith(fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: -0.2);
   //S16
   static final blackS16Bold = black.copyWith(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: -0.28);
   //S20
@@ -46,11 +47,12 @@ class AppTextStyles {
 
 
   //RED
-  static final red = TextStyle(color: AppColors.red400, fontWeight: FontWeight.w400);
+  static final red400 = TextStyle(color: AppColors.red400, fontWeight: FontWeight.w400);
   //S12
-  static final redS12Medium = red.copyWith(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: -0.24);
+  static final red400S12Medium = red400.copyWith(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: -0.24);
   //S14
-  static final redS14 = red.copyWith(fontSize: 14, letterSpacing: -0.4);
+  static final red400S14 = red400.copyWith(fontSize: 14, letterSpacing: -0.4);
+  static final red400S14Medium = red400.copyWith(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: -0.2);
 
 
   //ERROR
@@ -63,4 +65,9 @@ class AppTextStyles {
   static final green = TextStyle(color: AppColors.green400, fontWeight: FontWeight.w400);
   //S12
   static final greenS12Medium = green.copyWith(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: -0.24);
+
+  //RED
+  static final red = TextStyle(color: AppColors.red, fontWeight: FontWeight.w400);
+  //S12
+  static final redS12Medium = red.copyWith(fontSize: 12, fontWeight: FontWeight.w500);
 }

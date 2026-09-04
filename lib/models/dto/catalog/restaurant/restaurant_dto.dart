@@ -17,6 +17,7 @@ abstract class RestaurantDTO with _$RestaurantDTO{
     required DeliveryFeeDTO deliveryFee,
     required bool isFreeShipping,
     required int etaMinutes,
+    required bool isOpen,
     required String status,
     required bool hasTakeAway,
     required List<String> tags,

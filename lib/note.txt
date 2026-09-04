@@ -48,3 +48,5 @@
 - Gõ lệnh này: dart run flutter_launcher_icons:generate để flutter tự tạo và cấu hình file flutter_launcher_icons.yaml
 - Sau đó vào sửa cấu hình như path ảnh
 - Sau khi config xong thì chạy lệnh flutter pub get và dart run flutter_launcher_icons để nó áp dụng 
+
+11. Màn Home và màn Restaurant Detail dùng NestedScrollView

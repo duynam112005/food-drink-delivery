@@ -125,7 +125,7 @@ class LoginPage extends ConsumerWidget {
                 ),
                 TextSpan(
                   text: AppLocalizations.of(context)!.create_account_button,
-                  style: AppTextStyles.redS14,
+                  style: AppTextStyles.red400S14,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       context.pushNamed(RouteConfig.register);

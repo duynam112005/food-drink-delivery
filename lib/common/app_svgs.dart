@@ -17,4 +17,9 @@ class AppSvgs {
   static const String locationIcon = '$_svgPath/ic_location.svg';
   static const String locationMarkerIcon = '$_svgPath/ic_location_marker.svg';
   static const String filterIcon = '$_svgPath/ic_filter.svg';
+  static const String favouriteIcon = '$_svgPath/ic_favourite.svg';
+  static const String clockIcon = '$_svgPath/ic_clock.svg';
+  static const String percentIcon = '$_svgPath/ic_percent.svg';
+  static const String bookmarkIcon = '$_svgPath/ic_bookmark.svg';
+  static const String fireIcon = '$_svgPath/ic_fire.svg';
 }

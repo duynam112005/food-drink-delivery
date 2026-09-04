@@ -20,6 +20,7 @@ class RestaurantMapper {
             ),
             isFreeShipping: dto.isFreeShipping,
             etaMinutes: dto.etaMinutes,
+            isOpen: dto.isOpen,
             status: dto.status,
             tags: dto.tags,
             categories: dto.categories,

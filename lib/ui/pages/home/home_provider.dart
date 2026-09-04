@@ -82,9 +82,7 @@ class Home extends _$Home {
         },
         restaurants: {...state.restaurants, sort: restaurants},
       );
-    } catch (e, stackTrace) {
-      print('Error fetching restaurants for sort $sort: $e');
-      print(stackTrace);
+    } catch (e) {
       state = state.copyWith(
         errorMessage: e.toString(),
         restaurantLoadStatus: {
@@ -95,11 +93,24 @@ class Home extends _$Home {
     }
   }
 
+  void changeSelectedCategoryId(String? categoryId){
+    state = state.copyWith(selectedCategoryId: categoryId);
+  }
+
+  void changeSelectedSort(String? sort){
+    state = state.copyWith(selectedSort: sort);
+  }
+
+  void changeMaxDeliveryFee(double? maxDeliveryFee){
+    state = state.copyWith(selectedMaxDeliveryFee: maxDeliveryFee);
+  }
+
   //change selected item
   void changeSelectedItem(int index) {
     state = state.copyWith(selectedItem: index);
   }
 
+  //initialize
   Future<void> initialize() async {
     Future.wait([
       getCategories(),

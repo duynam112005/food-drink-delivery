@@ -10,7 +10,7 @@ part 'restaurant_detail_dto.g.dart';
 abstract class RestaurantDetailDTO with _$RestaurantDetailDTO{
   const factory RestaurantDetailDTO({
     required String id,
-    required String name,
+    required String? name,
     required String slug,
     required String coverUrl,
     required String addressLine,
@@ -20,6 +20,7 @@ abstract class RestaurantDetailDTO with _$RestaurantDetailDTO{
     required DeliveryFeeDTO deliveryFee,
     required bool isFreeShipping,
     required int etaMinutes,
+    required bool isOpen,
     required String status,
     required bool? hasTakeAway,
     required List<String> tags,

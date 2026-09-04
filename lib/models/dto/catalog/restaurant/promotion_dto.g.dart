@@ -8,16 +8,16 @@ part of 'promotion_dto.dart';
 
 _PromotionDTO _$PromotionDTOFromJson(Map<String, dynamic> json) =>
     _PromotionDTO(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      subTitle: json['subTitle'] as String,
-      voucherCode: json['voucherCode'] as String,
+      id: json['id'] as String?,
+      title: json['title'] as String?,
+      subtitle: json['subtitle'] as String?,
+      voucherCode: json['voucherCode'] as String?,
     );
 
 Map<String, dynamic> _$PromotionDTOToJson(_PromotionDTO instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'subTitle': instance.subTitle,
+      'subtitle': instance.subtitle,
       'voucherCode': instance.voucherCode,
     };

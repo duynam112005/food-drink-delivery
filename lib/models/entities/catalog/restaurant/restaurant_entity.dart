@@ -12,6 +12,7 @@ class RestaurantEntity{
   final DeliveryFeeEntity deliveryFee;
   final bool isFreeShipping;
   final int etaMinutes;
+  final bool isOpen;
   final String status;
   final List<String> tags;
   final List<String> categories;
@@ -29,6 +30,7 @@ class RestaurantEntity{
     required this.deliveryFee,
     required this.isFreeShipping,
     required this.etaMinutes,
+    required this.isOpen,
     required this.status,
     required this.tags,
     required this.categories,
