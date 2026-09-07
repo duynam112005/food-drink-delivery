@@ -107,12 +107,11 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
     final errorMessage = ref.watch(
       restaurantDetailProvider.select((state) => state.errorMessage),
     );
-    return restaurantLoadStatus == LoadStatus.loading
-        ? const Center(child: CircularProgressIndicator())
-        : restaurantLoadStatus == LoadStatus.failure
-        ? Center(child: Text(errorMessage ?? "An error occurred"))
-        : restaurantLoadStatus == LoadStatus.success && restaurant != null
-        ? Padding(
+    return restaurant != null ? switch (restaurantLoadStatus){
+      LoadStatus.initial || LoadStatus.loading => const Center(child: CircularProgressIndicator(color: AppColors.red400),),
+      LoadStatus.failure => Center(child: Text(errorMessage ?? "An error occurred")),
+
+      LoadStatus.success => Padding(
             padding: const EdgeInsets.fromLTRB(36, 0, 36, 24),
             child: Column(
               children: [
@@ -227,7 +226,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
               ],
             ),
           )
-        : const SizedBox();
+    } : const Center(child: CircularProgressIndicator(color: AppColors.red400),);
   }
 
   Widget _buildTabBar() {
@@ -256,13 +255,24 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   Widget _buildTabBarView() {
     return TabBarView(
       children: [
-        ListView(children: []),
+        _buildDeliveryTab(),
         ListView(
           children: List.generate(10, (index) {
             return ListTile(title: Text('Review ${index + 1}'));
           }),
         ),
       ],
+    );
+  }
+
+  Widget _buildDeliveryTab(){
+    final menuSections = ref.watch(
+      restaurantDetailProvider.select((state) => state.menuSections),
+    );
+    return ListView(
+      children: [
+        Text(menuSections.length.toString()),
+      ]
     );
   }
 }

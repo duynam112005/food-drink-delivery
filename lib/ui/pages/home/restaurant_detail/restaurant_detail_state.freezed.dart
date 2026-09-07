@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RestaurantDetailState {
 
- LoadStatus get restaurantLoadStatus; RestaurantDetailEntity? get restaurantDetail; LoadStatus get menuLoadStatus; List<String> get menuSections; LoadStatus get reviewLoadStatus; List<String> get reviewSections; String? get errorMessage;
+ LoadStatus get restaurantLoadStatus; RestaurantDetailEntity? get restaurantDetail; LoadStatus get menuLoadStatus; List<MenuSectionEntity> get menuSections; LoadStatus get reviewLoadStatus; List<String> get reviewSections; String? get errorMessage;
 /// Create a copy of RestaurantDetailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $RestaurantDetailStateCopyWith<$Res>  {
   factory $RestaurantDetailStateCopyWith(RestaurantDetailState value, $Res Function(RestaurantDetailState) _then) = _$RestaurantDetailStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<String> menuSections, LoadStatus reviewLoadStatus, List<String> reviewSections, String? errorMessage
+ LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<MenuSectionEntity> menuSections, LoadStatus reviewLoadStatus, List<String> reviewSections, String? errorMessage
 });
 
 
@@ -68,7 +68,7 @@ restaurantLoadStatus: null == restaurantLoadStatus ? _self.restaurantLoadStatus 
 as LoadStatus,restaurantDetail: freezed == restaurantDetail ? _self.restaurantDetail : restaurantDetail // ignore: cast_nullable_to_non_nullable
 as RestaurantDetailEntity?,menuLoadStatus: null == menuLoadStatus ? _self.menuLoadStatus : menuLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,menuSections: null == menuSections ? _self.menuSections : menuSections // ignore: cast_nullable_to_non_nullable
-as List<String>,reviewLoadStatus: null == reviewLoadStatus ? _self.reviewLoadStatus : reviewLoadStatus // ignore: cast_nullable_to_non_nullable
+as List<MenuSectionEntity>,reviewLoadStatus: null == reviewLoadStatus ? _self.reviewLoadStatus : reviewLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,reviewSections: null == reviewSections ? _self.reviewSections : reviewSections // ignore: cast_nullable_to_non_nullable
 as List<String>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<String> menuSections,  LoadStatus reviewLoadStatus,  List<String> reviewSections,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<String> reviewSections,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RestaurantDetailState() when $default != null:
 return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.errorMessage);case _:
@@ -177,7 +177,7 @@ return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoad
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<String> menuSections,  LoadStatus reviewLoadStatus,  List<String> reviewSections,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<String> reviewSections,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _RestaurantDetailState():
 return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.errorMessage);case _:
@@ -197,7 +197,7 @@ return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoad
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<String> menuSections,  LoadStatus reviewLoadStatus,  List<String> reviewSections,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<String> reviewSections,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _RestaurantDetailState() when $default != null:
 return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.errorMessage);case _:
@@ -212,14 +212,14 @@ return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoad
 
 
 class _RestaurantDetailState implements RestaurantDetailState {
-  const _RestaurantDetailState({this.restaurantLoadStatus = LoadStatus.initial, this.restaurantDetail, this.menuLoadStatus = LoadStatus.initial, final  List<String> menuSections = const [], this.reviewLoadStatus = LoadStatus.initial, final  List<String> reviewSections = const [], this.errorMessage}): _menuSections = menuSections,_reviewSections = reviewSections;
+  const _RestaurantDetailState({this.restaurantLoadStatus = LoadStatus.initial, this.restaurantDetail, this.menuLoadStatus = LoadStatus.initial, final  List<MenuSectionEntity> menuSections = const [], this.reviewLoadStatus = LoadStatus.initial, final  List<String> reviewSections = const [], this.errorMessage}): _menuSections = menuSections,_reviewSections = reviewSections;
   
 
 @override@JsonKey() final  LoadStatus restaurantLoadStatus;
 @override final  RestaurantDetailEntity? restaurantDetail;
 @override@JsonKey() final  LoadStatus menuLoadStatus;
- final  List<String> _menuSections;
-@override@JsonKey() List<String> get menuSections {
+ final  List<MenuSectionEntity> _menuSections;
+@override@JsonKey() List<MenuSectionEntity> get menuSections {
   if (_menuSections is EqualUnmodifiableListView) return _menuSections;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_menuSections);
@@ -265,7 +265,7 @@ abstract mixin class _$RestaurantDetailStateCopyWith<$Res> implements $Restauran
   factory _$RestaurantDetailStateCopyWith(_RestaurantDetailState value, $Res Function(_RestaurantDetailState) _then) = __$RestaurantDetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<String> menuSections, LoadStatus reviewLoadStatus, List<String> reviewSections, String? errorMessage
+ LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<MenuSectionEntity> menuSections, LoadStatus reviewLoadStatus, List<String> reviewSections, String? errorMessage
 });
 
 
@@ -288,7 +288,7 @@ restaurantLoadStatus: null == restaurantLoadStatus ? _self.restaurantLoadStatus 
 as LoadStatus,restaurantDetail: freezed == restaurantDetail ? _self.restaurantDetail : restaurantDetail // ignore: cast_nullable_to_non_nullable
 as RestaurantDetailEntity?,menuLoadStatus: null == menuLoadStatus ? _self.menuLoadStatus : menuLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,menuSections: null == menuSections ? _self._menuSections : menuSections // ignore: cast_nullable_to_non_nullable
-as List<String>,reviewLoadStatus: null == reviewLoadStatus ? _self.reviewLoadStatus : reviewLoadStatus // ignore: cast_nullable_to_non_nullable
+as List<MenuSectionEntity>,reviewLoadStatus: null == reviewLoadStatus ? _self.reviewLoadStatus : reviewLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,reviewSections: null == reviewSections ? _self._reviewSections : reviewSections // ignore: cast_nullable_to_non_nullable
 as List<String>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,

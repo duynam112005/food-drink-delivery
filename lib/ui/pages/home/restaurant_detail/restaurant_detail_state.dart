@@ -1,3 +1,4 @@
+import 'package:food_drink_delivery/models/entities/catalog/restaurant/menu_section_entity.dart';
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/restaurant_detail_entity.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -10,7 +11,7 @@ abstract class RestaurantDetailState with _$RestaurantDetailState{
     RestaurantDetailEntity? restaurantDetail,
 
     @Default(LoadStatus.initial) LoadStatus menuLoadStatus,
-    @Default([]) List<String> menuSections,
+    @Default([]) List<MenuSectionEntity> menuSections,
 
     @Default(LoadStatus.initial) LoadStatus reviewLoadStatus,
     @Default([]) List<String> reviewSections,

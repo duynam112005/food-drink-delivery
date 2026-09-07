@@ -7,6 +7,7 @@ import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/common/app_textfield_widget.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/home/search/search_provider.dart';
 import 'package:food_drink_delivery/ui/widgets/dot_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -124,6 +125,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             restaurant.rating,
             restaurant.isFreeShipping,
             restaurant.deliveryFee.formatted,
+            restaurant.id,
           ),
         ),
       ],
@@ -136,68 +138,77 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     double rating,
     bool isFreeShipping,
     String deliveryFee,
+    String id,
   ) {
-    return Container(
-      height: 112,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: BoxBorder.fromLTRB(
-          bottom: BorderSide(color: AppColors.cardColor, width: 1),
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed(
+          RouteConfig.restaurantDetail,
+          extra: {'restaurantId': id, 'restaurantImage': imageUrl},
+        );
+      },
+      child: Container(
+        height: 112,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: BoxBorder.fromLTRB(
+            bottom: BorderSide(color: AppColors.cardColor, width: 1),
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.fill,
-              width: 80,
-              height: 80,
-            ),
-          ),
-          const SizedBox(width: 18),
-          Column(
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .start,
-            children: [
-              Text(name, style: AppTextStyles.blackS16Medium),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(900),
-                      color: AppColors.red400,
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(AppSvgs.whiteStarIcon),
-                        const SizedBox(width: 4),
-                        Text(
-                          rating.toString(),
-                          style: AppTextStyles.whiteS12Medium,
-                        ),
-                      ],
-                    ),
-                  ),
-                  DotWidget(),
-                  SvgPicture.asset(AppSvgs.locationIcon),
-                  Text('1.5km', style: AppTextStyles.blackS12Medium),
-                  DotWidget(),
-                  Text(
-                    isFreeShipping ? 'Free Shipping' : deliveryFee,
-                    style: AppTextStyles.blackS12Medium,
-                  ),
-                ],
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.fill,
+                width: 80,
+                height: 80,
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(width: 18),
+            Column(
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .start,
+              children: [
+                Text(name, style: AppTextStyles.blackS16Medium),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(900),
+                        color: AppColors.red400,
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(AppSvgs.whiteStarIcon),
+                          const SizedBox(width: 4),
+                          Text(
+                            rating.toString(),
+                            style: AppTextStyles.whiteS12Medium,
+                          ),
+                        ],
+                      ),
+                    ),
+                    DotWidget(),
+                    SvgPicture.asset(AppSvgs.locationIcon),
+                    Text('1.5km', style: AppTextStyles.blackS12Medium),
+                    DotWidget(),
+                    Text(
+                      isFreeShipping ? 'Free Shipping' : deliveryFee,
+                      style: AppTextStyles.blackS12Medium,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

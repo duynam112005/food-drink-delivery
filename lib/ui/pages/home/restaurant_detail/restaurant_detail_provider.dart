@@ -23,7 +23,17 @@ class RestaurantDetail extends _$RestaurantDetail {
     }
   }
 
+  Future<void> getRestaurantMenu(String restaurantId) async{
+    state = state.copyWith(menuLoadStatus: LoadStatus.loading);
+    try{
+      final menuSections = await catalogRepository.getRestaurantMenu(restaurantId: restaurantId);
+      state= state.copyWith(menuLoadStatus: LoadStatus.success, menuSections: menuSections);
+    } catch(e){
+      state = state.copyWith(menuLoadStatus: LoadStatus.failure, errorMessage: e.toString());
+    }
+  }
+
   Future<void> initialize(String restaurantId) async{
-    Future.wait([getRestaurantDetail(restaurantId)]);
+    Future.wait([getRestaurantDetail(restaurantId), getRestaurantMenu(restaurantId)]);
   }
 }

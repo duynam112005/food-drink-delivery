@@ -3,6 +3,7 @@ import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/category/category_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_detail_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_menu_dto.dart';
 import 'package:food_drink_delivery/models/dto/search/search_dto.dart';
 import 'package:food_drink_delivery/models/responses/api_response_dto.dart';
 import 'package:injectable/injectable.dart';
@@ -20,11 +21,15 @@ abstract class ApiClient {
   //AUTH
   //login with social
   @POST("/v1/auth/social")
-  Future<ApiResponseDTO<AuthDTO>> loginWithSocial(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> loginWithSocial(
+    @Body() Map<String, dynamic> body,
+  );
 
   //login with email and password
   @POST("/v1/auth/login")
-  Future<ApiResponseDTO<AuthDTO>> loginWithEmailAndPassword(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> loginWithEmailAndPassword(
+    @Body() Map<String, dynamic> body,
+  );
 
   //register
   @POST("/v1/auth/register")
@@ -32,7 +37,9 @@ abstract class ApiClient {
 
   //verify otp with phone number
   @POST("/v1/auth/phone/verify-otp")
-  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithPhoneNumber(@Body() Map<String, dynamic> body);
+  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithPhoneNumber(
+    @Body() Map<String, dynamic> body,
+  );
 
   //request otp phone
   @POST("/v1/auth/phone/request-otp")
@@ -44,8 +51,9 @@ abstract class ApiClient {
 
   //verify otp with email
   @POST("/v1/auth/password/verify-otp")
-  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithEmail(@Body() Map<String, dynamic> body);
-
+  Future<ApiResponseDTO<AuthDTO>> verifyOTPWithEmail(
+    @Body() Map<String, dynamic> body,
+  );
 
   //CATALOG
   //get categories
@@ -74,7 +82,11 @@ abstract class ApiClient {
 
   //search restaurants and menu items
   @GET('/v1/search')
-  Future<ApiResponseDTO<SearchDTO>> search({
-    @Query('q') required String query, 
-  });
+  Future<ApiResponseDTO<SearchDTO>> search({@Query('q') required String query});
+
+  //get restaurant menu
+  @GET('/v1/restaurants/{id}/menu')
+  Future<ApiResponseDTO<RestaurantMenuDTO>> getRestaurantMenu(
+    @Path('id') String restaurantId,
+  );
 }
