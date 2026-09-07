@@ -58,7 +58,7 @@ abstract class ApiClient {
   //get restaurants by category
   @GET('/v1/restaurants')
   Future<ApiResponseDTO<List<RestaurantDTO>>> getRestaurants({
-    @Query('sort') required String sort,
+    @Query('sort') String? sort,
     @Query('lat') double? lat,
     @Query('lng') double? lng,
     @Query('category') String? category,

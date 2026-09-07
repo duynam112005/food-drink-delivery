@@ -59,7 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       backgroundColor: AppColors.cardColor,
       body: Column(
         children: [
-          _buildTopBar(context),
+          _buildTopBar(context, bodyHeight),
           Expanded(
             child: DefaultTabController(
               length: 4,
@@ -115,7 +115,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildTopBar(BuildContext context) {
+  Widget _buildTopBar(BuildContext context, double bodyHeight) {
     return Container(
       height: 212,
       width: double.infinity,
@@ -197,23 +197,43 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                ),
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 20,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.red400,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Text(
-                                  textAlign: TextAlign.center,
-                                  'Complete',
-                                  style: AppTextStyles.whiteS14Medium,
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                  ref.read(homeProvider.notifier).getRestaurantsByFilter(
+                                    ref.read(homeProvider).selectedCategoryId,
+                                    ref.read(homeProvider).selectedSort,
+                                    ref.read(homeProvider).selectedMaxDeliveryFee,
+                                  );
+                                  showModalBottomSheet(
+                                    context: context,
+                                    scrollControlDisabledMaxHeightRatio: bodyHeight,
+                                    builder: (context) {
+                                      return _buildFilteredRestaurantsDetail(
+                                        context,
+                                        bodyHeight,
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 20,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.red400,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    'Complete',
+                                    style: AppTextStyles.whiteS14Medium,
+                                  ),
                                 ),
                               ),
                             ],
@@ -512,6 +532,30 @@ class _HomePageState extends ConsumerState<HomePage> {
     final bestPartners = ref.watch(
       homeProvider.select((state) => state.bestPartners),
     );
+    return _buildRestaurantListSheet(
+      context,
+      bodyHeight,
+      'Best Partners',
+      bestPartners,
+    );
+  }
+
+  Widget _buildFilteredRestaurantsDetail(BuildContext context, double bodyHeight) {
+    final filteredRestaurantsLoadStatus = ref.watch(
+      homeProvider.select((state) => state.filteredRestaurantsLoadStatus),
+    );
+    final filteredRestaurants = ref.watch(
+      homeProvider.select((state) => state.filteredRestaurants),
+    );
+    return _buildRestaurantListSheet(
+      context,
+      bodyHeight,
+      'Filtered Restaurants',
+      filteredRestaurants,
+    );
+  }
+
+  Widget _buildRestaurantListSheet(BuildContext context, double bodyHeight, String title, List<RestaurantEntity> restaurants){
     return Container(
       padding: const EdgeInsets.only(top: 16),
       height: bodyHeight,
@@ -540,7 +584,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
-              child: Text('Best Partners', style: AppTextStyles.blackS16Bold),
+              child: Text(title, style: AppTextStyles.blackS16Bold),
             ),
             Container(
               height: 1,
@@ -553,12 +597,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 34),
                 child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                  itemCount: bestPartners.length,
+                  itemCount: restaurants.length,
                   itemBuilder: (context, index) {
-                    final tags = bestPartners[index].tags;
+                    final tags = restaurants[index].tags;
                     return Padding(
                       padding: const EdgeInsets.only(top: 24),
-                      child: _restaurantInfor(bestPartners, tags, index),
+                      child: _restaurantInfor(context, restaurants, tags, index),
                     );
                   },
                 ),
@@ -569,8 +613,10 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
     );
   }
+  
 
   Widget _restaurantInfor(
+    BuildContext context,
     List<RestaurantEntity> restaurants,
     List<String> tags,
     int index,
@@ -733,7 +779,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-          child: _restaurantInfor(restaurant, restaurant[index].tags, index),
+          child: _restaurantInfor(context, restaurant, restaurant[index].tags, index),
         );
       },
     );
@@ -807,103 +853,114 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildSortFilter() {
-    return Consumer(builder: (context, ref, _){
-       String? sort;
-      final selectedSort = ref.watch(
-        homeProvider.select((state) => state.selectedSort),
-      );
-      return Column(
-      children: List.generate(3, (index) {
-        return GestureDetector(
-          onTap:(){
-            if(index == 0){
-              sort = 'recommended';
-            } else if(index == 1){
-              sort = 'fastest';
-            } else {
-              sort = 'popular';
-            }
-            if(index == 0){
-              ref.read(homeProvider.notifier).changeSelectedSort('recommended');
-            } else if(index == 1){
-              ref.read(homeProvider.notifier).changeSelectedSort('fastest');
-            } else {
-              ref.read(homeProvider.notifier).changeSelectedSort('popular');
-            }
-          },
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-            decoration: BoxDecoration(
-              color: AppColors.cardColor,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Row(
-              children: [
-                SvgPicture.asset(
-                  index == 0
-                      ? AppSvgs.bookmarkIcon
-                      : index == 1
-                      ? AppSvgs.clockIcon
-                      : AppSvgs.fireIcon,
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  index == 0
-                      ? 'Recommended'
-                      : index == 1
-                      ? 'Fastest Delivery'
-                      : 'Most Popular',
-                  style: AppTextStyles.blackS14,
-                ),
-                const Spacer(),
-                selectedSort == sort ? SvgPicture.asset(AppSvgs.tickIcon) : const SizedBox(),
-              ],
-            ),
-          ),
+    return Consumer(
+      builder: (context, ref, _) {
+        String? sort;
+        final selectedSort = ref.watch(
+          homeProvider.select((state) => state.selectedSort),
         );
-      }),
+        return Column(
+          children: List.generate(3, (index) {
+            final sort = switch (index) {
+              0 => 'recommended',
+              1 => 'fastest',
+              _ => 'popular',
+            };
+            return GestureDetector(
+              onTap: () {
+                ref.read(homeProvider.notifier).changeSelectedSort(sort);
+              },
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.cardColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      index == 0
+                          ? AppSvgs.bookmarkIcon
+                          : index == 1
+                          ? AppSvgs.clockIcon
+                          : AppSvgs.fireIcon,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      index == 0
+                          ? 'Recommended'
+                          : index == 1
+                          ? 'Fastest Delivery'
+                          : 'Most Popular',
+                      style: AppTextStyles.blackS14,
+                    ),
+                    const Spacer(),
+                    selectedSort == sort
+                        ? SvgPicture.asset(AppSvgs.tickIcon)
+                        : const SizedBox(),
+                  ],
+                ),
+              ),
+            );
+          }),
+        );
+      },
     );
-    },);
   }
 
   Widget _buildPriceFilter() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Max Delivery Fee', style: AppTextStyles.blackS14Bold),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            decoration: BoxDecoration(
-              color: AppColors.cardColor,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              children: [
-                Row(
+    return Consumer(
+      builder: (context, ref, _) {
+        final maxDeliveryFeeValue = ref.watch(
+          homeProvider.select((state) => state.selectedMaxDeliveryFee),
+        );
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Max Delivery Fee', style: AppTextStyles.blackS14Bold),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.cardColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
                   children: [
-                    Text('\$50', style: AppTextStyles.blackS14),
-                    const Spacer(),
-                    Text('\$100', style: AppTextStyles.blackS14),
+                    Row(
+                      children: [
+                        Text('\$${maxDeliveryFeeValue?.toStringAsFixed(1) ?? "0.0"}', style: AppTextStyles.blackS14),
+                        const Spacer(),
+                        Text('\$100', style: AppTextStyles.blackS14),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Slider(
+                      activeColor: AppColors.red400,
+                      padding: EdgeInsets.zero,
+                      value: maxDeliveryFeeValue ?? 0,
+                      min: 0,
+                      max: 100,
+                      onChanged: (value) {
+                        ref.read(homeProvider.notifier).changeMaxDeliveryFee(value);
+                      },
+                    ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Slider(
-                  activeColor: AppColors.red400,
-                  padding: EdgeInsets.zero,
-                  value: 30,
-                  min: 0,
-                  max: 100,
-                  onChanged: (value) {},
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

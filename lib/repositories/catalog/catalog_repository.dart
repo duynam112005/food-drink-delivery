@@ -68,6 +68,19 @@ class CatalogRepository {
     }
   }
 
+  //get restaurants by filter
+  Future<List<RestaurantEntity>> getRestaurantsByFilter({String? categoryId, String? sort, double? maxDeliveryFee}) async{
+    try{
+      final response = await apiClient.getRestaurants(sort: sort, category: categoryId, maxDeliveryFee: maxDeliveryFee?.toInt());
+      final results = response.data;
+      return RestaurantMapper.toEntityList(results);
+    } on DioException catch (e){
+      throw ApiException(
+        e.message ?? "An error occurred while fetching restaurants by filter",
+      );
+    }
+  }
+
   //get restaurant detail
   Future<RestaurantDetailEntity> getRestaurantDetail(String restaurantId) async{
     try{

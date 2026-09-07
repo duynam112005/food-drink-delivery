@@ -296,7 +296,7 @@ class _ApiClient implements ApiClient {
 
   @override
   Future<ApiResponseDTO<List<RestaurantDTO>>> getRestaurants({
-    required String sort,
+    String? sort,
     double? lat,
     double? lng,
     String? category,

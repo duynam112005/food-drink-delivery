@@ -25,6 +25,7 @@ abstract class HomeState with _$HomeState{
     String? selectedCategoryId,
     String? selectedSort,
     double? selectedMaxDeliveryFee,
+    @Default(LoadStatus.initial) LoadStatus filteredRestaurantsLoadStatus,
     @Default([]) List<RestaurantEntity> filteredRestaurants,
 
     //selected item bottom navigation

@@ -256,9 +256,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   Widget _buildTabBarView() {
     return TabBarView(
       children: [
-        ListView(
-          children: []
-        ),
+        ListView(children: []),
         ListView(
           children: List.generate(10, (index) {
             return ListTile(title: Text('Review ${index + 1}'));

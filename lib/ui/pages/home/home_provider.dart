@@ -93,16 +93,36 @@ class Home extends _$Home {
     }
   }
 
+  //change selected category id
   void changeSelectedCategoryId(String? categoryId){
     state = state.copyWith(selectedCategoryId: categoryId);
   }
 
+  //selected sort
   void changeSelectedSort(String? sort){
     state = state.copyWith(selectedSort: sort);
   }
 
+  //selected max delivery fee
   void changeMaxDeliveryFee(double? maxDeliveryFee){
     state = state.copyWith(selectedMaxDeliveryFee: maxDeliveryFee);
+  }
+
+  //get filter restaurants
+  Future<void> getRestaurantsByFilter(String? categoryId, String? sort, double? maxDeliveryFee) async{
+    state = state.copyWith(filteredRestaurantsLoadStatus: LoadStatus.loading);
+    try{
+      final filteredRestaurants = await catalogRepository.getRestaurantsByFilter(categoryId: categoryId, sort: sort, maxDeliveryFee: maxDeliveryFee);
+      state = state.copyWith(
+        filteredRestaurantsLoadStatus: LoadStatus.success,
+        filteredRestaurants: filteredRestaurants,
+      );
+    } catch(e){
+      state = state.copyWith(
+        errorMessage: e.toString(),
+        filteredRestaurantsLoadStatus: LoadStatus.failure,
+      );
+    }
   }
 
   //change selected item
