@@ -22,4 +22,6 @@ class AppSvgs {
   static const String percentIcon = '$_svgPath/ic_percent.svg';
   static const String bookmarkIcon = '$_svgPath/ic_bookmark.svg';
   static const String fireIcon = '$_svgPath/ic_fire.svg';
+  static const String arrowLeftIcon = '$_svgPath/ic_arrow_left.svg';
+  static const String cancelIcon = '$_svgPath/ic_cancel.svg';
 }

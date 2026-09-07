@@ -10,15 +10,20 @@ class AppTextfieldWidget extends StatefulWidget {
     super.key,
     required this.controller,
     required this.hintText,
-    required this.onChanged,
-    required this.prefixIcon,
+    this.onChanged,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.onTap,
+    this.autoFocus,
   });
 
   final String hintText;
   final TextEditingController controller;
   final Function(String)? onChanged;
   final Widget? prefixIcon;
-
+  final Widget? suffixIcon;
+  final Function()? onTap;
+  final bool? autoFocus;
   @override
   State<AppTextfieldWidget> createState() => _AppTextfieldWidgetState();
 }
@@ -33,6 +38,9 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
 
         return TextFormField(
           controller: widget.controller,
+          onTap: widget.onTap != null ? () => widget.onTap!() : null,
+          autofocus: widget.autoFocus ?? false,
+          cursorColor: AppColors.red400,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           onChanged: widget.onChanged,
           decoration: InputDecoration(
@@ -49,12 +57,13 @@ class _AppTextfieldWidgetState extends State<AppTextfieldWidget> {
               borderSide: BorderSide.none,
             ),
             prefixIcon: widget.prefixIcon,
-            suffixIcon: emailText.contains('@gmail.com')
-                ? Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(AppSvgs.tickIcon),
-                  )
-                : null,
+            suffixIcon: widget.suffixIcon,
+            // suffixIcon: emailText.contains('@gmail.com')
+            //     ? Padding(
+            //         padding: const EdgeInsets.all(10),
+            //         child: SvgPicture.asset(AppSvgs.tickIcon),
+            //       )
+            //     : null,
           ),
           validator: switch (widget.hintText) {
             "Email" => FormBuilderValidators.compose([

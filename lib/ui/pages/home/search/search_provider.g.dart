@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_provider.dart';
+part of 'search_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,51 +9,51 @@ part of 'home_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(Home)
-const homeProvider = HomeProvider._();
+@ProviderFor(Search)
+const searchProvider = SearchProvider._();
 
-final class HomeProvider extends $NotifierProvider<Home, HomeState> {
-  const HomeProvider._()
+final class SearchProvider extends $NotifierProvider<Search, SearchState> {
+  const SearchProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'homeProvider',
-        isAutoDispose: false,
+        name: r'searchProvider',
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$homeHash();
+  String debugGetCreateSourceHash() => _$searchHash();
 
   @$internal
   @override
-  Home create() => Home();
+  Search create() => Search();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(HomeState value) {
+  Override overrideWithValue(SearchState value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<HomeState>(value),
+      providerOverride: $SyncValueProvider<SearchState>(value),
     );
   }
 }
 
-String _$homeHash() => r'08d572d531cc5008b705138dc5d0864bd4b1acec';
+String _$searchHash() => r'6fc246d96406f1129d8d787b5397cd171654b602';
 
-abstract class _$Home extends $Notifier<HomeState> {
-  HomeState build();
+abstract class _$Search extends $Notifier<SearchState> {
+  SearchState build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<HomeState, HomeState>;
+    final ref = this.ref as $Ref<SearchState, SearchState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<HomeState, HomeState>,
-              HomeState,
+              AnyNotifier<SearchState, SearchState>,
+              SearchState,
               Object?,
               Object?
             >;

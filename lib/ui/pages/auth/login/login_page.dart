@@ -240,7 +240,6 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
               return AppTextfieldWidget(
                 controller: _emailController,
                 hintText: 'Email',
-                prefixIcon: null,
                 onChanged: (value) {
                   ref
                       .read(loginProvider.notifier)

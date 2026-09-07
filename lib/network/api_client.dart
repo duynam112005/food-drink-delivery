@@ -3,6 +3,7 @@ import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/category/category_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_detail_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_dto.dart';
+import 'package:food_drink_delivery/models/dto/search/search_dto.dart';
 import 'package:food_drink_delivery/models/responses/api_response_dto.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/error_logger.dart';
@@ -70,4 +71,10 @@ abstract class ApiClient {
   Future<ApiResponseDTO<RestaurantDetailDTO>> getRestaurantDetail(
     @Path('id') String restaurantId,
   );
+
+  //search restaurants and menu items
+  @GET('/v1/search')
+  Future<ApiResponseDTO<SearchDTO>> search({
+    @Query('q') required String query, 
+  });
 }

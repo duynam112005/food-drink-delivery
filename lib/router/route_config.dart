@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:food_drink_delivery/ui/pages/home/restaurant_detail/restaurant_detail_page.dart';
+import 'package:food_drink_delivery/ui/pages/home/search/search_page.dart';
 import 'package:food_drink_delivery/ui/pages/onboarding/onboarding_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/forgot_password/enter_email/enter_email_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/login/login_page.dart';
@@ -22,6 +23,7 @@ class RouteConfig {
 
   static const String home = '/home';
   static const String restaurantDetail = '/restaurant_detail';
+  static const String search = '/search';
 
   static final routes = GoRouter(
     initialLocation: home,
@@ -65,6 +67,9 @@ class RouteConfig {
             final restaurantId = extra['restaurantId'] as String;
             final restaurantImage = extra['restaurantImage'] as String;
             return RestaurantDetailPage(restaurantId: restaurantId, restaurantImage: restaurantImage);
+          }),
+          GoRoute(path: search, name: search, builder: (context, state){
+            return const SearchPage();
           })
         ]
       ),

@@ -135,8 +135,13 @@ class _HomePageState extends ConsumerState<HomePage> {
               AppSvgs.locationIcon,
               fit: BoxFit.scaleDown,
             ),
+            onTap:(){
+              context.pushNamed(RouteConfig.search);
+            },
             hintText: 'Search on Coody',
-            onChanged: (value) {},
+            onChanged: (value) {
+              
+            },
           ),
           const SizedBox(height: 24),
           Row(
@@ -200,14 +205,26 @@ class _HomePageState extends ConsumerState<HomePage> {
                               InkWell(
                                 onTap: () {
                                   Navigator.of(context).pop();
-                                  ref.read(homeProvider.notifier).getRestaurantsByFilter(
-                                    ref.read(homeProvider).selectedCategoryId,
-                                    ref.read(homeProvider).selectedSort,
-                                    ref.read(homeProvider).selectedMaxDeliveryFee,
-                                  );
+                                  final selectedCategoryId = ref
+                                      .read(homeProvider)
+                                      .selectedCategoryId;
+                                  final selectedSort = ref
+                                      .read(homeProvider)
+                                      .selectedSort;
+                                  final selectedMaxDeliveryFee = ref
+                                      .read(homeProvider)
+                                      .selectedMaxDeliveryFee;
+                                  ref
+                                      .read(homeProvider.notifier)
+                                      .getRestaurantsByFilter(
+                                        selectedCategoryId,
+                                        selectedSort,
+                                        selectedMaxDeliveryFee,
+                                      );
                                   showModalBottomSheet(
                                     context: context,
-                                    scrollControlDisabledMaxHeightRatio: bodyHeight,
+                                    scrollControlDisabledMaxHeightRatio:
+                                        bodyHeight,
                                     builder: (context) {
                                       return _buildFilteredRestaurantsDetail(
                                         context,
@@ -282,6 +299,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     LoadStatus categoryLoadStatus,
     List<CategoryEntity> categories,
   ) {
+    final errorMessage = ref.watch(
+      homeProvider.select((state) => state.errorMessage),
+    );
     return Container(
       margin: const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
@@ -304,45 +324,49 @@ class _HomePageState extends ConsumerState<HomePage> {
           Container(
             margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             height: 138,
-            child: categoryLoadStatus == LoadStatus.loading
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: categories.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          right: 20,
-                          left: index == 0 ? 20 : 0,
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: AppColors.backgroundItemCategory,
-                                borderRadius: BorderRadius.circular(50),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    categories[index].iconUrl,
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+            child: switch (categoryLoadStatus) {
+              LoadStatus.initial || LoadStatus.loading => const Center(
+                child: CircularProgressIndicator(color: AppColors.red400),
+              ),
+              LoadStatus.failure => Center(
+                child: Text(errorMessage ?? 'Failed to load categories'),
+              ),
+              LoadStatus.success => ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: categories.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: 20,
+                      left: index == 0 ? 20 : 0,
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundItemCategory,
+                            borderRadius: BorderRadius.circular(50),
+                            image: DecorationImage(
+                              image: NetworkImage(categories[index].iconUrl),
+                              fit: BoxFit.cover,
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              categories[index].name,
-                              style: AppTextStyles.blackS12Medium,
-                            ),
-                          ],
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                        const SizedBox(height: 8),
+                        Text(
+                          categories[index].name,
+                          style: AppTextStyles.blackS12Medium,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            },
           ),
         ],
       ),
@@ -354,6 +378,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     List<RestaurantEntity> bestPartners,
     double bodyHeight,
   ) {
+    final errorMessage = ref.watch(
+      homeProvider.select((state) => state.errorMessage),
+    );
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -386,102 +413,103 @@ class _HomePageState extends ConsumerState<HomePage> {
           Container(
             height: 238,
             margin: const EdgeInsets.fromLTRB(0, 20, 0, 6),
-            child: bestPartnersStatus == LoadStatus.loading
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: bestPartners.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          right: 20,
-                          left: index == 0 ? 20 : 0,
+            child: switch (bestPartnersStatus) {
+              LoadStatus.initial || LoadStatus.loading => const Center(
+                child: CircularProgressIndicator(color: AppColors.red400),
+              ),
+              LoadStatus.failure => Center(
+                child: Text(errorMessage ?? 'Failed to load best partners'),
+              ),
+              LoadStatus.success => ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: bestPartners.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: 20,
+                      left: index == 0 ? 20 : 0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 116,
+                          width: 204,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image.network(
+                              bestPartners[index].coverUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        const SizedBox(height: 16),
+                        Row(
                           children: [
-                            SizedBox(
-                              height: 116,
-                              width: 204,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.network(
-                                  bestPartners[index].coverUrl,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                            Text(
+                              bestPartners[index].name,
+                              style: AppTextStyles.blackS20Medium,
                             ),
-                            const SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Text(
-                                  bestPartners[index].name,
-                                  style: AppTextStyles.blackS20Medium,
-                                ),
-                                SvgPicture.asset(AppSvgs.shieldCheckIcon),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                bestPartners[index].isOpen == true
-                                    ? Text(
-                                        "Open",
-                                        style: AppTextStyles.greenS12Medium,
-                                      )
-                                    : Text("Closed", style: AppTextStyles.red),
-                                DotWidget(),
-                                Text(
-                                  bestPartners[index].addressLine,
-                                  style: AppTextStyles.greyS12Medium,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(900),
-                                    color: AppColors.red400,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset(AppSvgs.whiteStarIcon),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        bestPartners[index].rating.toString(),
-                                        style: AppTextStyles.whiteS12Medium,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                DotWidget(),
-                                Text(
-                                  '1.5km',
-                                  style: AppTextStyles.blackS12Medium,
-                                ),
-                                DotWidget(),
-                                Text(
-                                  bestPartners[index].isFreeShipping
-                                      ? 'Free Shipping'
-                                      : bestPartners[index]
-                                            .deliveryFee
-                                            .formatted,
-                                  style: AppTextStyles.blackS12Medium,
-                                ),
-                              ],
+                            SvgPicture.asset(AppSvgs.shieldCheckIcon),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            bestPartners[index].isOpen == true
+                                ? Text(
+                                    "Open",
+                                    style: AppTextStyles.greenS12Medium,
+                                  )
+                                : Text("Closed", style: AppTextStyles.red),
+                            DotWidget(),
+                            Text(
+                              bestPartners[index].addressLine,
+                              style: AppTextStyles.greyS12Medium,
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(900),
+                                color: AppColors.red400,
+                              ),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(AppSvgs.whiteStarIcon),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    bestPartners[index].rating.toString(),
+                                    style: AppTextStyles.whiteS12Medium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            DotWidget(),
+                            Text('1.5km', style: AppTextStyles.blackS12Medium),
+                            DotWidget(),
+                            Text(
+                              bestPartners[index].isFreeShipping
+                                  ? 'Free Shipping'
+                                  : bestPartners[index].deliveryFee.formatted,
+                              style: AppTextStyles.blackS12Medium,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            },
           ),
         ],
       ),
@@ -537,10 +565,14 @@ class _HomePageState extends ConsumerState<HomePage> {
       bodyHeight,
       'Best Partners',
       bestPartners,
+      null,
     );
   }
 
-  Widget _buildFilteredRestaurantsDetail(BuildContext context, double bodyHeight) {
+  Widget _buildFilteredRestaurantsDetail(
+    BuildContext context,
+    double bodyHeight,
+  ) {
     final filteredRestaurantsLoadStatus = ref.watch(
       homeProvider.select((state) => state.filteredRestaurantsLoadStatus),
     );
@@ -552,10 +584,17 @@ class _HomePageState extends ConsumerState<HomePage> {
       bodyHeight,
       'Filtered Restaurants',
       filteredRestaurants,
+      filteredRestaurantsLoadStatus,
     );
   }
 
-  Widget _buildRestaurantListSheet(BuildContext context, double bodyHeight, String title, List<RestaurantEntity> restaurants){
+  Widget _buildRestaurantListSheet(
+    BuildContext context,
+    double bodyHeight,
+    String title,
+    List<RestaurantEntity> restaurants,
+    LoadStatus? loadStatus,
+  ) {
     return Container(
       padding: const EdgeInsets.only(top: 16),
       height: bodyHeight,
@@ -572,48 +611,104 @@ class _HomePageState extends ConsumerState<HomePage> {
         bottom: true,
         left: false,
         right: false,
-        child: Column(
-          children: [
-            Container(
-              height: 5,
-              width: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: AppColors.blackOpacity5,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
-              child: Text(title, style: AppTextStyles.blackS16Bold),
-            ),
-            Container(
-              height: 1,
-              width: double.infinity,
-              color: AppColors.cardColor,
-            ),
-            //const SizedBox(height: 24),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 34),
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: restaurants.length,
-                  itemBuilder: (context, index) {
-                    final tags = restaurants[index].tags;
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 24),
-                      child: _restaurantInfor(context, restaurants, tags, index),
-                    );
-                  },
+        child: loadStatus == null
+            ? Column(
+                children: [
+                  Container(
+                    height: 5,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: AppColors.blackOpacity5,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
+                    child: Text(title, style: AppTextStyles.blackS16Bold),
+                  ),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: AppColors.cardColor,
+                  ),
+                  //const SizedBox(height: 24),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 34),
+                      child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: restaurants.length,
+                        itemBuilder: (context, index) {
+                          final tags = restaurants[index].tags;
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 24),
+                            child: _restaurantInfor(
+                              context,
+                              restaurants,
+                              tags,
+                              index,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : switch (loadStatus) {
+                LoadStatus.loading || LoadStatus.initial => const Center(
+                  child: CircularProgressIndicator(color: AppColors.red400),
                 ),
-              ),
-            ),
-          ],
-        ),
+                LoadStatus.failure => const Center(
+                  child: Text('Failed to load restaurants'),
+                ),
+                LoadStatus.success => Column(
+                  children: [
+                    Container(
+                      height: 5,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: AppColors.blackOpacity5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
+                      child: Text(title, style: AppTextStyles.blackS16Bold),
+                    ),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: AppColors.cardColor,
+                    ),
+                    //const SizedBox(height: 24),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 34),
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: restaurants.length,
+                          itemBuilder: (context, index) {
+                            final tags = restaurants[index].tags;
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 24),
+                              child: _restaurantInfor(
+                                context,
+                                restaurants,
+                                tags,
+                                index,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              },
       ),
     );
   }
-  
 
   Widget _restaurantInfor(
     BuildContext context,
@@ -763,26 +858,45 @@ class _HomePageState extends ConsumerState<HomePage> {
     final status = ref.watch(
       homeProvider.select((state) => state.restaurantLoadStatus[sort]),
     );
-    if (status == LoadStatus.loading) {
-      return Center(child: CircularProgressIndicator());
-    }
-    if (status == LoadStatus.failure) {
-      return Center(child: Text('Failed to load restaurants'));
-    }
-    if (restaurant == null || restaurant.isEmpty) {
-      return Center(child: Text('No restaurants available'));
-    }
-    return ListView.separated(
-      itemCount: restaurant.length,
-      separatorBuilder: (context, index) =>
-          Container(height: 1, color: AppColors.cardColor),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-          child: _restaurantInfor(context, restaurant, restaurant[index].tags, index),
-        );
-      },
+    final errorMessage = ref.watch(
+      homeProvider.select((state) => state.errorMessage),
     );
+    switch (status) {
+      case LoadStatus.initial:
+      case LoadStatus.loading:
+        return const Center(
+          child: CircularProgressIndicator(color: AppColors.red400),
+        );
+      case LoadStatus.failure:
+        return Center(
+          child: Text(errorMessage ?? 'Failed to load restaurants'),
+        );
+      case LoadStatus.success:
+        if (restaurant == null) {
+          return SizedBox();
+        }
+        if (restaurant.isEmpty) {
+          return const Center(child: Text('No restaurants available'));
+        }
+        return ListView.separated(
+          itemCount: restaurant.length,
+          separatorBuilder: (context, index) =>
+              Container(height: 1, color: AppColors.cardColor),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: _restaurantInfor(
+                context,
+                restaurant,
+                restaurant[index].tags,
+                index,
+              ),
+            );
+          },
+        );
+      default:
+        return const SizedBox();
+    }
   }
 
   Widget _buildCategoryFilter() {
@@ -797,57 +911,68 @@ class _HomePageState extends ConsumerState<HomePage> {
         final selectedCategoryId = ref.watch(
           homeProvider.select((state) => state.selectedCategoryId),
         );
-        return categoryLoadStatus == LoadStatus.loading
-            ? const Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: categories.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        right: 20,
-                        left: index == 0 ? 20 : 0,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          ref
-                              .read(homeProvider.notifier)
-                              .changeSelectedCategoryId(categories[index].id);
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: AppColors.backgroundItemCategory,
-                                borderRadius: BorderRadius.circular(50),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    categories[index].iconUrl,
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
+        final errorMessage = ref.watch(
+          homeProvider.select((state) => state.errorMessage),
+        );
+        switch (categoryLoadStatus) {
+          case LoadStatus.initial:
+          case LoadStatus.loading:
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.red400),
+            );
+          case LoadStatus.failure:
+            return Center(
+              child: Text(errorMessage ?? 'Failed to load categories'),
+            );
+          case LoadStatus.success:
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: categories.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: 20,
+                      left: index == 0 ? 20 : 0,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(homeProvider.notifier)
+                            .changeSelectedCategoryId(categories[index].id);
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 100,
+                            width: 100,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundItemCategory,
+                              borderRadius: BorderRadius.circular(50),
+                              image: DecorationImage(
+                                image: NetworkImage(categories[index].iconUrl),
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              categories[index].name,
-                              style: categories[index].id == selectedCategoryId
-                                  ? AppTextStyles.red400S12Medium
-                                  : AppTextStyles.blackS12Medium,
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            categories[index].name,
+                            style: categories[index].id == selectedCategoryId
+                                ? AppTextStyles.red400S12Medium
+                                : AppTextStyles.blackS12Medium,
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
-              );
+                    ),
+                  );
+                },
+              ),
+            );
+        }
       },
     );
   }
@@ -855,7 +980,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildSortFilter() {
     return Consumer(
       builder: (context, ref, _) {
-        String? sort;
         final selectedSort = ref.watch(
           homeProvider.select((state) => state.selectedSort),
         );
@@ -938,7 +1062,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                   children: [
                     Row(
                       children: [
-                        Text('\$${maxDeliveryFeeValue?.toStringAsFixed(1) ?? "0.0"}', style: AppTextStyles.blackS14),
+                        Text(
+                          '\$${maxDeliveryFeeValue?.toStringAsFixed(1) ?? "0.0"}',
+                          style: AppTextStyles.blackS14,
+                        ),
                         const Spacer(),
                         Text('\$100', style: AppTextStyles.blackS14),
                       ],
@@ -951,7 +1078,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                       min: 0,
                       max: 100,
                       onChanged: (value) {
-                        ref.read(homeProvider.notifier).changeMaxDeliveryFee(value);
+                        ref
+                            .read(homeProvider.notifier)
+                            .changeMaxDeliveryFee(value);
                       },
                     ),
                   ],
