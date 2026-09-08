@@ -135,13 +135,11 @@ class _HomePageState extends ConsumerState<HomePage> {
               AppSvgs.locationIcon,
               fit: BoxFit.scaleDown,
             ),
-            onTap:(){
+            onTap: () {
               context.pushNamed(RouteConfig.search);
             },
             hintText: 'Search on Coody',
-            onChanged: (value) {
-              
-            },
+            onChanged: (value) {},
           ),
           const SizedBox(height: 24),
           Row(
@@ -536,19 +534,19 @@ class _HomePageState extends ConsumerState<HomePage> {
         currentIndex: currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.homeIcon),
+            icon: SvgPicture.asset(AppSvgs.homeIcon, color: currentIndex == 0 ? AppColors.red400 : null),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.compressIcon),
+            icon: SvgPicture.asset(AppSvgs.compressIcon, color: currentIndex == 1 ? AppColors.red400 : null),
             label: 'Compress',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.orderIcon),
+            icon: SvgPicture.asset(AppSvgs.orderIcon, color: currentIndex == 2 ? AppColors.red400 : null),
             label: 'Order',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.profileIcon),
+            icon: SvgPicture.asset(AppSvgs.profileIcon, color: currentIndex == 3 ? AppColors.red400 : null),
             label: 'Profile',
           ),
         ],
@@ -565,7 +563,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       bodyHeight,
       'Best Partners',
       bestPartners,
-      null,
+      LoadStatus.success,
     );
   }
 
@@ -573,18 +571,22 @@ class _HomePageState extends ConsumerState<HomePage> {
     BuildContext context,
     double bodyHeight,
   ) {
-    final filteredRestaurantsLoadStatus = ref.watch(
-      homeProvider.select((state) => state.filteredRestaurantsLoadStatus),
-    );
-    final filteredRestaurants = ref.watch(
-      homeProvider.select((state) => state.filteredRestaurants),
-    );
-    return _buildRestaurantListSheet(
-      context,
-      bodyHeight,
-      'Filtered Restaurants',
-      filteredRestaurants,
-      filteredRestaurantsLoadStatus,
+    return Consumer(
+      builder: (context, ref, child) {
+        final filteredRestaurantsLoadStatus = ref.watch(
+          homeProvider.select((state) => state.filteredRestaurantsLoadStatus),
+        );
+        final filteredRestaurants = ref.watch(
+          homeProvider.select((state) => state.filteredRestaurants),
+        );
+        return _buildRestaurantListSheet(
+          context,
+          bodyHeight,
+          'Filtered Restaurants',
+          filteredRestaurants,
+          filteredRestaurantsLoadStatus,
+        );
+      },
     );
   }
 
@@ -593,7 +595,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     double bodyHeight,
     String title,
     List<RestaurantEntity> restaurants,
-    LoadStatus? loadStatus,
+    LoadStatus loadStatus,
   ) {
     return Container(
       padding: const EdgeInsets.only(top: 16),
@@ -611,101 +613,57 @@ class _HomePageState extends ConsumerState<HomePage> {
         bottom: true,
         left: false,
         right: false,
-        child: loadStatus == null
-            ? Column(
-                children: [
-                  Container(
-                    height: 5,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: AppColors.blackOpacity5,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
-                    child: Text(title, style: AppTextStyles.blackS16Bold),
-                  ),
-                  Container(
-                    height: 1,
-                    width: double.infinity,
-                    color: AppColors.cardColor,
-                  ),
-                  //const SizedBox(height: 24),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 34),
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: restaurants.length,
-                        itemBuilder: (context, index) {
-                          final tags = restaurants[index].tags;
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 24),
-                            child: _restaurantInfor(
-                              context,
-                              restaurants,
-                              tags,
-                              index,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : switch (loadStatus) {
-                LoadStatus.loading || LoadStatus.initial => const Center(
-                  child: CircularProgressIndicator(color: AppColors.red400),
+        child: switch (loadStatus) {
+          LoadStatus.loading || LoadStatus.initial => const Center(
+            child: CircularProgressIndicator(color: AppColors.red400),
+          ),
+          LoadStatus.failure => const Center(
+            child: Text('Failed to load restaurants'),
+          ),
+          LoadStatus.success => Column(
+            children: [
+              Container(
+                height: 5,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: AppColors.blackOpacity5,
                 ),
-                LoadStatus.failure => const Center(
-                  child: Text('Failed to load restaurants'),
-                ),
-                LoadStatus.success => Column(
-                  children: [
-                    Container(
-                      height: 5,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: AppColors.blackOpacity5,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
-                      child: Text(title, style: AppTextStyles.blackS16Bold),
-                    ),
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: AppColors.cardColor,
-                    ),
-                    //const SizedBox(height: 24),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 34),
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: restaurants.length,
-                          itemBuilder: (context, index) {
-                            final tags = restaurants[index].tags;
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 24),
-                              child: _restaurantInfor(
-                                context,
-                                restaurants,
-                                tags,
-                                index,
-                              ),
-                            );
-                          },
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
+                child: Text(title, style: AppTextStyles.blackS16Bold),
+              ),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: AppColors.cardColor,
+              ),
+              //const SizedBox(height: 24),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 34),
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: restaurants.length,
+                    itemBuilder: (context, index) {
+                      final tags = restaurants[index].tags;
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 24),
+                        child: _restaurantInfor(
+                          context,
+                          restaurants,
+                          tags,
+                          index,
                         ),
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
-              },
+              ),
+            ],
+          ),
+        },
       ),
     );
   }

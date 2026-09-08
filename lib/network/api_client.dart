@@ -4,6 +4,7 @@ import 'package:food_drink_delivery/models/dto/catalog/category/category_dto.dar
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_detail_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_menu_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/restaurant/review_dto.dart';
 import 'package:food_drink_delivery/models/dto/search/search_dto.dart';
 import 'package:food_drink_delivery/models/responses/api_response_dto.dart';
 import 'package:injectable/injectable.dart';
@@ -87,6 +88,12 @@ abstract class ApiClient {
   //get restaurant menu
   @GET('/v1/restaurants/{id}/menu')
   Future<ApiResponseDTO<RestaurantMenuDTO>> getRestaurantMenu(
+    @Path('id') String restaurantId,
+  );
+
+  //get restaurant reviews
+  @GET('/v1/restaurants/{id}/reviews')
+  Future<ApiResponseDTO<List<ReviewDTO>>> getRestaurantReviews(
     @Path('id') String restaurantId,
   );
 }

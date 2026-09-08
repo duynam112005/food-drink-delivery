@@ -10,6 +10,7 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
   //S12
+  static final blackS12 = black.copyWith(fontSize: 12, letterSpacing: -0.24);
   static final blackS12Medium = black.copyWith(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: -0.24);
   //S14
   static final blackS14 = black.copyWith(fontSize: 14);

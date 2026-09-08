@@ -50,3 +50,14 @@
 - Sau khi config xong thì chạy lệnh flutter pub get và dart run flutter_launcher_icons để nó áp dụng 
 
 11. Màn Home và màn Restaurant Detail dùng NestedScrollView
+
+12. Dùng CustomerScrollView cho màn RestaurantDetail để có thể co giãn header
+- CustomerScrollView sẽ chứa 1 list Slivers. Sliver là 1 vùng nội dung được thiết kế để hoạt động bên trong scrolling của flutter
+- Các loại Sliver như:
+   + SliverAppBar: Header/ AppBar co giãn
+   + SliverToBoxAdapter: Đưa widget bình thường vào
+   + SliverList: 1 list
+   + SliverFixedExtentList: 1 list có chiều cao cố định
+   + SliverGrid: grid
+   + SliverPadding: padding cho Sliver
+   + SliverFillRemaining: phần còn lại của view port

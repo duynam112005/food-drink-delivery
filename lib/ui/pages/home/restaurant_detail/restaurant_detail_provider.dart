@@ -13,6 +13,7 @@ class RestaurantDetail extends _$RestaurantDetail {
     return const RestaurantDetailState();
   }
 
+  //get restaurant detail
   Future<void> getRestaurantDetail(String restuarantId) async{
     state = state.copyWith(restaurantLoadStatus: LoadStatus.loading);
     try{
@@ -23,6 +24,7 @@ class RestaurantDetail extends _$RestaurantDetail {
     }
   }
 
+  //get restaurant menu
   Future<void> getRestaurantMenu(String restaurantId) async{
     state = state.copyWith(menuLoadStatus: LoadStatus.loading);
     try{
@@ -33,7 +35,19 @@ class RestaurantDetail extends _$RestaurantDetail {
     }
   }
 
+  //get restaurant reviews
+  Future<void> getRestaurantReviews({required String restaurantId}) async{
+    state = state.copyWith(reviewLoadStatus: LoadStatus.loading);
+    try{
+      final reviews = await catalogRepository.getRestaurantReviews(restaurantId: restaurantId);
+      state = state.copyWith(reviewLoadStatus: LoadStatus.success, reviewSections: reviews);
+    } catch (e){
+      state= state.copyWith(reviewLoadStatus: LoadStatus.failure, errorMessage: e.toString());
+    }
+  }
+
+  //initialize
   Future<void> initialize(String restaurantId) async{
-    Future.wait([getRestaurantDetail(restaurantId), getRestaurantMenu(restaurantId)]);
+    Future.wait([getRestaurantDetail(restaurantId), getRestaurantMenu(restaurantId), getRestaurantReviews(restaurantId: restaurantId)]);
   }
 }

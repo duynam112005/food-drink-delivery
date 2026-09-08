@@ -24,4 +24,9 @@ class AppSvgs {
   static const String fireIcon = '$_svgPath/ic_fire.svg';
   static const String arrowLeftIcon = '$_svgPath/ic_arrow_left.svg';
   static const String cancelIcon = '$_svgPath/ic_cancel.svg';
+  static const String yellowStarS16Icon = '$_svgPath/ic_yellow_star_s16.svg';
+  static const String greyStarS16Icon = '$_svgPath/ic_grey_star_s16.svg';
+  static const String flagIcon = '$_svgPath/ic_flag.svg';
+  static const String yellowStarS24Icon = '$_svgPath/ic_yellow_star_s24.svg';
+  static const String greyStarS24Icon = '$_svgPath/ic_grey_star_s24.svg';
 }
