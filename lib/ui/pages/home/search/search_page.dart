@@ -49,7 +49,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             Row(
               children: [
                 InkWell(
-                  onTap: () {
+                  onTap: () {     
                     context.pop();
                   },
                   child: SvgPicture.asset(AppSvgs.arrowLeftIcon),
@@ -114,7 +114,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   }
 
   Widget _buildSearchRestaurants() {
-    final searchResults = ref.watch(searchProvider).searchResult;
+    final searchResults = ref.watch(searchProvider.select((state) => state.searchResult));
     final restaurants = searchResults?.restaurants ?? [];
     return Column(
       children: [

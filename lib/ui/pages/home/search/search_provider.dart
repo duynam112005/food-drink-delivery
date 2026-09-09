@@ -7,28 +7,56 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'search_provider.g.dart';
 
 @riverpod
-class Search extends _$Search{
+class Search extends _$Search {
   final SearchRepository _searchRepository = sl<SearchRepository>();
+  int searchRequestId = 0;
   @override
-  SearchState build(){
+  SearchState build() {
     return SearchState();
   }
 
-  Future<void> search(String query) async{
-    state= state.copyWith(searchLoadStatus: LoadStatus.loading);
-    try{
+  Future<void> search(String query) async {
+    final requestId = ++searchRequestId;
+    if (query.trim().isEmpty) {
+      state = state.copyWith(
+        searchLoadStatus: LoadStatus.initial,
+        searchResult: null,
+      );
+      return;
+    }
+    state = state.copyWith(searchLoadStatus: LoadStatus.loading);
+    try {
       final results = await _searchRepository.search(query: query);
-      state = state.copyWith(searchLoadStatus: LoadStatus.success, searchResult: results);
-    } catch(e){
-      state = state.copyWith(searchLoadStatus: LoadStatus.failure, errorMessage: e.toString());
+      if (!ref.mounted) return;
+      if (requestId != searchRequestId) {
+        return;
+      }
+      state = state.copyWith(
+        searchLoadStatus: LoadStatus.success,
+        searchResult: results,
+      );
+    } catch (e) {
+      if (!ref.mounted) return;
+      if (requestId != searchRequestId) {
+        return;
+      }
+      state = state.copyWith(
+        searchLoadStatus: LoadStatus.failure,
+        errorMessage: e.toString(),
+      );
     }
   }
 
-  void onSearchTextChanged(String text){
+  void onSearchTextChanged(String text) {
     state = state.copyWith(searchText: text);
   }
 
-  Future<void> clearSearch() async{
-    state = state.copyWith(searchLoadStatus: LoadStatus.initial, searchResult: null, errorMessage: null);
+  Future<void> clearSearch() async {
+    searchRequestId++;
+    state = state.copyWith(
+      searchLoadStatus: LoadStatus.initial,
+      searchResult: null,
+      errorMessage: null,
+    );
   }
 }

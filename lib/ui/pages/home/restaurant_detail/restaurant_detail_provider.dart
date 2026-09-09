@@ -18,8 +18,10 @@ class RestaurantDetail extends _$RestaurantDetail {
     state = state.copyWith(restaurantLoadStatus: LoadStatus.loading);
     try{
       final restaurantDetail = await catalogRepository.getRestaurantDetail(restuarantId);
+      if(!ref.mounted) return;
       state = state.copyWith(restaurantLoadStatus: LoadStatus.success, restaurantDetail: restaurantDetail);
     } catch(e){
+      if(!ref.mounted) return;
       state = state.copyWith(restaurantLoadStatus: LoadStatus.failure, errorMessage: e.toString());
     }
   }
@@ -29,8 +31,10 @@ class RestaurantDetail extends _$RestaurantDetail {
     state = state.copyWith(menuLoadStatus: LoadStatus.loading);
     try{
       final menuSections = await catalogRepository.getRestaurantMenu(restaurantId: restaurantId);
+      if(!ref.mounted) return;
       state= state.copyWith(menuLoadStatus: LoadStatus.success, menuSections: menuSections);
     } catch(e){
+      if(!ref.mounted) return;
       state = state.copyWith(menuLoadStatus: LoadStatus.failure, errorMessage: e.toString());
     }
   }
@@ -40,10 +44,40 @@ class RestaurantDetail extends _$RestaurantDetail {
     state = state.copyWith(reviewLoadStatus: LoadStatus.loading);
     try{
       final reviews = await catalogRepository.getRestaurantReviews(restaurantId: restaurantId);
+      if(!ref.mounted) return;
       state = state.copyWith(reviewLoadStatus: LoadStatus.success, reviewSections: reviews);
     } catch (e){
+      if(!ref.mounted) return;
       state= state.copyWith(reviewLoadStatus: LoadStatus.failure, errorMessage: e.toString());
     }
+  }
+
+  // get menu item detail
+  Future<void> getMenuItemDetail({required String menuItemid}) async{
+    state = state.copyWith(menuItemDetailLoadStatus: LoadStatus.loading);
+    try{
+      final menuitemDetail = await catalogRepository.getMenuItemDetail(menuItemId: menuItemid);
+      if(!ref.mounted) return;
+      state = state.copyWith(menuItemDetailLoadStatus: LoadStatus.success, menuItemDetail: menuitemDetail);
+    } catch (e){
+      if(!ref.mounted) return;
+      state = state.copyWith(menuItemDetailLoadStatus: LoadStatus.failure, errorMessage: e.toString());
+    }
+  }
+
+  //increase item quantity
+  void increaseItemQuantity(){
+    state = state.copyWith(itemQuantity: state.itemQuantity+1);
+  }
+
+  //decrese item quantity
+  void decreaseItemQuantity(){
+    state = state.copyWith(itemQuantity: state.itemQuantity - 1);
+  }
+
+  //change item size
+  void changeItemSize(String size){
+    state = state.copyWith(itemSizeSelected: size);
   }
 
   //initialize

@@ -61,3 +61,9 @@
    + SliverGrid: grid
    + SliverPadding: padding cho Sliver
    + SliverFillRemaining: phần còn lại của view port
+
+13. Xử lý trường hợp đang call API mà thoát màn hình đó
+- ở provider check mounted (mounted cho biết 1 state của stateful còn tồn tại hay không)
+
+14. Nếu dùng GestureDetector bình thường thì các chỗ như const SizedBox(hieght: 16) sẽ không nhận onTap vì nó là vùng trống, không có nội dung nên không ăn onTap
+- Sửa: ste behavior của GestureDetector là opaque 

@@ -37,6 +37,8 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bodyHeight =
+        MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -51,15 +53,17 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                 surfaceTintColor: AppColors.white,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image.network(
-                    widget.restaurantImage,
-                    fit: BoxFit.cover,
-                  ),
+                            widget.restaurantImage,
+                            fit: BoxFit.cover,
+                          ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  color: AppColors.white,
                   padding: const EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                  ),
                   child: _buildRestaurantInfor(),
                 ),
               ),
@@ -68,7 +72,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
               ),
             ];
           },
-          body: _buildTabBarView(),
+          body: _buildTabBarView(bodyHeight),
         ),
       ),
     );
@@ -245,14 +249,16 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
     );
   }
 
-  Widget _buildTabBarView() {
+  Widget _buildTabBarView(double bodyHeight) {
     return Container(
       color: AppColors.white,
-      child: TabBarView(children: [_buildDeliveryTab(), _buildReviewTab()]),
+      child: TabBarView(
+        children: [_buildDeliveryTab(bodyHeight), _buildReviewTab()],
+      ),
     );
   }
 
-  Widget _buildDeliveryTab() {
+  Widget _buildDeliveryTab(double bodyHeight) {
     final menuSections = ref.watch(
       restaurantDetailProvider.select((state) => state.menuSections),
     );
@@ -272,21 +278,26 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
       ),
       LoadStatus.success => ListView(
         children: [
-          if (lengthSections >= 1) _buildPopularItem(menuSections),
+          if (lengthSections >= 1) _buildPopularItem(menuSections, bodyHeight),
           Container(
             height: 1,
             width: double.infinity,
             color: AppColors.cardColor,
             margin: const EdgeInsets.symmetric(vertical: 20),
           ),
-          if (lengthSections >= 2) _buildComboItem(menuSections, indexItem: 1),
-          if (lengthSections >= 3) _buildComboItem(menuSections, indexItem: 2),
+          if (lengthSections >= 2)
+            _buildComboItem(menuSections, bodyHeight, indexItem: 1),
+          if (lengthSections >= 3)
+            _buildComboItem(menuSections, bodyHeight, indexItem: 2),
         ],
       ),
     };
   }
 
-  Widget _buildPopularItem(List<MenuSectionEntity> menuSections) {
+  Widget _buildPopularItem(
+    List<MenuSectionEntity> menuSections,
+    double bodyHeight,
+  ) {
     final listItems = menuSections[0].items;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,51 +318,73 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   left: index == 0 ? 36 : 0,
                 ),
                 width: 146,
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    SizedBox(
-                      height: 146,
-                      width: 146,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image.network(
-                          listItems[index].imageUrl!,
-                          fit: BoxFit.cover,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    final menuItemId = listItems[index].id;
+                    final menuItemDetailName = listItems[index].name;
+                    final menuItemDetailDescription =
+                        listItems[index].description;
+                    final menuItemDetailImage = listItems[index].imageUrl;
+                    showModalBottomSheet(
+                      scrollControlDisabledMaxHeightRatio: bodyHeight,
+                      context: context,
+                      builder: (context) {
+                        return _buildItemDetailSheet(
+                          bodyHeight,
+                          itemName: menuItemDetailName,
+                          itemDescription: menuItemDetailDescription,
+                          itemImage: menuItemDetailImage,
+                        );
+                      },
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      SizedBox(
+                        height: 146,
+                        width: 146,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            listItems[index].imageUrl!,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      listItems[index].name!,
-                      style: AppTextStyles.blackS16Medium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        Text(
-                          listItems[index].price?.formatted ?? '',
-                          style: AppTextStyles.greenS12Medium,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: DotWidget(),
-                        ),
-                        listItems[index].isAvailable == true
-                            ? Text(
-                                'Available',
-                                style: AppTextStyles.greyS12Medium,
-                              )
-                            : Text(
-                                'No available',
-                                style: AppTextStyles.greyS12Medium,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                      ],
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      Text(
+                        listItems[index].name!,
+                        style: AppTextStyles.blackS16Medium,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Text(
+                            listItems[index].price?.formatted ?? '',
+                            style: AppTextStyles.greenS12Medium,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: DotWidget(),
+                          ),
+                          listItems[index].isAvailable == true
+                              ? Text(
+                                  'Available',
+                                  style: AppTextStyles.greyS12Medium,
+                                )
+                              : Text(
+                                  'No available',
+                                  style: AppTextStyles.greyS12Medium,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -362,7 +395,8 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   }
 
   Widget _buildComboItem(
-    List<MenuSectionEntity> menuSections, {
+    List<MenuSectionEntity> menuSections,
+    double bodyHeight, {
     required int indexItem,
   }) {
     final listItems = menuSections[indexItem].items;
@@ -377,69 +411,90 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
             children: List.generate(listItems.length, (index) {
               return Column(
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            listItems[index].imageUrl!,
-                            fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: () {
+                      final menuItemId = listItems[index].id;
+                      final menuItemDetailName = listItems[index].name;
+                      final menuItemDetailDescription =
+                          listItems[index].description;
+                      final menuItemDetailImage = listItems[index].imageUrl;
+                      showModalBottomSheet(
+                        scrollControlDisabledMaxHeightRatio: bodyHeight,
+                        context: context,
+                        builder: (context) {
+                          return _buildItemDetailSheet(
+                            bodyHeight,
+                            itemName: menuItemDetailName,
+                            itemDescription: menuItemDetailDescription,
+                            itemImage: menuItemDetailImage,
+                          );
+                        },
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(
+                              listItems[index].imageUrl!,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: .start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    listItems[index].name!,
-                                    style: AppTextStyles.blackS16Medium,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      listItems[index].name!,
+                                      style: AppTextStyles.blackS16Medium,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                ),
-                                SvgPicture.asset(
-                                  listItems[index].isPopular == true
-                                      ? AppSvgs.yellowStarS24Icon
-                                      : AppSvgs.greyStarS24Icon,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Text(
-                                  listItems[index].price?.formatted ?? '',
-                                  style: AppTextStyles.red400S12Medium,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
+                                  SvgPicture.asset(
+                                    listItems[index].isPopular == true
+                                        ? AppSvgs.yellowStarS24Icon
+                                        : AppSvgs.greyStarS24Icon,
                                   ),
-                                  child: DotWidget(),
-                                ),
-                                listItems[index].comboLabel != null
-                                    ? Text(
-                                        listItems[index].comboLabel!,
-                                        style: AppTextStyles.greyS12Medium,
-                                      )
-                                    : Text(
-                                        'No combo',
-                                        style: AppTextStyles.greyS12Medium,
-                                      ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Text(
+                                    listItems[index].price?.formatted ?? '',
+                                    style: AppTextStyles.red400S12Medium,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
+                                    child: DotWidget(),
+                                  ),
+                                  listItems[index].comboLabel != null
+                                      ? Text(
+                                          listItems[index].comboLabel!,
+                                          style: AppTextStyles.greyS12Medium,
+                                        )
+                                      : Text(
+                                          'No combo',
+                                          style: AppTextStyles.greyS12Medium,
+                                        ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Container(
                     height: 1,
@@ -584,5 +639,188 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
         ),
       ),
     };
+  }
+
+  Widget _buildItemDetailSheet(
+    double bodyHeight, {
+    String? itemName,
+    String? itemDescription,
+    String? itemImage,
+  }) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final itemQuantity = ref.watch(restaurantDetailProvider.select((state) => state.itemQuantity));
+        final itemSizeSelected = ref.watch(restaurantDetailProvider.select((state) => state.itemSizeSelected));
+        return Container(
+          height: bodyHeight,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                height: 5,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: AppColors.blackOpacity5,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 36, 24, 16),
+                child: Text(
+                  itemName ?? '',
+                  style: AppTextStyles.blackS20Medium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  itemDescription ?? '',
+                  style: AppTextStyles.greyS12Medium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Container(
+                height: 244,
+                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(30, 32, 30, 36),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.network(itemImage ?? '', fit: BoxFit.cover),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 96),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(3, (index) {
+                    return GestureDetector(
+                      onTap: (){
+                        final selectedSize = index == 0 ? 'S' : index == 1 ? 'M' : 'L';
+                        ref.read(restaurantDetailProvider.notifier).changeItemSize(selectedSize);
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.blackOpacity13,
+                              blurRadius: 30,
+                              offset: const Offset(0, 7),
+                            ),
+                          ],
+                          color: itemSizeSelected == (index == 0 ? 'S' : index == 1 ? 'M' : 'L') ? AppColors.red400 : AppColors.white,
+                        ),
+                        child: Center(
+                          child: Text(
+                            index == 0
+                                ? 'S'
+                                : index == 1
+                                ? 'M'
+                                : 'L',
+                            style: AppTextStyles.blackS16Medium,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              const SizedBox(height: 56),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 112),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if(itemQuantity > 0){
+                          ref.read(restaurantDetailProvider.notifier).decreaseItemQuantity();
+                        }
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: AppColors.yellow75,
+                        ),
+                        child: SvgPicture.asset(
+                          AppSvgs.minusIcon,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: Center(
+                        child: Text(itemQuantity.toString(), style: AppTextStyles.blackS16Medium),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(restaurantDetailProvider.notifier).increaseItemQuantity();
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: AppColors.yellow75,
+                        ),
+                        child: SvgPicture.asset(
+                          AppSvgs.plusIcon,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(36, 0, 36, 36),
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text('Price', style: AppTextStyles.blackS16Medium),
+                        const SizedBox(height: 4),
+                        Text('\$ 5.99', style: AppTextStyles.red400S20Medium),
+                      ],
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap:(){
+                        print('Add to Order');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.red400,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text('Add to Order', style: AppTextStyles.whiteS14Medium),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:food_drink_delivery/mapper/menu_item_detail_mapper.dart';
 import 'package:food_drink_delivery/mapper/menu_item_mapper.dart';
 import 'package:food_drink_delivery/mapper/restaurant_detail_mapper.dart';
 import 'package:food_drink_delivery/mapper/restaurant_mapper.dart';
 import 'package:food_drink_delivery/mapper/review_mapper.dart';
 import 'package:food_drink_delivery/models/entities/catalog/category/category_entity.dart';
+import 'package:food_drink_delivery/models/entities/catalog/restaurant/menu_item_detail_entity.dart';
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/menu_section_entity.dart';
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/restaurant_detail_entity.dart';
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/restaurant_entity.dart';
@@ -125,6 +127,19 @@ class CatalogRepository {
     } on DioException catch (e){
       throw ApiException(
         e.message ?? "An error occurred while fetching restaurant reviews",
+      );
+    }
+  }
+
+  //get menu item detail
+  Future<MenuItemDetailEntity> getMenuItemDetail({required String menuItemId}) async {
+    try {
+      final response = await apiClient.getMenuItemDetail(menuItemId);
+      final result = response.data;
+      return MenuItemDetailMapper.toEntity(result);
+    } on DioException catch (e) {
+      throw ApiException(
+        e.message ?? "An error occurred while fetching menu item detail",
       );
     }
   }

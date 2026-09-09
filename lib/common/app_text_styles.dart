@@ -48,13 +48,15 @@ class AppTextStyles {
   static final whiteS14Medium = white.copyWith(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: -0.2);
 
 
-  //RED
+  //RED400
   static final red400 = TextStyle(color: AppColors.red400, fontWeight: FontWeight.w400);
   //S12
   static final red400S12Medium = red400.copyWith(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: -0.24);
   //S14
   static final red400S14 = red400.copyWith(fontSize: 14, letterSpacing: -0.4);
   static final red400S14Medium = red400.copyWith(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: -0.2);
+  //S20
+  static final red400S20Medium = red400.copyWith(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: -0.28);
 
 
   //ERROR

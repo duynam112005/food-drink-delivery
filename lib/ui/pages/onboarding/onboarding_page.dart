@@ -84,9 +84,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
               spacing: 8,
             ),
           ),
-          //const Spacer(),
           Padding(
-            padding: const EdgeInsets.fromLTRB(36, 64, 36, 80),
+            padding: const EdgeInsets.fromLTRB(36, 64, 36, 78),
             child: TextButtonWidget(
               onTap: () async {
                 ref

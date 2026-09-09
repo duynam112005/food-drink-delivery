@@ -123,7 +123,7 @@ class _BuildRegisterFormState extends State<BuildRegisterForm> {
 
     await ref
         .read(registerProvider.notifier)
-        .onRegister(fullName, phone, email, password, ref, context);
+        .onRegister(fullName, phone, email, password, context);
     final registerState = ref.read(
       registerProvider.select((state) => state.loadStatus),
     );

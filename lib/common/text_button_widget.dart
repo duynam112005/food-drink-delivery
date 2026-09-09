@@ -15,8 +15,8 @@ class TextButtonWidget extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
+        height: 44,
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: _isEnabled
                         ? AppColors.red400

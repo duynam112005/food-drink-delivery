@@ -20,11 +20,13 @@ class Home extends _$Home {
     state = state.copyWith(categoryLoadStatus: LoadStatus.loading);
     try {
       final categories = await catalogRepository.getCategories();
+      if(!ref.mounted) return;
       state = state.copyWith(
         categoryLoadStatus: LoadStatus.success,
         categories: categories,
       );
     } catch (e) {
+      if(!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         categoryLoadStatus: LoadStatus.failure,
@@ -37,11 +39,13 @@ class Home extends _$Home {
     state = state.copyWith(bestPartnersLoadStatus: LoadStatus.loading);
     try {
       final bestPartners = await catalogRepository.getBestPartners();
+      if(!ref.mounted) return;
       state = state.copyWith(
         bestPartnersLoadStatus: LoadStatus.success,
         bestPartners: bestPartners,
       );
     } catch (e) {
+      if(!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         bestPartnersLoadStatus: LoadStatus.failure,
@@ -75,6 +79,7 @@ class Home extends _$Home {
         lat: lat,
         lng: lng,
       );
+      if(!ref.mounted) return;
       state = state.copyWith(
         restaurantLoadStatus: {
           ...state.restaurantLoadStatus,
@@ -83,6 +88,7 @@ class Home extends _$Home {
         restaurants: {...state.restaurants, sort: restaurants},
       );
     } catch (e) {
+      if(!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         restaurantLoadStatus: {
@@ -113,11 +119,13 @@ class Home extends _$Home {
     state = state.copyWith(filteredRestaurantsLoadStatus: LoadStatus.loading);
     try{
       final filteredRestaurants = await catalogRepository.getRestaurantsByFilter(categoryId: categoryId, sort: sort, maxDeliveryFee: maxDeliveryFee);
+      if(!ref.mounted) return;
       state = state.copyWith(
         filteredRestaurantsLoadStatus: LoadStatus.success,
         filteredRestaurants: filteredRestaurants,
       );
     } catch(e){
+      if(!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         filteredRestaurantsLoadStatus: LoadStatus.failure,

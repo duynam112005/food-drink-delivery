@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_state.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../di/injection.dart';
@@ -23,7 +22,7 @@ class Register extends _$Register {
     String phone,
     String email,
     String password,
-    WidgetRef ref,
+    //WidgetRef ref,
     BuildContext context,
   ) async {
     state = state.copyWith(loadStatus: LoadStatus.loading, isEnable: false);
@@ -35,6 +34,8 @@ class Register extends _$Register {
         password,
       );
 
+      if (!ref.mounted) return;
+
       final accessToken = result.accessToken;
       final refreshToken = result.refreshToken;
 
@@ -45,6 +46,7 @@ class Register extends _$Register {
 
       state = state.copyWith(loadStatus: LoadStatus.success, isEnable: true);
     } catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         loadStatus: LoadStatus.failure,
         errorMessage: e.toString(),

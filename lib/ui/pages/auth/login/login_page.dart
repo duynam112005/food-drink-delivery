@@ -22,7 +22,7 @@ class LoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginSocial = ref.watch(
+    final loginSocialStatus = ref.watch(
       loginProvider.select((state) => state.socialLoginStatus),
     );
     ref.watch(loginProvider.select((state) => state.loadStatus));
@@ -81,7 +81,7 @@ class LoginPage extends ConsumerWidget {
                 ),
               ),
             ),
-            loginSocial == LoadStatus.loading
+            loginSocialStatus == LoadStatus.loading
                 ? Container(
                     height: double.infinity,
                     width: double.infinity,
@@ -106,7 +106,7 @@ class LoginPage extends ConsumerWidget {
 
   Widget _buildTitle(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50),
+      padding: const EdgeInsets.symmetric(horizontal: 44),
       child: Column(
         children: [
           Text(
@@ -142,7 +142,7 @@ class LoginPage extends ConsumerWidget {
   Widget _buildForgotPassword(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushReplacementNamed(RouteConfig.enterEmail);
+        context.pushNamed(RouteConfig.enterEmail);
       },
       child: Text(
         AppLocalizations.of(context)!.forgot_password_button,
@@ -167,7 +167,8 @@ class LoginPage extends ConsumerWidget {
         );
         if (loginSocialState == LoadStatus.success) {
           context.goNamed(RouteConfig.home);
-        } else {
+        }
+        else if (loginSocialState == LoadStatus.failure) {
           final errorMessage = ref.read(
             loginProvider.select((state) => state.errorMessage),
           );
@@ -292,7 +293,7 @@ class _BuildLoginFormState extends State<BuildLoginForm> {
                                     email,
                                     password,
                                     context,
-                                    ref
+                                    ref,
                                   );
                             }
                           },

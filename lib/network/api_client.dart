@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:food_drink_delivery/models/dto/auth/auth_results/auth_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/category/category_dto.dart';
+import 'package:food_drink_delivery/models/dto/catalog/restaurant/menu_item_detail_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_detail_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_dto.dart';
 import 'package:food_drink_delivery/models/dto/catalog/restaurant/restaurant_menu_dto.dart';
@@ -95,5 +96,11 @@ abstract class ApiClient {
   @GET('/v1/restaurants/{id}/reviews')
   Future<ApiResponseDTO<List<ReviewDTO>>> getRestaurantReviews(
     @Path('id') String restaurantId,
+  );
+
+  //get menu item detail
+  @GET('/v1/menu-items/{id}')
+  Future<ApiResponseDTO<MenuItemDetailDTO>> getMenuItemDetail(
+    @Path('id') String menuItemId
   );
 }
