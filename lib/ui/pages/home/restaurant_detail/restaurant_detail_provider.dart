@@ -26,6 +26,13 @@ class RestaurantDetail extends _$RestaurantDetail {
     }
   }
 
+  //change app bar collapsed state
+  void changeAppBarState({required double offset, required double expandedHeight, required double collapsedHeight}){
+    final isCollapsed = offset >= (expandedHeight - collapsedHeight);
+    if(state.isCollapsedAppBar == isCollapsed) return;
+    state = state.copyWith(isCollapsedAppBar: isCollapsed);
+  }
+
   //get restaurant menu
   Future<void> getRestaurantMenu(String restaurantId) async{
     state = state.copyWith(menuLoadStatus: LoadStatus.loading);

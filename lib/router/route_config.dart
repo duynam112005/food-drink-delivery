@@ -63,10 +63,13 @@ class RouteConfig {
         builder: (context, state) => const HomePage(),
         routes: [
           GoRoute(path: restaurantDetail, name: restaurantDetail, builder: (context, state){
-            final extra = state.extra as Map<String, String>;
+            final extra = state.extra as Map<String, dynamic>;
             final restaurantId = extra['restaurantId'] as String;
             final restaurantImage = extra['restaurantImage'] as String;
-            return RestaurantDetailPage(restaurantId: restaurantId, restaurantImage: restaurantImage);
+            final restaurantName = extra['restaurantName'] as String;
+            final hasTakeAway = extra['hasTakeAway'];
+            final isFavorite = extra['isFavorite'];
+            return RestaurantDetailPage(restaurantId: restaurantId, restaurantImage: restaurantImage, restaurantName: restaurantName, hasTakeAway: hasTakeAway, isFavorite: isFavorite);
           }),
           GoRoute(path: search, name: search, builder: (context, state){
             return const SearchPage();

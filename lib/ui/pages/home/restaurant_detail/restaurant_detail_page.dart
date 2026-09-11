@@ -8,15 +8,22 @@ import 'package:food_drink_delivery/models/entities/catalog/restaurant/menu_sect
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/ui/pages/home/restaurant_detail/restaurant_detail_provider.dart';
 import 'package:food_drink_delivery/ui/widgets/dot_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RestaurantDetailPage extends ConsumerStatefulWidget {
   final String restaurantImage;
   final String restaurantId;
+  final String restaurantName;
+  final bool hasTakeAway;
+  final bool isFavorite;
   const RestaurantDetailPage({
     super.key,
     required this.restaurantId,
     required this.restaurantImage,
+    required this.restaurantName,
+    required this.hasTakeAway,
+    required this.isFavorite,
   });
 
   @override
@@ -25,6 +32,10 @@ class RestaurantDetailPage extends ConsumerStatefulWidget {
 }
 
 class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
+  final ScrollController _scrollController = ScrollController();
+  final collapsedHeight = kToolbarHeight;
+  final expandedHeight = 200.0;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +44,21 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
           .read(restaurantDetailProvider.notifier)
           .initialize(widget.restaurantId);
     });
+    _scrollController.addListener(
+      () => ref
+          .read(restaurantDetailProvider.notifier)
+          .changeAppBarState(
+            collapsedHeight: collapsedHeight,
+            expandedHeight: expandedHeight,
+            offset: _scrollController.offset,
+          ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,27 +69,98 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
       length: 2,
       child: Scaffold(
         body: NestedScrollView(
+          controller: _scrollController,
           physics: const BouncingScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               SliverAppBar(
+                leading: GestureDetector(
+                  onTap: () {
+                    context.pop();
+                  },
+                  child: SvgPicture.asset(
+                    AppSvgs.arrowLeftIcon,
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment(-0.5, 0.15),
+                  ),
+                ),
+                automaticallyImplyLeading: false,
                 expandedHeight: 200,
                 pinned: true,
                 backgroundColor: AppColors.white,
                 surfaceTintColor: AppColors.white,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image.network(
-                            widget.restaurantImage,
-                            fit: BoxFit.cover,
+                    widget.restaurantImage,
+                    fit: BoxFit.cover,
+                  ),
+                  titlePadding: EdgeInsets.zero,
+                  expandedTitleScale: 1,
+                  title: Consumer(
+                    builder: (context, ref, _) {
+                      final isCollapsedAppBar = ref.watch(
+                        restaurantDetailProvider.select(
+                          (state) => state.isCollapsedAppBar,
+                        ),
+                      );
+                      return Container(
+                        padding: EdgeInsets.fromLTRB(
+                          isCollapsedAppBar ? 44 : 36,
+                          20,
+                          36,
+                          10,
+                        ),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
                           ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.restaurantName,
+                              style: AppTextStyles.blackS20Medium,
+                            ),
+                            const SizedBox(width: 4),
+                            SvgPicture.asset(AppSvgs.shieldCheckIcon),
+                            const Spacer(),
+                            widget.hasTakeAway == true
+                                ? Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: AppColors.red50Opacity20,
+                                    ),
+                                    child: Text(
+                                      "Take Away",
+                                      style: AppTextStyles.red400S12Medium,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            const SizedBox(width: 8),
+                            SvgPicture.asset(
+                              AppSvgs.favouriteIcon,
+                              color: widget.isFavorite == true
+                                  ? null
+                                  : AppColors.grey,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                  ),
+                  decoration: BoxDecoration(color: AppColors.white),
                   child: _buildRestaurantInfor(),
                 ),
               ),
@@ -101,42 +198,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
               padding: const EdgeInsets.fromLTRB(36, 0, 36, 24),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        restaurant.name,
-                        style: AppTextStyles.blackS20Medium,
-                      ),
-                      const SizedBox(width: 4),
-                      SvgPicture.asset(AppSvgs.shieldCheckIcon),
-                      const Spacer(),
-                      restaurant.hasTakeAway == true
-                          ? Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.red50Opacity20,
-                              ),
-                              child: Text(
-                                "Take Away",
-                                style: AppTextStyles.red400S12Medium,
-                              ),
-                            )
-                          : const SizedBox(),
-                      const SizedBox(width: 8),
-                      SvgPicture.asset(
-                        AppSvgs.favouriteIcon,
-                        color: restaurant.isFavorite == true
-                            ? null
-                            : AppColors.grey,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
+                  //const SizedBox(height: 8),
                   Row(
                     children: [
                       restaurant.isOpen == true
@@ -447,7 +509,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment: .start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
@@ -649,8 +711,12 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   }) {
     return Consumer(
       builder: (context, ref, child) {
-        final itemQuantity = ref.watch(restaurantDetailProvider.select((state) => state.itemQuantity));
-        final itemSizeSelected = ref.watch(restaurantDetailProvider.select((state) => state.itemSizeSelected));
+        final itemQuantity = ref.watch(
+          restaurantDetailProvider.select((state) => state.itemQuantity),
+        );
+        final itemSizeSelected = ref.watch(
+          restaurantDetailProvider.select((state) => state.itemSizeSelected),
+        );
         return Container(
           height: bodyHeight,
           width: double.infinity,
@@ -703,9 +769,15 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: List.generate(3, (index) {
                     return GestureDetector(
-                      onTap: (){
-                        final selectedSize = index == 0 ? 'S' : index == 1 ? 'M' : 'L';
-                        ref.read(restaurantDetailProvider.notifier).changeItemSize(selectedSize);
+                      onTap: () {
+                        final selectedSize = index == 0
+                            ? 'S'
+                            : index == 1
+                            ? 'M'
+                            : 'L';
+                        ref
+                            .read(restaurantDetailProvider.notifier)
+                            .changeItemSize(selectedSize);
                       },
                       child: Container(
                         height: 40,
@@ -719,7 +791,15 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                               offset: const Offset(0, 7),
                             ),
                           ],
-                          color: itemSizeSelected == (index == 0 ? 'S' : index == 1 ? 'M' : 'L') ? AppColors.red400 : AppColors.white,
+                          color:
+                              itemSizeSelected ==
+                                  (index == 0
+                                      ? 'S'
+                                      : index == 1
+                                      ? 'M'
+                                      : 'L')
+                              ? AppColors.red400
+                              : AppColors.white,
                         ),
                         child: Center(
                           child: Text(
@@ -744,8 +824,10 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if(itemQuantity > 0){
-                          ref.read(restaurantDetailProvider.notifier).decreaseItemQuantity();
+                        if (itemQuantity > 0) {
+                          ref
+                              .read(restaurantDetailProvider.notifier)
+                              .decreaseItemQuantity();
                         }
                       },
                       child: Container(
@@ -765,12 +847,17 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                       height: 40,
                       width: 40,
                       child: Center(
-                        child: Text(itemQuantity.toString(), style: AppTextStyles.blackS16Medium),
+                        child: Text(
+                          itemQuantity.toString(),
+                          style: AppTextStyles.blackS16Medium,
+                        ),
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        ref.read(restaurantDetailProvider.notifier).increaseItemQuantity();
+                        ref
+                            .read(restaurantDetailProvider.notifier)
+                            .increaseItemQuantity();
                       },
                       child: Container(
                         height: 40,
@@ -802,16 +889,22 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                     ),
                     const Spacer(),
                     GestureDetector(
-                      onTap:(){
+                      onTap: () {
                         print('Add to Order');
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 36,
+                          vertical: 12,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.red400,
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Text('Add to Order', style: AppTextStyles.whiteS14Medium),
+                        child: Text(
+                          'Add to Order',
+                          style: AppTextStyles.whiteS14Medium,
+                        ),
                       ),
                     ),
                   ],

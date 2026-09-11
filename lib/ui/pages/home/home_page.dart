@@ -676,6 +676,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   ) {
     final restaurantId = restaurants[index].id;
     final restaurantImage = restaurants[index].coverUrl;
+    final restaurantName = restaurants[index].name;
+    final hasTakeAway = restaurants[index].hasTakeAway;
+    final isFavorite = restaurants[index].isFavorite;
     return GestureDetector(
       onTap: () {
         context.pushNamed(
@@ -683,6 +686,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           extra: {
             'restaurantId': restaurantId,
             'restaurantImage': restaurantImage,
+            'restaurantName': restaurantName,
+            'hasTakeAway': hasTakeAway,
+            'isFavorite': isFavorite,
           },
         );
       },

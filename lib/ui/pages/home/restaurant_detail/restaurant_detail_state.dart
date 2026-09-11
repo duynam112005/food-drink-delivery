@@ -28,6 +28,7 @@ abstract class RestaurantDetailState with _$RestaurantDetailState{
     @Default(0) double itemTotalPrice,
     @Default('M') String itemSizeSelected,
 
+    @Default(false) bool isCollapsedAppBar,
     //error message
     String? errorMessage,
   })= _RestaurantDetailState;

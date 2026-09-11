@@ -19,6 +19,7 @@ class RestaurantMapper {
               formatted: dto.deliveryFee.formatted,
             ),
             isFreeShipping: dto.isFreeShipping,
+            hasTakeAway: dto.hasTakeAway,
             etaMinutes: dto.etaMinutes,
             isOpen: dto.isOpen,
             status: dto.status,
