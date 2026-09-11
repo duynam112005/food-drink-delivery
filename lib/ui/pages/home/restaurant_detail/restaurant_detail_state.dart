@@ -28,7 +28,15 @@ abstract class RestaurantDetailState with _$RestaurantDetailState{
     @Default(0) double itemTotalPrice,
     @Default('M') String itemSizeSelected,
 
+    //add restaurant to favorite
+    @Default(false) bool isFavorite,
+
+    //app bar state
     @Default(false) bool isCollapsedAppBar,
+
+    //menu item size selected
+    @Default(1) int itemSizeSelectedIndex,
+
     //error message
     String? errorMessage,
   })= _RestaurantDetailState;

@@ -26,7 +26,7 @@ class RouteConfig {
   static const String search = '/search';
 
   static final routes = GoRouter(
-    initialLocation: home,
+    initialLocation: onboarding,
     navigatorKey: navigationKey,
     routes: [
       GoRoute(

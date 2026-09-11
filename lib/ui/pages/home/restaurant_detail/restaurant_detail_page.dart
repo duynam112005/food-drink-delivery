@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_drink_delivery/common/app_colors.dart';
@@ -32,6 +35,7 @@ class RestaurantDetailPage extends ConsumerStatefulWidget {
 }
 
 class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
+  late final PageController _pageController;
   final ScrollController _scrollController = ScrollController();
   final collapsedHeight = kToolbarHeight;
   final expandedHeight = 200.0;
@@ -39,6 +43,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(initialPage: 1, viewportFraction: 0.8);
     Future.microtask(() {
       ref
           .read(restaurantDetailProvider.notifier)
@@ -85,7 +90,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   ),
                 ),
                 automaticallyImplyLeading: false,
-                expandedHeight: 200,
+                expandedHeight: expandedHeight,
                 pinned: true,
                 backgroundColor: AppColors.white,
                 surfaceTintColor: AppColors.white,
@@ -145,11 +150,30 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                                   )
                                 : const SizedBox(),
                             const SizedBox(width: 8),
-                            SvgPicture.asset(
-                              AppSvgs.favouriteIcon,
-                              color: widget.isFavorite == true
-                                  ? null
-                                  : AppColors.grey,
+                            Consumer(
+                              builder: (context, ref, _) {
+                                final isFavorite = ref.watch(
+                                  restaurantDetailProvider.select(
+                                    (state) => state.isFavorite,
+                                  ),
+                                );
+                                return GestureDetector(
+                                  onTap: () {
+                                    ref
+                                        .read(restaurantDetailProvider.notifier)
+                                        .changeRestaurantFavourite(
+                                          restaurantId: widget.restaurantId,
+                                        );
+                                    print('isFavorite: $isFavorite');
+                                  },
+                                  child: SvgPicture.asset(
+                                    AppSvgs.favouriteIcon,
+                                    color: isFavorite == true
+                                        ? null
+                                        : AppColors.grey,
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -374,6 +398,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
             itemCount: listItems.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
+              final item = listItems[index];
               return Container(
                 margin: EdgeInsets.only(
                   right: index == listItems.length - 1 ? 36 : 8,
@@ -383,11 +408,10 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    final menuItemId = listItems[index].id;
-                    final menuItemDetailName = listItems[index].name;
-                    final menuItemDetailDescription =
-                        listItems[index].description;
-                    final menuItemDetailImage = listItems[index].imageUrl;
+                    final menuItemId = item.id;
+                    final menuItemDetailName = item.name;
+                    final menuItemDetailDescription = item.description;
+                    final menuItemDetailImage = item.imageUrl;
                     showModalBottomSheet(
                       scrollControlDisabledMaxHeightRatio: bodyHeight,
                       context: context,
@@ -410,14 +434,14 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: Image.network(
-                            listItems[index].imageUrl!,
+                            item.imageUrl!,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        listItems[index].name!,
+                        item.name!,
                         style: AppTextStyles.blackS16Medium,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -426,14 +450,14 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                       Row(
                         children: [
                           Text(
-                            listItems[index].price?.formatted ?? '',
+                            item.price?.formatted ?? '',
                             style: AppTextStyles.greenS12Medium,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: DotWidget(),
                           ),
-                          listItems[index].isAvailable == true
+                          item.isAvailable == true
                               ? Text(
                                   'Available',
                                   style: AppTextStyles.greyS12Medium,
@@ -714,8 +738,13 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
         final itemQuantity = ref.watch(
           restaurantDetailProvider.select((state) => state.itemQuantity),
         );
-        final itemSizeSelected = ref.watch(
-          restaurantDetailProvider.select((state) => state.itemSizeSelected),
+        // final itemSizeSelected = ref.watch(
+        //   restaurantDetailProvider.select((state) => state.itemSizeSelected),
+        // );
+        final itemSizeSelectedIndex = ref.watch(
+          restaurantDetailProvider.select(
+            (state) => state.itemSizeSelectedIndex,
+          ),
         );
         return Container(
           height: bodyHeight,
@@ -754,13 +783,42 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 244,
-                width: double.infinity,
-                margin: const EdgeInsets.fromLTRB(30, 32, 30, 36),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.network(itemImage ?? '', fit: BoxFit.cover),
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    ref
+                        .read(restaurantDetailProvider.notifier)
+                        .changeItemSizeIndex(index);
+                    index = itemSizeSelectedIndex;
+                  },
+                  scrollBehavior: ScrollBehavior(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return FractionallySizedBox(
+                      heightFactor: itemSizeSelectedIndex == index ? 1.0 : 0.8,
+                      child: ImageFiltered(
+                        imageFilter: ImageFilter.blur(
+                          sigmaX: itemSizeSelectedIndex == index ? 0.0 : 5.0,
+                          sigmaY: itemSizeSelectedIndex == index ? 0.0 : 5.0,
+                        ),
+                        child: Container(
+                          height: 244,
+                          width: MediaQuery.of(context).size.width - 72,
+                          margin: const EdgeInsets.fromLTRB(16, 32, 16, 36),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image.network(
+                              itemImage ?? '',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               Padding(
@@ -770,14 +828,18 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   children: List.generate(3, (index) {
                     return GestureDetector(
                       onTap: () {
-                        final selectedSize = index == 0
-                            ? 'S'
-                            : index == 1
-                            ? 'M'
-                            : 'L';
                         ref
                             .read(restaurantDetailProvider.notifier)
-                            .changeItemSize(selectedSize);
+                            .changeItemSizeIndex(index);
+                        final nextIndex = ref
+                            .read(restaurantDetailProvider)
+                            .itemSizeSelectedIndex;
+                        _pageController.animateToPage(
+                          nextIndex,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                        //_pageController.jumpToPage(nextIndex);
                       },
                       child: Container(
                         height: 40,
@@ -791,13 +853,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                               offset: const Offset(0, 7),
                             ),
                           ],
-                          color:
-                              itemSizeSelected ==
-                                  (index == 0
-                                      ? 'S'
-                                      : index == 1
-                                      ? 'M'
-                                      : 'L')
+                          color: itemSizeSelectedIndex == index
                               ? AppColors.red400
                               : AppColors.white,
                         ),

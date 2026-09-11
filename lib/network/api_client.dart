@@ -103,4 +103,12 @@ abstract class ApiClient {
   Future<ApiResponseDTO<MenuItemDetailDTO>> getMenuItemDetail(
     @Path('id') String menuItemId
   );
+
+  //post favorite restaurant
+  @POST('/v1/favorites/{restaurantId}')
+  Future<void> addRestaurantToFavorite(@Path('restaurantId') String restaurantId);
+
+  //delete favorite restaurant
+  @DELETE('/v1/favorites/{restaurantId}')
+  Future<void> removeRestaurantFromFavorite(@Path('restaurantId') String restaurantId);
 }

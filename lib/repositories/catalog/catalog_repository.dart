@@ -143,4 +143,26 @@ class CatalogRepository {
       );
     }
   }
+
+  //add restaurant to favorite
+  Future<void> addRestaurantToFavorite({required String restaurantId}) async{
+    try{
+      await apiClient.addRestaurantToFavorite(restaurantId);
+    } on DioException catch (e){
+      throw ApiException(
+        e.message ?? "An error occurred while adding restaurant to favorite",
+      );
+    }
+  }
+
+  // delete restaurant from favorite
+  Future<void> removeRestaurantFromFavorite({required String restaurantId}) async{
+    try{
+      await apiClient.removeRestaurantFromFavorite(restaurantId);
+    } on DioException catch (e){
+      throw ApiException(
+        e.message ?? "An error occurred while removing restaurant from favorite",
+      );
+    }
+  }
 }

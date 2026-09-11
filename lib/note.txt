@@ -66,4 +66,4 @@
 - ở provider check mounted (mounted cho biết 1 state của stateful còn tồn tại hay không)
 
 14. Nếu dùng GestureDetector bình thường thì các chỗ như const SizedBox(hieght: 16) sẽ không nhận onTap vì nó là vùng trống, không có nội dung nên không ăn onTap
-- Sửa: ste behavior của GestureDetector là opaque 
+- Sửa: set behavior của GestureDetector là opaque 

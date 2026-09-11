@@ -21,3 +21,8 @@ code
 8. khai báo color ở AppColor và gọi ở page: done
 9. logic xử lý để trong provider
 10. sửa lưu accessToken và refreshToken thành gọi đồng thời: done
+
+
+saturday:
+1. Xử lý phần thêm restaurant vào mục yêu thích
+2. xử lý phần item detail
