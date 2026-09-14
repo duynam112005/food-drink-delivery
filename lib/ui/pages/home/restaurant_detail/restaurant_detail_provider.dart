@@ -87,10 +87,12 @@ class RestaurantDetail extends _$RestaurantDetail {
     }
   }
 
-  //change restaurant favorite status
   Future<void> changeRestaurantFavourite({required String restaurantId}) async {
     try {
-      if (state.isFavorite) {
+      final previousFavoriteStatus =
+          state.isFavorite;
+      state = state.copyWith(isFavorite: !previousFavoriteStatus);
+      if (previousFavoriteStatus) {
         await catalogRepository.removeRestaurantFromFavorite(
           restaurantId: restaurantId,
         );
@@ -100,10 +102,6 @@ class RestaurantDetail extends _$RestaurantDetail {
         );
       }
       if (!ref.mounted) return;
-      final restaurant = await catalogRepository.getRestaurantDetail(
-        restaurantId,
-      );
-      state = state.copyWith(isFavorite: restaurant.isFavorite);
     } catch (e) {
       if (!ref.mounted) return;
       state = state.copyWith(errorMessage: e.toString());
@@ -129,21 +127,6 @@ class RestaurantDetail extends _$RestaurantDetail {
         errorMessage: e.toString(),
       );
     }
-  }
-
-  //increase item quantity
-  void increaseItemQuantity() {
-    state = state.copyWith(itemQuantity: state.itemQuantity + 1);
-  }
-
-  //decrese item quantity
-  void decreaseItemQuantity() {
-    state = state.copyWith(itemQuantity: state.itemQuantity - 1);
-  }
-
-  //change item size
-  void changeItemSize(String size) {
-    state = state.copyWith(itemSizeSelected: size);
   }
 
   //change item size index

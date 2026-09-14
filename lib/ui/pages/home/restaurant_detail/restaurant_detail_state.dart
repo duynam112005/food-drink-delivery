@@ -24,9 +24,6 @@ abstract class RestaurantDetailState with _$RestaurantDetailState{
     //menu item detail
     @Default(LoadStatus.initial) LoadStatus menuItemDetailLoadStatus,
     MenuItemDetailEntity? menuItemDetail,
-    @Default(0) int itemQuantity,
-    @Default(0) double itemTotalPrice,
-    @Default('M') String itemSizeSelected,
 
     //add restaurant to favorite
     @Default(false) bool isFavorite,

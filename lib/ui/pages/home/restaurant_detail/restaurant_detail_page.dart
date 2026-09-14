@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/menu_section_entity.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/home/restaurant_detail/restaurant_detail_provider.dart';
 import 'package:food_drink_delivery/ui/widgets/dot_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -152,7 +152,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                             const SizedBox(width: 8),
                             Consumer(
                               builder: (context, ref, _) {
-                                final isFavorite = ref.watch(
+                                final isFavoriteLocal = ref.watch(
                                   restaurantDetailProvider.select(
                                     (state) => state.isFavorite,
                                   ),
@@ -164,11 +164,10 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                                         .changeRestaurantFavourite(
                                           restaurantId: widget.restaurantId,
                                         );
-                                    print('isFavorite: $isFavorite');
                                   },
                                   child: SvgPicture.asset(
                                     AppSvgs.favouriteIcon,
-                                    color: isFavorite == true
+                                    color: isFavoriteLocal == true
                                         ? null
                                         : AppColors.grey,
                                   ),
@@ -735,12 +734,6 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   }) {
     return Consumer(
       builder: (context, ref, child) {
-        final itemQuantity = ref.watch(
-          restaurantDetailProvider.select((state) => state.itemQuantity),
-        );
-        // final itemSizeSelected = ref.watch(
-        //   restaurantDetailProvider.select((state) => state.itemSizeSelected),
-        // );
         final itemSizeSelectedIndex = ref.watch(
           restaurantDetailProvider.select(
             (state) => state.itemSizeSelectedIndex,
@@ -791,32 +784,55 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                     ref
                         .read(restaurantDetailProvider.notifier)
                         .changeItemSizeIndex(index);
-                    index = itemSizeSelectedIndex;
                   },
                   scrollBehavior: ScrollBehavior(),
                   scrollDirection: Axis.horizontal,
                   itemCount: 3,
                   itemBuilder: (context, index) {
-                    return FractionallySizedBox(
-                      heightFactor: itemSizeSelectedIndex == index ? 1.0 : 0.8,
-                      child: ImageFiltered(
-                        imageFilter: ImageFilter.blur(
-                          sigmaX: itemSizeSelectedIndex == index ? 0.0 : 5.0,
-                          sigmaY: itemSizeSelectedIndex == index ? 0.0 : 5.0,
-                        ),
-                        child: Container(
-                          height: 244,
-                          width: MediaQuery.of(context).size.width - 72,
-                          margin: const EdgeInsets.fromLTRB(16, 32, 16, 36),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image.network(
-                              itemImage ?? '',
-                              fit: BoxFit.cover,
+                    return AnimatedBuilder(
+                      animation: _pageController,
+                      builder: (context, child) {
+                        final currentPage =
+                            _pageController.page ??
+                            _pageController.initialPage.toDouble();
+                        final distance = (currentPage - index).abs();
+                        final scale = (1 - (currentPage - index).abs() * 0.2);
+                        return Transform.scale(
+                          scale: _pageController.position.haveDimensions
+                              ? distance < 1
+                                    ? scale
+                                    : 0.8
+                              : index == 1
+                              ? 1.0
+                              : 0.8,
+                          child: ImageFiltered(
+                            imageFilter: ImageFilter.blur(
+                              sigmaX: itemSizeSelectedIndex == index ? 0 : 4,
+                              sigmaY: itemSizeSelectedIndex == index ? 0 : 4,
+                            ),
+                            child: Container(
+                              height: 244,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.greyBold,
+                                    blurRadius: 19,
+                                    offset: Offset(0, 7),
+                                  ),
+                                ],
+                              ),
+                              margin: const EdgeInsets.fromLTRB(0, 32, 0, 36),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Image.network(
+                                  itemImage ?? '',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -834,12 +850,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                         final nextIndex = ref
                             .read(restaurantDetailProvider)
                             .itemSizeSelectedIndex;
-                        _pageController.animateToPage(
-                          nextIndex,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                        //_pageController.jumpToPage(nextIndex);
+                        _pageController.jumpToPage(nextIndex);
                       },
                       child: Container(
                         height: 40,
@@ -879,13 +890,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        if (itemQuantity > 0) {
-                          ref
-                              .read(restaurantDetailProvider.notifier)
-                              .decreaseItemQuantity();
-                        }
-                      },
+                      onTap: () {},
                       child: Container(
                         height: 40,
                         width: 40,
@@ -903,18 +908,11 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                       height: 40,
                       width: 40,
                       child: Center(
-                        child: Text(
-                          itemQuantity.toString(),
-                          style: AppTextStyles.blackS16Medium,
-                        ),
+                        child: Text("1", style: AppTextStyles.blackS16Medium),
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        ref
-                            .read(restaurantDetailProvider.notifier)
-                            .increaseItemQuantity();
-                      },
+                      onTap: () {},
                       child: Container(
                         height: 40,
                         width: 40,
@@ -946,7 +944,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        print('Add to Order');
+                        context.pushNamed(RouteConfig.orderConfirm);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

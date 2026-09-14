@@ -67,3 +67,10 @@
 
 14. Nếu dùng GestureDetector bình thường thì các chỗ như const SizedBox(hieght: 16) sẽ không nhận onTap vì nó là vùng trống, không có nội dung nên không ăn onTap
 - Sửa: set behavior của GestureDetector là opaque 
+
+15. Xử lý blur 
+- Dùng ImageFiltered
+
+16. Làm hiệu ứng vuốt page thì page nhỏ dần, page được focus thì to dần
+- Dùng Transform.scale và scale động + AnimatedBuilder
+- _pageController.position.haveDimensions: để check xem page đó có kích thước không (thường khi mới khởi toạ thì page không có kích thước nên nó return false)
