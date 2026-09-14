@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SearchState {
 
- LoadStatus get searchLoadStatus; SearchEntity? get searchResult;//String? searchText,
- String? get errorMessage;
+ LoadStatus get searchLoadStatus; SearchEntity? get searchResult; String? get errorMessage;
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -214,7 +213,6 @@ class _SearchState implements SearchState {
 
 @override@JsonKey() final  LoadStatus searchLoadStatus;
 @override final  SearchEntity? searchResult;
-//String? searchText,
 @override final  String? errorMessage;
 
 /// Create a copy of SearchState

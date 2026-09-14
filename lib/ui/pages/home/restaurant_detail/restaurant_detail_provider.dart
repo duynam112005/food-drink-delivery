@@ -24,6 +24,7 @@ class RestaurantDetail extends _$RestaurantDetail {
       state = state.copyWith(
         restaurantLoadStatus: LoadStatus.success,
         restaurantDetail: restaurantDetail,
+        isFavorite: restaurantDetail.isFavorite,
       );
     } catch (e) {
       if (!ref.mounted) return;
@@ -87,11 +88,15 @@ class RestaurantDetail extends _$RestaurantDetail {
     }
   }
 
+  //change restaurant favorite
   Future<void> changeRestaurantFavourite({required String restaurantId}) async {
+    if (state.isChangingFavorite) return;
+    final previousFavoriteStatus = state.isFavorite;
+    state = state.copyWith(
+      isFavorite: !previousFavoriteStatus,
+      isChangingFavorite: true,
+    );
     try {
-      final previousFavoriteStatus =
-          state.isFavorite;
-      state = state.copyWith(isFavorite: !previousFavoriteStatus);
       if (previousFavoriteStatus) {
         await catalogRepository.removeRestaurantFromFavorite(
           restaurantId: restaurantId,
@@ -102,9 +107,13 @@ class RestaurantDetail extends _$RestaurantDetail {
         );
       }
       if (!ref.mounted) return;
+      state = state.copyWith(isChangingFavorite: false);
     } catch (e) {
       if (!ref.mounted) return;
-      state = state.copyWith(errorMessage: e.toString());
+      state = state.copyWith(
+        isFavorite: previousFavoriteStatus,
+        errorMessage: e.toString(),
+      );
     }
   }
 

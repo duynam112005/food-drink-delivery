@@ -19,7 +19,7 @@ mixin _$RestaurantDetailState {
  LoadStatus get menuLoadStatus; List<MenuSectionEntity> get menuSections;//review section
  LoadStatus get reviewLoadStatus; List<ReviewEntity> get reviewSections;//menu item detail
  LoadStatus get menuItemDetailLoadStatus; MenuItemDetailEntity? get menuItemDetail;//add restaurant to favorite
- bool get isFavorite;//app bar state
+ bool get isFavorite; bool get isChangingFavorite;//app bar state
  bool get isCollapsedAppBar;//menu item size selected
  int get itemSizeSelectedIndex;//error message
  String? get errorMessage;
@@ -33,16 +33,16 @@ $RestaurantDetailStateCopyWith<RestaurantDetailState> get copyWith => _$Restaura
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RestaurantDetailState&&(identical(other.restaurantLoadStatus, restaurantLoadStatus) || other.restaurantLoadStatus == restaurantLoadStatus)&&(identical(other.restaurantDetail, restaurantDetail) || other.restaurantDetail == restaurantDetail)&&(identical(other.menuLoadStatus, menuLoadStatus) || other.menuLoadStatus == menuLoadStatus)&&const DeepCollectionEquality().equals(other.menuSections, menuSections)&&(identical(other.reviewLoadStatus, reviewLoadStatus) || other.reviewLoadStatus == reviewLoadStatus)&&const DeepCollectionEquality().equals(other.reviewSections, reviewSections)&&(identical(other.menuItemDetailLoadStatus, menuItemDetailLoadStatus) || other.menuItemDetailLoadStatus == menuItemDetailLoadStatus)&&(identical(other.menuItemDetail, menuItemDetail) || other.menuItemDetail == menuItemDetail)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isCollapsedAppBar, isCollapsedAppBar) || other.isCollapsedAppBar == isCollapsedAppBar)&&(identical(other.itemSizeSelectedIndex, itemSizeSelectedIndex) || other.itemSizeSelectedIndex == itemSizeSelectedIndex)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RestaurantDetailState&&(identical(other.restaurantLoadStatus, restaurantLoadStatus) || other.restaurantLoadStatus == restaurantLoadStatus)&&(identical(other.restaurantDetail, restaurantDetail) || other.restaurantDetail == restaurantDetail)&&(identical(other.menuLoadStatus, menuLoadStatus) || other.menuLoadStatus == menuLoadStatus)&&const DeepCollectionEquality().equals(other.menuSections, menuSections)&&(identical(other.reviewLoadStatus, reviewLoadStatus) || other.reviewLoadStatus == reviewLoadStatus)&&const DeepCollectionEquality().equals(other.reviewSections, reviewSections)&&(identical(other.menuItemDetailLoadStatus, menuItemDetailLoadStatus) || other.menuItemDetailLoadStatus == menuItemDetailLoadStatus)&&(identical(other.menuItemDetail, menuItemDetail) || other.menuItemDetail == menuItemDetail)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isChangingFavorite, isChangingFavorite) || other.isChangingFavorite == isChangingFavorite)&&(identical(other.isCollapsedAppBar, isCollapsedAppBar) || other.isCollapsedAppBar == isCollapsedAppBar)&&(identical(other.itemSizeSelectedIndex, itemSizeSelectedIndex) || other.itemSizeSelectedIndex == itemSizeSelectedIndex)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,restaurantLoadStatus,restaurantDetail,menuLoadStatus,const DeepCollectionEquality().hash(menuSections),reviewLoadStatus,const DeepCollectionEquality().hash(reviewSections),menuItemDetailLoadStatus,menuItemDetail,isFavorite,isCollapsedAppBar,itemSizeSelectedIndex,errorMessage);
+int get hashCode => Object.hash(runtimeType,restaurantLoadStatus,restaurantDetail,menuLoadStatus,const DeepCollectionEquality().hash(menuSections),reviewLoadStatus,const DeepCollectionEquality().hash(reviewSections),menuItemDetailLoadStatus,menuItemDetail,isFavorite,isChangingFavorite,isCollapsedAppBar,itemSizeSelectedIndex,errorMessage);
 
 @override
 String toString() {
-  return 'RestaurantDetailState(restaurantLoadStatus: $restaurantLoadStatus, restaurantDetail: $restaurantDetail, menuLoadStatus: $menuLoadStatus, menuSections: $menuSections, reviewLoadStatus: $reviewLoadStatus, reviewSections: $reviewSections, menuItemDetailLoadStatus: $menuItemDetailLoadStatus, menuItemDetail: $menuItemDetail, isFavorite: $isFavorite, isCollapsedAppBar: $isCollapsedAppBar, itemSizeSelectedIndex: $itemSizeSelectedIndex, errorMessage: $errorMessage)';
+  return 'RestaurantDetailState(restaurantLoadStatus: $restaurantLoadStatus, restaurantDetail: $restaurantDetail, menuLoadStatus: $menuLoadStatus, menuSections: $menuSections, reviewLoadStatus: $reviewLoadStatus, reviewSections: $reviewSections, menuItemDetailLoadStatus: $menuItemDetailLoadStatus, menuItemDetail: $menuItemDetail, isFavorite: $isFavorite, isChangingFavorite: $isChangingFavorite, isCollapsedAppBar: $isCollapsedAppBar, itemSizeSelectedIndex: $itemSizeSelectedIndex, errorMessage: $errorMessage)';
 }
 
 
@@ -53,7 +53,7 @@ abstract mixin class $RestaurantDetailStateCopyWith<$Res>  {
   factory $RestaurantDetailStateCopyWith(RestaurantDetailState value, $Res Function(RestaurantDetailState) _then) = _$RestaurantDetailStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<MenuSectionEntity> menuSections, LoadStatus reviewLoadStatus, List<ReviewEntity> reviewSections, LoadStatus menuItemDetailLoadStatus, MenuItemDetailEntity? menuItemDetail, bool isFavorite, bool isCollapsedAppBar, int itemSizeSelectedIndex, String? errorMessage
+ LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<MenuSectionEntity> menuSections, LoadStatus reviewLoadStatus, List<ReviewEntity> reviewSections, LoadStatus menuItemDetailLoadStatus, MenuItemDetailEntity? menuItemDetail, bool isFavorite, bool isChangingFavorite, bool isCollapsedAppBar, int itemSizeSelectedIndex, String? errorMessage
 });
 
 
@@ -70,7 +70,7 @@ class _$RestaurantDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of RestaurantDetailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? restaurantLoadStatus = null,Object? restaurantDetail = freezed,Object? menuLoadStatus = null,Object? menuSections = null,Object? reviewLoadStatus = null,Object? reviewSections = null,Object? menuItemDetailLoadStatus = null,Object? menuItemDetail = freezed,Object? isFavorite = null,Object? isCollapsedAppBar = null,Object? itemSizeSelectedIndex = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? restaurantLoadStatus = null,Object? restaurantDetail = freezed,Object? menuLoadStatus = null,Object? menuSections = null,Object? reviewLoadStatus = null,Object? reviewSections = null,Object? menuItemDetailLoadStatus = null,Object? menuItemDetail = freezed,Object? isFavorite = null,Object? isChangingFavorite = null,Object? isCollapsedAppBar = null,Object? itemSizeSelectedIndex = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 restaurantLoadStatus: null == restaurantLoadStatus ? _self.restaurantLoadStatus : restaurantLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,restaurantDetail: freezed == restaurantDetail ? _self.restaurantDetail : restaurantDetail // ignore: cast_nullable_to_non_nullable
@@ -81,6 +81,7 @@ as LoadStatus,reviewSections: null == reviewSections ? _self.reviewSections : re
 as List<ReviewEntity>,menuItemDetailLoadStatus: null == menuItemDetailLoadStatus ? _self.menuItemDetailLoadStatus : menuItemDetailLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,menuItemDetail: freezed == menuItemDetail ? _self.menuItemDetail : menuItemDetail // ignore: cast_nullable_to_non_nullable
 as MenuItemDetailEntity?,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
+as bool,isChangingFavorite: null == isChangingFavorite ? _self.isChangingFavorite : isChangingFavorite // ignore: cast_nullable_to_non_nullable
 as bool,isCollapsedAppBar: null == isCollapsedAppBar ? _self.isCollapsedAppBar : isCollapsedAppBar // ignore: cast_nullable_to_non_nullable
 as bool,itemSizeSelectedIndex: null == itemSizeSelectedIndex ? _self.itemSizeSelectedIndex : itemSizeSelectedIndex // ignore: cast_nullable_to_non_nullable
 as int,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -169,10 +170,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<ReviewEntity> reviewSections,  LoadStatus menuItemDetailLoadStatus,  MenuItemDetailEntity? menuItemDetail,  bool isFavorite,  bool isCollapsedAppBar,  int itemSizeSelectedIndex,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<ReviewEntity> reviewSections,  LoadStatus menuItemDetailLoadStatus,  MenuItemDetailEntity? menuItemDetail,  bool isFavorite,  bool isChangingFavorite,  bool isCollapsedAppBar,  int itemSizeSelectedIndex,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RestaurantDetailState() when $default != null:
-return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.menuItemDetailLoadStatus,_that.menuItemDetail,_that.isFavorite,_that.isCollapsedAppBar,_that.itemSizeSelectedIndex,_that.errorMessage);case _:
+return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.menuItemDetailLoadStatus,_that.menuItemDetail,_that.isFavorite,_that.isChangingFavorite,_that.isCollapsedAppBar,_that.itemSizeSelectedIndex,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -190,10 +191,10 @@ return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoad
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<ReviewEntity> reviewSections,  LoadStatus menuItemDetailLoadStatus,  MenuItemDetailEntity? menuItemDetail,  bool isFavorite,  bool isCollapsedAppBar,  int itemSizeSelectedIndex,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<ReviewEntity> reviewSections,  LoadStatus menuItemDetailLoadStatus,  MenuItemDetailEntity? menuItemDetail,  bool isFavorite,  bool isChangingFavorite,  bool isCollapsedAppBar,  int itemSizeSelectedIndex,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _RestaurantDetailState():
-return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.menuItemDetailLoadStatus,_that.menuItemDetail,_that.isFavorite,_that.isCollapsedAppBar,_that.itemSizeSelectedIndex,_that.errorMessage);case _:
+return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.menuItemDetailLoadStatus,_that.menuItemDetail,_that.isFavorite,_that.isChangingFavorite,_that.isCollapsedAppBar,_that.itemSizeSelectedIndex,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -210,10 +211,10 @@ return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoad
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<ReviewEntity> reviewSections,  LoadStatus menuItemDetailLoadStatus,  MenuItemDetailEntity? menuItemDetail,  bool isFavorite,  bool isCollapsedAppBar,  int itemSizeSelectedIndex,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus restaurantLoadStatus,  RestaurantDetailEntity? restaurantDetail,  LoadStatus menuLoadStatus,  List<MenuSectionEntity> menuSections,  LoadStatus reviewLoadStatus,  List<ReviewEntity> reviewSections,  LoadStatus menuItemDetailLoadStatus,  MenuItemDetailEntity? menuItemDetail,  bool isFavorite,  bool isChangingFavorite,  bool isCollapsedAppBar,  int itemSizeSelectedIndex,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _RestaurantDetailState() when $default != null:
-return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.menuItemDetailLoadStatus,_that.menuItemDetail,_that.isFavorite,_that.isCollapsedAppBar,_that.itemSizeSelectedIndex,_that.errorMessage);case _:
+return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoadStatus,_that.menuSections,_that.reviewLoadStatus,_that.reviewSections,_that.menuItemDetailLoadStatus,_that.menuItemDetail,_that.isFavorite,_that.isChangingFavorite,_that.isCollapsedAppBar,_that.itemSizeSelectedIndex,_that.errorMessage);case _:
   return null;
 
 }
@@ -225,7 +226,7 @@ return $default(_that.restaurantLoadStatus,_that.restaurantDetail,_that.menuLoad
 
 
 class _RestaurantDetailState implements RestaurantDetailState {
-  const _RestaurantDetailState({this.restaurantLoadStatus = LoadStatus.initial, this.restaurantDetail, this.menuLoadStatus = LoadStatus.initial, final  List<MenuSectionEntity> menuSections = const [], this.reviewLoadStatus = LoadStatus.initial, final  List<ReviewEntity> reviewSections = const [], this.menuItemDetailLoadStatus = LoadStatus.initial, this.menuItemDetail, this.isFavorite = false, this.isCollapsedAppBar = false, this.itemSizeSelectedIndex = 1, this.errorMessage}): _menuSections = menuSections,_reviewSections = reviewSections;
+  const _RestaurantDetailState({this.restaurantLoadStatus = LoadStatus.initial, this.restaurantDetail, this.menuLoadStatus = LoadStatus.initial, final  List<MenuSectionEntity> menuSections = const [], this.reviewLoadStatus = LoadStatus.initial, final  List<ReviewEntity> reviewSections = const [], this.menuItemDetailLoadStatus = LoadStatus.initial, this.menuItemDetail, this.isFavorite = false, this.isChangingFavorite = false, this.isCollapsedAppBar = false, this.itemSizeSelectedIndex = 1, this.errorMessage}): _menuSections = menuSections,_reviewSections = reviewSections;
   
 
 //restaurant detail
@@ -254,6 +255,7 @@ class _RestaurantDetailState implements RestaurantDetailState {
 @override final  MenuItemDetailEntity? menuItemDetail;
 //add restaurant to favorite
 @override@JsonKey() final  bool isFavorite;
+@override@JsonKey() final  bool isChangingFavorite;
 //app bar state
 @override@JsonKey() final  bool isCollapsedAppBar;
 //menu item size selected
@@ -271,16 +273,16 @@ _$RestaurantDetailStateCopyWith<_RestaurantDetailState> get copyWith => __$Resta
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RestaurantDetailState&&(identical(other.restaurantLoadStatus, restaurantLoadStatus) || other.restaurantLoadStatus == restaurantLoadStatus)&&(identical(other.restaurantDetail, restaurantDetail) || other.restaurantDetail == restaurantDetail)&&(identical(other.menuLoadStatus, menuLoadStatus) || other.menuLoadStatus == menuLoadStatus)&&const DeepCollectionEquality().equals(other._menuSections, _menuSections)&&(identical(other.reviewLoadStatus, reviewLoadStatus) || other.reviewLoadStatus == reviewLoadStatus)&&const DeepCollectionEquality().equals(other._reviewSections, _reviewSections)&&(identical(other.menuItemDetailLoadStatus, menuItemDetailLoadStatus) || other.menuItemDetailLoadStatus == menuItemDetailLoadStatus)&&(identical(other.menuItemDetail, menuItemDetail) || other.menuItemDetail == menuItemDetail)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isCollapsedAppBar, isCollapsedAppBar) || other.isCollapsedAppBar == isCollapsedAppBar)&&(identical(other.itemSizeSelectedIndex, itemSizeSelectedIndex) || other.itemSizeSelectedIndex == itemSizeSelectedIndex)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RestaurantDetailState&&(identical(other.restaurantLoadStatus, restaurantLoadStatus) || other.restaurantLoadStatus == restaurantLoadStatus)&&(identical(other.restaurantDetail, restaurantDetail) || other.restaurantDetail == restaurantDetail)&&(identical(other.menuLoadStatus, menuLoadStatus) || other.menuLoadStatus == menuLoadStatus)&&const DeepCollectionEquality().equals(other._menuSections, _menuSections)&&(identical(other.reviewLoadStatus, reviewLoadStatus) || other.reviewLoadStatus == reviewLoadStatus)&&const DeepCollectionEquality().equals(other._reviewSections, _reviewSections)&&(identical(other.menuItemDetailLoadStatus, menuItemDetailLoadStatus) || other.menuItemDetailLoadStatus == menuItemDetailLoadStatus)&&(identical(other.menuItemDetail, menuItemDetail) || other.menuItemDetail == menuItemDetail)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isChangingFavorite, isChangingFavorite) || other.isChangingFavorite == isChangingFavorite)&&(identical(other.isCollapsedAppBar, isCollapsedAppBar) || other.isCollapsedAppBar == isCollapsedAppBar)&&(identical(other.itemSizeSelectedIndex, itemSizeSelectedIndex) || other.itemSizeSelectedIndex == itemSizeSelectedIndex)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,restaurantLoadStatus,restaurantDetail,menuLoadStatus,const DeepCollectionEquality().hash(_menuSections),reviewLoadStatus,const DeepCollectionEquality().hash(_reviewSections),menuItemDetailLoadStatus,menuItemDetail,isFavorite,isCollapsedAppBar,itemSizeSelectedIndex,errorMessage);
+int get hashCode => Object.hash(runtimeType,restaurantLoadStatus,restaurantDetail,menuLoadStatus,const DeepCollectionEquality().hash(_menuSections),reviewLoadStatus,const DeepCollectionEquality().hash(_reviewSections),menuItemDetailLoadStatus,menuItemDetail,isFavorite,isChangingFavorite,isCollapsedAppBar,itemSizeSelectedIndex,errorMessage);
 
 @override
 String toString() {
-  return 'RestaurantDetailState(restaurantLoadStatus: $restaurantLoadStatus, restaurantDetail: $restaurantDetail, menuLoadStatus: $menuLoadStatus, menuSections: $menuSections, reviewLoadStatus: $reviewLoadStatus, reviewSections: $reviewSections, menuItemDetailLoadStatus: $menuItemDetailLoadStatus, menuItemDetail: $menuItemDetail, isFavorite: $isFavorite, isCollapsedAppBar: $isCollapsedAppBar, itemSizeSelectedIndex: $itemSizeSelectedIndex, errorMessage: $errorMessage)';
+  return 'RestaurantDetailState(restaurantLoadStatus: $restaurantLoadStatus, restaurantDetail: $restaurantDetail, menuLoadStatus: $menuLoadStatus, menuSections: $menuSections, reviewLoadStatus: $reviewLoadStatus, reviewSections: $reviewSections, menuItemDetailLoadStatus: $menuItemDetailLoadStatus, menuItemDetail: $menuItemDetail, isFavorite: $isFavorite, isChangingFavorite: $isChangingFavorite, isCollapsedAppBar: $isCollapsedAppBar, itemSizeSelectedIndex: $itemSizeSelectedIndex, errorMessage: $errorMessage)';
 }
 
 
@@ -291,7 +293,7 @@ abstract mixin class _$RestaurantDetailStateCopyWith<$Res> implements $Restauran
   factory _$RestaurantDetailStateCopyWith(_RestaurantDetailState value, $Res Function(_RestaurantDetailState) _then) = __$RestaurantDetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<MenuSectionEntity> menuSections, LoadStatus reviewLoadStatus, List<ReviewEntity> reviewSections, LoadStatus menuItemDetailLoadStatus, MenuItemDetailEntity? menuItemDetail, bool isFavorite, bool isCollapsedAppBar, int itemSizeSelectedIndex, String? errorMessage
+ LoadStatus restaurantLoadStatus, RestaurantDetailEntity? restaurantDetail, LoadStatus menuLoadStatus, List<MenuSectionEntity> menuSections, LoadStatus reviewLoadStatus, List<ReviewEntity> reviewSections, LoadStatus menuItemDetailLoadStatus, MenuItemDetailEntity? menuItemDetail, bool isFavorite, bool isChangingFavorite, bool isCollapsedAppBar, int itemSizeSelectedIndex, String? errorMessage
 });
 
 
@@ -308,7 +310,7 @@ class __$RestaurantDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of RestaurantDetailState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? restaurantLoadStatus = null,Object? restaurantDetail = freezed,Object? menuLoadStatus = null,Object? menuSections = null,Object? reviewLoadStatus = null,Object? reviewSections = null,Object? menuItemDetailLoadStatus = null,Object? menuItemDetail = freezed,Object? isFavorite = null,Object? isCollapsedAppBar = null,Object? itemSizeSelectedIndex = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? restaurantLoadStatus = null,Object? restaurantDetail = freezed,Object? menuLoadStatus = null,Object? menuSections = null,Object? reviewLoadStatus = null,Object? reviewSections = null,Object? menuItemDetailLoadStatus = null,Object? menuItemDetail = freezed,Object? isFavorite = null,Object? isChangingFavorite = null,Object? isCollapsedAppBar = null,Object? itemSizeSelectedIndex = null,Object? errorMessage = freezed,}) {
   return _then(_RestaurantDetailState(
 restaurantLoadStatus: null == restaurantLoadStatus ? _self.restaurantLoadStatus : restaurantLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,restaurantDetail: freezed == restaurantDetail ? _self.restaurantDetail : restaurantDetail // ignore: cast_nullable_to_non_nullable
@@ -319,6 +321,7 @@ as LoadStatus,reviewSections: null == reviewSections ? _self._reviewSections : r
 as List<ReviewEntity>,menuItemDetailLoadStatus: null == menuItemDetailLoadStatus ? _self.menuItemDetailLoadStatus : menuItemDetailLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,menuItemDetail: freezed == menuItemDetail ? _self.menuItemDetail : menuItemDetail // ignore: cast_nullable_to_non_nullable
 as MenuItemDetailEntity?,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
+as bool,isChangingFavorite: null == isChangingFavorite ? _self.isChangingFavorite : isChangingFavorite // ignore: cast_nullable_to_non_nullable
 as bool,isCollapsedAppBar: null == isCollapsedAppBar ? _self.isCollapsedAppBar : isCollapsedAppBar // ignore: cast_nullable_to_non_nullable
 as bool,itemSizeSelectedIndex: null == itemSizeSelectedIndex ? _self.itemSizeSelectedIndex : itemSizeSelectedIndex // ignore: cast_nullable_to_non_nullable
 as int,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:food_drink_delivery/ui/pages/home/order_confirm/order_confirm_page.dart';
 import 'package:food_drink_delivery/ui/pages/home/restaurant_detail/restaurant_detail_page.dart';
 import 'package:food_drink_delivery/ui/pages/home/search/search_page.dart';
 import 'package:food_drink_delivery/ui/pages/onboarding/onboarding_page.dart';
@@ -24,6 +25,7 @@ class RouteConfig {
   static const String home = '/home';
   static const String restaurantDetail = '/restaurant_detail';
   static const String search = '/search';
+  static const String orderConfirm = '/order_confirm';
 
   static final routes = GoRouter(
     initialLocation: onboarding,
@@ -62,19 +64,43 @@ class RouteConfig {
         name: home,
         builder: (context, state) => const HomePage(),
         routes: [
-          GoRoute(path: restaurantDetail, name: restaurantDetail, builder: (context, state){
-            final extra = state.extra as Map<String, dynamic>;
-            final restaurantId = extra['restaurantId'] as String;
-            final restaurantImage = extra['restaurantImage'] as String;
-            final restaurantName = extra['restaurantName'] as String;
-            final hasTakeAway = extra['hasTakeAway'];
-            final isFavorite = extra['isFavorite'];
-            return RestaurantDetailPage(restaurantId: restaurantId, restaurantImage: restaurantImage, restaurantName: restaurantName, hasTakeAway: hasTakeAway, isFavorite: isFavorite);
-          }),
-          GoRoute(path: search, name: search, builder: (context, state){
-            return const SearchPage();
-          })
-        ]
+          GoRoute(
+            path: restaurantDetail,
+            name: restaurantDetail,
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>;
+              final restaurantId = extra['restaurantId'] as String;
+              final restaurantImage = extra['restaurantImage'] as String;
+              final restaurantName = extra['restaurantName'] as String;
+              final hasTakeAway = extra['hasTakeAway'];
+              final isFavorite = extra['isFavorite'];
+              return RestaurantDetailPage(
+                restaurantId: restaurantId,
+                restaurantImage: restaurantImage,
+                restaurantName: restaurantName,
+                hasTakeAway: hasTakeAway,
+                isFavorite: isFavorite,
+              );
+            },
+            routes: [
+              GoRoute(
+                path: orderConfirm,
+                name: orderConfirm,
+                builder: (context, state) {
+                  //final extra = state.extra as Map<String, dynamic>;
+                  return OrderConfirmPage();
+                },
+              ),
+            ],
+          ),
+          GoRoute(
+            path: search,
+            name: search,
+            builder: (context, state) {
+              return const SearchPage();
+            },
+          ),
+        ],
       ),
     ],
   );

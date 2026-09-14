@@ -27,6 +27,7 @@ abstract class RestaurantDetailState with _$RestaurantDetailState{
 
     //add restaurant to favorite
     @Default(false) bool isFavorite,
+    @Default(false) bool isChangingFavorite,
 
     //app bar state
     @Default(false) bool isCollapsedAppBar,
