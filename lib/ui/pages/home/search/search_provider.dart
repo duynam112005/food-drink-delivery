@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:food_drink_delivery/di/injection.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/repositories/search/search_repository.dart';
@@ -9,9 +11,13 @@ part 'search_provider.g.dart';
 @riverpod
 class Search extends _$Search {
   final SearchRepository _searchRepository = sl<SearchRepository>();
+  Timer? _debounceTimer;
   int searchRequestId = 0;
   @override
   SearchState build() {
+    ref.onDispose(() {
+      _debounceTimer?.cancel();
+    });
     return SearchState();
   }
 
@@ -26,15 +32,18 @@ class Search extends _$Search {
     }
     state = state.copyWith(searchLoadStatus: LoadStatus.loading);
     try {
-      final results = await _searchRepository.search(query: query);
-      if (!ref.mounted) return;
-      if (requestId != searchRequestId) {
-        return;
-      }
-      state = state.copyWith(
-        searchLoadStatus: LoadStatus.success,
-        searchResult: results,
-      );
+      _debounceTimer?.cancel();
+      _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+        final results = await _searchRepository.search(query: query);
+        if (!ref.mounted) return;
+        if (requestId != searchRequestId) {
+          return;
+        }
+        state = state.copyWith(
+          searchLoadStatus: LoadStatus.success,
+          searchResult: results,
+        );
+      });
     } catch (e) {
       if (!ref.mounted) return;
       if (requestId != searchRequestId) {
@@ -45,10 +54,6 @@ class Search extends _$Search {
         errorMessage: e.toString(),
       );
     }
-  }
-
-  void onSearchTextChanged(String text) {
-    state = state.copyWith(searchText: text);
   }
 
   Future<void> clearSearch() async {

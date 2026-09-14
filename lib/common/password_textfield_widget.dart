@@ -7,13 +7,18 @@ import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class PasswordTextfieldWidget extends StatefulWidget {
-  const PasswordTextfieldWidget({super.key, required this.controller, required this.onChanged});
+  const PasswordTextfieldWidget({
+    super.key,
+    required this.controller,
+    required this.onChanged,
+  });
 
   final TextEditingController controller;
   final Function(String)? onChanged;
 
   @override
-  State<PasswordTextfieldWidget> createState() => _PasswordTextfieldWidgetState();
+  State<PasswordTextfieldWidget> createState() =>
+      _PasswordTextfieldWidgetState();
 }
 
 class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
@@ -28,39 +33,48 @@ class _PasswordTextfieldWidgetState extends State<PasswordTextfieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-            controller: widget.controller,
-            onChanged: widget.onChanged,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.password_hint,
-              hintStyle: AppTextStyles.greyS14,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              filled: true,
-              fillColor: AppColors.cardColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.all(10),
-                child: GestureDetector(
-                  onTap: () {
-                    if (widget.controller.text.trim().isNotEmpty) {
-                      toggleObscure();
-                    }
-                  },
-                  child: _isObscure ? SvgPicture.asset(AppSvgs.eyeIcon) : Icon(Icons.visibility_off, color: AppColors.neutral100),
-                ),
-              ),
-            ),
-            obscureText: _isObscure,
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'Password is required'),
-              FormBuilderValidators.minLength(8, errorText: 'Password must be at least 8 characters'),
-              FormBuilderValidators.password(errorText: 'Include uppercase, lowercase, number and special character'),
-            ])
-          );
+      controller: widget.controller,
+      onChanged: widget.onChanged,
+      decoration: InputDecoration(
+        hintText: AppLocalizations.of(context)!.password_hint,
+        hintStyle: AppTextStyles.greyS14,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+        filled: true,
+        fillColor: AppColors.cardColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.all(10),
+          child: GestureDetector(
+            onTap: () {
+              if (widget.controller.text.trim().isNotEmpty) {
+                toggleObscure();
+              }
+            },
+            child: _isObscure
+                ? SvgPicture.asset(AppSvgs.eyeIcon)
+                : Icon(Icons.visibility_off, color: AppColors.neutral100),
+          ),
+        ),
+      ),
+      cursorColor: AppColors.red400,
+      obscureText: _isObscure,
+      validator: FormBuilderValidators.compose([
+        FormBuilderValidators.required(errorText: 'Password is required'),
+        FormBuilderValidators.minLength(
+          8,
+          errorText: 'Password must be at least 8 characters',
+        ),
+        FormBuilderValidators.password(
+          errorText:
+              'Include uppercase, lowercase, number and special character',
+        ),
+      ]),
+    );
   }
 }

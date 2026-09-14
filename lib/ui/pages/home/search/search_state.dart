@@ -9,7 +9,6 @@ part 'search_state.freezed.dart';
   factory SearchState({
     @Default(LoadStatus.initial) LoadStatus searchLoadStatus,
     SearchEntity? searchResult,
-    String? searchText,
     String? errorMessage
   }) = _SearchState;
  }

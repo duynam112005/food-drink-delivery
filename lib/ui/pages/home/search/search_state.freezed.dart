@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SearchState {
 
- LoadStatus get searchLoadStatus; SearchEntity? get searchResult; String? get searchText; String? get errorMessage;
+ LoadStatus get searchLoadStatus; SearchEntity? get searchResult;//String? searchText,
+ String? get errorMessage;
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +26,16 @@ $SearchStateCopyWith<SearchState> get copyWith => _$SearchStateCopyWithImpl<Sear
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchState&&(identical(other.searchLoadStatus, searchLoadStatus) || other.searchLoadStatus == searchLoadStatus)&&(identical(other.searchResult, searchResult) || other.searchResult == searchResult)&&(identical(other.searchText, searchText) || other.searchText == searchText)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchState&&(identical(other.searchLoadStatus, searchLoadStatus) || other.searchLoadStatus == searchLoadStatus)&&(identical(other.searchResult, searchResult) || other.searchResult == searchResult)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchLoadStatus,searchResult,searchText,errorMessage);
+int get hashCode => Object.hash(runtimeType,searchLoadStatus,searchResult,errorMessage);
 
 @override
 String toString() {
-  return 'SearchState(searchLoadStatus: $searchLoadStatus, searchResult: $searchResult, searchText: $searchText, errorMessage: $errorMessage)';
+  return 'SearchState(searchLoadStatus: $searchLoadStatus, searchResult: $searchResult, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +46,7 @@ abstract mixin class $SearchStateCopyWith<$Res>  {
   factory $SearchStateCopyWith(SearchState value, $Res Function(SearchState) _then) = _$SearchStateCopyWithImpl;
 @useResult
 $Res call({
- LoadStatus searchLoadStatus, SearchEntity? searchResult, String? searchText, String? errorMessage
+ LoadStatus searchLoadStatus, SearchEntity? searchResult, String? errorMessage
 });
 
 
@@ -62,12 +63,11 @@ class _$SearchStateCopyWithImpl<$Res>
 
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? searchLoadStatus = null,Object? searchResult = freezed,Object? searchText = freezed,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? searchLoadStatus = null,Object? searchResult = freezed,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 searchLoadStatus: null == searchLoadStatus ? _self.searchLoadStatus : searchLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,searchResult: freezed == searchResult ? _self.searchResult : searchResult // ignore: cast_nullable_to_non_nullable
-as SearchEntity?,searchText: freezed == searchText ? _self.searchText : searchText // ignore: cast_nullable_to_non_nullable
-as String?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as SearchEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -153,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus searchLoadStatus,  SearchEntity? searchResult,  String? searchText,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( LoadStatus searchLoadStatus,  SearchEntity? searchResult,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
-return $default(_that.searchLoadStatus,_that.searchResult,_that.searchText,_that.errorMessage);case _:
+return $default(_that.searchLoadStatus,_that.searchResult,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -174,10 +174,10 @@ return $default(_that.searchLoadStatus,_that.searchResult,_that.searchText,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus searchLoadStatus,  SearchEntity? searchResult,  String? searchText,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( LoadStatus searchLoadStatus,  SearchEntity? searchResult,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _SearchState():
-return $default(_that.searchLoadStatus,_that.searchResult,_that.searchText,_that.errorMessage);case _:
+return $default(_that.searchLoadStatus,_that.searchResult,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +194,10 @@ return $default(_that.searchLoadStatus,_that.searchResult,_that.searchText,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus searchLoadStatus,  SearchEntity? searchResult,  String? searchText,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( LoadStatus searchLoadStatus,  SearchEntity? searchResult,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _SearchState() when $default != null:
-return $default(_that.searchLoadStatus,_that.searchResult,_that.searchText,_that.errorMessage);case _:
+return $default(_that.searchLoadStatus,_that.searchResult,_that.errorMessage);case _:
   return null;
 
 }
@@ -209,12 +209,12 @@ return $default(_that.searchLoadStatus,_that.searchResult,_that.searchText,_that
 
 
 class _SearchState implements SearchState {
-   _SearchState({this.searchLoadStatus = LoadStatus.initial, this.searchResult, this.searchText, this.errorMessage});
+   _SearchState({this.searchLoadStatus = LoadStatus.initial, this.searchResult, this.errorMessage});
   
 
 @override@JsonKey() final  LoadStatus searchLoadStatus;
 @override final  SearchEntity? searchResult;
-@override final  String? searchText;
+//String? searchText,
 @override final  String? errorMessage;
 
 /// Create a copy of SearchState
@@ -227,16 +227,16 @@ _$SearchStateCopyWith<_SearchState> get copyWith => __$SearchStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchState&&(identical(other.searchLoadStatus, searchLoadStatus) || other.searchLoadStatus == searchLoadStatus)&&(identical(other.searchResult, searchResult) || other.searchResult == searchResult)&&(identical(other.searchText, searchText) || other.searchText == searchText)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchState&&(identical(other.searchLoadStatus, searchLoadStatus) || other.searchLoadStatus == searchLoadStatus)&&(identical(other.searchResult, searchResult) || other.searchResult == searchResult)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,searchLoadStatus,searchResult,searchText,errorMessage);
+int get hashCode => Object.hash(runtimeType,searchLoadStatus,searchResult,errorMessage);
 
 @override
 String toString() {
-  return 'SearchState(searchLoadStatus: $searchLoadStatus, searchResult: $searchResult, searchText: $searchText, errorMessage: $errorMessage)';
+  return 'SearchState(searchLoadStatus: $searchLoadStatus, searchResult: $searchResult, errorMessage: $errorMessage)';
 }
 
 
@@ -247,7 +247,7 @@ abstract mixin class _$SearchStateCopyWith<$Res> implements $SearchStateCopyWith
   factory _$SearchStateCopyWith(_SearchState value, $Res Function(_SearchState) _then) = __$SearchStateCopyWithImpl;
 @override @useResult
 $Res call({
- LoadStatus searchLoadStatus, SearchEntity? searchResult, String? searchText, String? errorMessage
+ LoadStatus searchLoadStatus, SearchEntity? searchResult, String? errorMessage
 });
 
 
@@ -264,12 +264,11 @@ class __$SearchStateCopyWithImpl<$Res>
 
 /// Create a copy of SearchState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? searchLoadStatus = null,Object? searchResult = freezed,Object? searchText = freezed,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? searchLoadStatus = null,Object? searchResult = freezed,Object? errorMessage = freezed,}) {
   return _then(_SearchState(
 searchLoadStatus: null == searchLoadStatus ? _self.searchLoadStatus : searchLoadStatus // ignore: cast_nullable_to_non_nullable
 as LoadStatus,searchResult: freezed == searchResult ? _self.searchResult : searchResult // ignore: cast_nullable_to_non_nullable
-as SearchEntity?,searchText: freezed == searchText ? _self.searchText : searchText // ignore: cast_nullable_to_non_nullable
-as String?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as SearchEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

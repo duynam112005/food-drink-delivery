@@ -22,7 +22,6 @@ class SearchPage extends ConsumerStatefulWidget {
 
 class _SearchPageState extends ConsumerState<SearchPage> {
   late final TextEditingController _searchController;
-  Timer? _debounce;
 
   @override
   void initState() {
@@ -33,7 +32,6 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   @override
   void dispose() {
     _searchController.dispose();
-    _debounce?.cancel();
     super.dispose();
   }
 
@@ -73,17 +71,11 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                         : null,
                     hintText: 'Search on Coody',
                     onChanged: (value) async {
-                      ref
-                          .read(searchProvider.notifier)
-                          .onSearchTextChanged(value);
-                      _debounce?.cancel();
                       if (value.isEmpty) {
                         ref.read(searchProvider.notifier).clearSearch();
                         return;
                       }
-                      _debounce = Timer(const Duration(milliseconds: 500), () {
-                        ref.read(searchProvider.notifier).search(value);
-                      });
+                      ref.read(searchProvider.notifier).search(value);
                     },
                   ),
                 ),
@@ -126,6 +118,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             restaurant.isFreeShipping,
             restaurant.deliveryFee.formatted,
             restaurant.id,
+            restaurant.hasTakeAway,
+            restaurant.isFavorite,
           ),
         ),
       ],
@@ -139,12 +133,14 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     bool isFreeShipping,
     String deliveryFee,
     String id,
+    bool hasTakeAway,
+    bool isFavorite,
   ) {
     return GestureDetector(
       onTap: () {
         context.pushNamed(
           RouteConfig.restaurantDetail,
-          extra: {'restaurantId': id, 'restaurantImage': imageUrl},
+          extra: {'restaurantId': id, 'restaurantImage': imageUrl, 'restaurantName': name, 'hasTakeAway': hasTakeAway, 'isFavorite': isFavorite},
         );
       },
       child: Container(
