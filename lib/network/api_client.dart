@@ -111,4 +111,8 @@ abstract class ApiClient {
   //delete favorite restaurant
   @DELETE('/v1/favorites/{restaurantId}')
   Future<void> removeRestaurantFromFavorite(@Path('restaurantId') String restaurantId);
+
+  //add to cart
+  @POST('/v1/cart/items')
+  Future<void> addToCart(@Body() Map<String, dynamic> body);
 }

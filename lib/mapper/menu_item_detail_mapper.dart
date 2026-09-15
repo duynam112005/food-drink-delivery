@@ -11,20 +11,24 @@ class MenuItemDetailMapper {
       name: dto.name,
       description: dto.description,
       imageUrl: dto.imageUrl,
-      price: MoneyEntity(
-        amount: dto.price.amount,
-        currency: dto.price.currency,
-        formatted: dto.price.formatted,
-      ),
+      price: dto.price != null
+          ? MoneyEntity(
+              amount: dto.price!.amount,
+              currency: dto.price!.currency,
+              formatted: dto.price!.formatted,
+            )
+          : null,
       comboLabel: dto.comboLabel,
       isPopular: dto.isPopular,
       isAvailable: dto.isAvailable,
-      restaurantBrief: RestaurantBriefEntity(
-        id: dto.restaurant.id,
-        name: dto.restaurant.name,
-        logoUrl: dto.restaurant.logoUrl,
-        isOpen: dto.restaurant.isOpen,
-      ),
+      restaurantBrief: dto.restaurant != null
+          ? RestaurantBriefEntity(
+              id: dto.restaurant!.id,
+              name: dto.restaurant!.name,
+              logoUrl: dto.restaurant!.logoUrl,
+              isOpen: dto.restaurant!.isOpen,
+            )
+          : null,
       sectionName: dto.sectionName,
       optionGroups: dto.optionGroups
           .map((optionGroup) => MenuItemOptionGroupMapper.toEntity(optionGroup))

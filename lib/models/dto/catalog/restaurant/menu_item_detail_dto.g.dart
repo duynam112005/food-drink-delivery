@@ -6,26 +6,27 @@ part of 'menu_item_detail_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_MenuItemDetailDTO _$MenuItemDetailDTOFromJson(Map<String, dynamic> json) =>
-    _MenuItemDetailDTO(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      imageUrl: json['imageUrl'] as String,
-      price: MoneyDTO.fromJson(json['price'] as Map<String, dynamic>),
-      comboLabel: json['comboLabel'] as String?,
-      isPopular: json['isPopular'] as bool,
-      isAvailable: json['isAvailable'] as bool,
-      restaurant: RestaurantBriefDTO.fromJson(
-        json['restaurant'] as Map<String, dynamic>,
-      ),
-      sectionName: json['sectionName'] as String?,
-      optionGroups: (json['optionGroups'] as List<dynamic>)
-          .map(
-            (e) => MenuItemOptionGroupDTO.fromJson(e as Map<String, dynamic>),
-          )
-          .toList(),
-    );
+_MenuItemDetailDTO _$MenuItemDetailDTOFromJson(
+  Map<String, dynamic> json,
+) => _MenuItemDetailDTO(
+  id: json['id'] as String?,
+  name: json['name'] as String?,
+  description: json['description'] as String?,
+  imageUrl: json['imageUrl'] as String?,
+  price: json['price'] == null
+      ? null
+      : MoneyDTO.fromJson(json['price'] as Map<String, dynamic>),
+  comboLabel: json['comboLabel'] as String?,
+  isPopular: json['isPopular'] as bool?,
+  isAvailable: json['isAvailable'] as bool?,
+  restaurant: json['restaurant'] == null
+      ? null
+      : RestaurantBriefDTO.fromJson(json['restaurant'] as Map<String, dynamic>),
+  sectionName: json['sectionName'] as String?,
+  optionGroups: (json['optionGroups'] as List<dynamic>)
+      .map((e) => MenuItemOptionGroupDTO.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$MenuItemDetailDTOToJson(_MenuItemDetailDTO instance) =>
     <String, dynamic>{

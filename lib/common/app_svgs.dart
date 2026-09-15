@@ -31,4 +31,5 @@ class AppSvgs {
   static const String greyStarS24Icon = '$_svgPath/ic_grey_star_s24.svg';
   static const String plusIcon = '$_svgPath/ic_plus.svg';
   static const String minusIcon = '$_svgPath/ic_minus.svg';
+  static const String cartIcon = '$_svgPath/ic_cart.svg';
 }

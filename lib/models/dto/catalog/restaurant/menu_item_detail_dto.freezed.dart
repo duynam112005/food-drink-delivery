@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MenuItemDetailDTO {
 
- String get id; String get name; String get description; String get imageUrl; MoneyDTO get price; String? get comboLabel; bool get isPopular; bool get isAvailable; RestaurantBriefDTO get restaurant; String? get sectionName; List<MenuItemOptionGroupDTO> get optionGroups;
+ String? get id; String? get name; String? get description; String? get imageUrl; MoneyDTO? get price; String? get comboLabel; bool? get isPopular; bool? get isAvailable; RestaurantBriefDTO? get restaurant; String? get sectionName; List<MenuItemOptionGroupDTO> get optionGroups;
 /// Create a copy of MenuItemDetailDTO
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $MenuItemDetailDTOCopyWith<$Res>  {
   factory $MenuItemDetailDTOCopyWith(MenuItemDetailDTO value, $Res Function(MenuItemDetailDTO) _then) = _$MenuItemDetailDTOCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String description, String imageUrl, MoneyDTO price, String? comboLabel, bool isPopular, bool isAvailable, RestaurantBriefDTO restaurant, String? sectionName, List<MenuItemOptionGroupDTO> optionGroups
+ String? id, String? name, String? description, String? imageUrl, MoneyDTO? price, String? comboLabel, bool? isPopular, bool? isAvailable, RestaurantBriefDTO? restaurant, String? sectionName, List<MenuItemOptionGroupDTO> optionGroups
 });
 
 
-$MoneyDTOCopyWith<$Res> get price;$RestaurantBriefDTOCopyWith<$Res> get restaurant;
+$MoneyDTOCopyWith<$Res>? get price;$RestaurantBriefDTOCopyWith<$Res>? get restaurant;
 
 }
 /// @nodoc
@@ -65,18 +65,18 @@ class _$MenuItemDetailDTOCopyWithImpl<$Res>
 
 /// Create a copy of MenuItemDetailDTO
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = null,Object? imageUrl = null,Object? price = null,Object? comboLabel = freezed,Object? isPopular = null,Object? isAvailable = null,Object? restaurant = null,Object? sectionName = freezed,Object? optionGroups = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? description = freezed,Object? imageUrl = freezed,Object? price = freezed,Object? comboLabel = freezed,Object? isPopular = freezed,Object? isAvailable = freezed,Object? restaurant = freezed,Object? sectionName = freezed,Object? optionGroups = null,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,imageUrl: null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as MoneyDTO,comboLabel: freezed == comboLabel ? _self.comboLabel : comboLabel // ignore: cast_nullable_to_non_nullable
-as String?,isPopular: null == isPopular ? _self.isPopular : isPopular // ignore: cast_nullable_to_non_nullable
-as bool,isAvailable: null == isAvailable ? _self.isAvailable : isAvailable // ignore: cast_nullable_to_non_nullable
-as bool,restaurant: null == restaurant ? _self.restaurant : restaurant // ignore: cast_nullable_to_non_nullable
-as RestaurantBriefDTO,sectionName: freezed == sectionName ? _self.sectionName : sectionName // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
+as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as MoneyDTO?,comboLabel: freezed == comboLabel ? _self.comboLabel : comboLabel // ignore: cast_nullable_to_non_nullable
+as String?,isPopular: freezed == isPopular ? _self.isPopular : isPopular // ignore: cast_nullable_to_non_nullable
+as bool?,isAvailable: freezed == isAvailable ? _self.isAvailable : isAvailable // ignore: cast_nullable_to_non_nullable
+as bool?,restaurant: freezed == restaurant ? _self.restaurant : restaurant // ignore: cast_nullable_to_non_nullable
+as RestaurantBriefDTO?,sectionName: freezed == sectionName ? _self.sectionName : sectionName // ignore: cast_nullable_to_non_nullable
 as String?,optionGroups: null == optionGroups ? _self.optionGroups : optionGroups // ignore: cast_nullable_to_non_nullable
 as List<MenuItemOptionGroupDTO>,
   ));
@@ -85,18 +85,24 @@ as List<MenuItemOptionGroupDTO>,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$MoneyDTOCopyWith<$Res> get price {
-  
-  return $MoneyDTOCopyWith<$Res>(_self.price, (value) {
+$MoneyDTOCopyWith<$Res>? get price {
+    if (_self.price == null) {
+    return null;
+  }
+
+  return $MoneyDTOCopyWith<$Res>(_self.price!, (value) {
     return _then(_self.copyWith(price: value));
   });
 }/// Create a copy of MenuItemDetailDTO
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$RestaurantBriefDTOCopyWith<$Res> get restaurant {
-  
-  return $RestaurantBriefDTOCopyWith<$Res>(_self.restaurant, (value) {
+$RestaurantBriefDTOCopyWith<$Res>? get restaurant {
+    if (_self.restaurant == null) {
+    return null;
+  }
+
+  return $RestaurantBriefDTOCopyWith<$Res>(_self.restaurant!, (value) {
     return _then(_self.copyWith(restaurant: value));
   });
 }
@@ -181,7 +187,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String description,  String imageUrl,  MoneyDTO price,  String? comboLabel,  bool isPopular,  bool isAvailable,  RestaurantBriefDTO restaurant,  String? sectionName,  List<MenuItemOptionGroupDTO> optionGroups)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? description,  String? imageUrl,  MoneyDTO? price,  String? comboLabel,  bool? isPopular,  bool? isAvailable,  RestaurantBriefDTO? restaurant,  String? sectionName,  List<MenuItemOptionGroupDTO> optionGroups)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MenuItemDetailDTO() when $default != null:
 return $default(_that.id,_that.name,_that.description,_that.imageUrl,_that.price,_that.comboLabel,_that.isPopular,_that.isAvailable,_that.restaurant,_that.sectionName,_that.optionGroups);case _:
@@ -202,7 +208,7 @@ return $default(_that.id,_that.name,_that.description,_that.imageUrl,_that.price
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String description,  String imageUrl,  MoneyDTO price,  String? comboLabel,  bool isPopular,  bool isAvailable,  RestaurantBriefDTO restaurant,  String? sectionName,  List<MenuItemOptionGroupDTO> optionGroups)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? description,  String? imageUrl,  MoneyDTO? price,  String? comboLabel,  bool? isPopular,  bool? isAvailable,  RestaurantBriefDTO? restaurant,  String? sectionName,  List<MenuItemOptionGroupDTO> optionGroups)  $default,) {final _that = this;
 switch (_that) {
 case _MenuItemDetailDTO():
 return $default(_that.id,_that.name,_that.description,_that.imageUrl,_that.price,_that.comboLabel,_that.isPopular,_that.isAvailable,_that.restaurant,_that.sectionName,_that.optionGroups);case _:
@@ -222,7 +228,7 @@ return $default(_that.id,_that.name,_that.description,_that.imageUrl,_that.price
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String description,  String imageUrl,  MoneyDTO price,  String? comboLabel,  bool isPopular,  bool isAvailable,  RestaurantBriefDTO restaurant,  String? sectionName,  List<MenuItemOptionGroupDTO> optionGroups)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? description,  String? imageUrl,  MoneyDTO? price,  String? comboLabel,  bool? isPopular,  bool? isAvailable,  RestaurantBriefDTO? restaurant,  String? sectionName,  List<MenuItemOptionGroupDTO> optionGroups)?  $default,) {final _that = this;
 switch (_that) {
 case _MenuItemDetailDTO() when $default != null:
 return $default(_that.id,_that.name,_that.description,_that.imageUrl,_that.price,_that.comboLabel,_that.isPopular,_that.isAvailable,_that.restaurant,_that.sectionName,_that.optionGroups);case _:
@@ -240,15 +246,15 @@ class _MenuItemDetailDTO implements MenuItemDetailDTO {
   const _MenuItemDetailDTO({required this.id, required this.name, required this.description, required this.imageUrl, required this.price, required this.comboLabel, required this.isPopular, required this.isAvailable, required this.restaurant, required this.sectionName, required final  List<MenuItemOptionGroupDTO> optionGroups}): _optionGroups = optionGroups;
   factory _MenuItemDetailDTO.fromJson(Map<String, dynamic> json) => _$MenuItemDetailDTOFromJson(json);
 
-@override final  String id;
-@override final  String name;
-@override final  String description;
-@override final  String imageUrl;
-@override final  MoneyDTO price;
+@override final  String? id;
+@override final  String? name;
+@override final  String? description;
+@override final  String? imageUrl;
+@override final  MoneyDTO? price;
 @override final  String? comboLabel;
-@override final  bool isPopular;
-@override final  bool isAvailable;
-@override final  RestaurantBriefDTO restaurant;
+@override final  bool? isPopular;
+@override final  bool? isAvailable;
+@override final  RestaurantBriefDTO? restaurant;
 @override final  String? sectionName;
  final  List<MenuItemOptionGroupDTO> _optionGroups;
 @override List<MenuItemOptionGroupDTO> get optionGroups {
@@ -291,11 +297,11 @@ abstract mixin class _$MenuItemDetailDTOCopyWith<$Res> implements $MenuItemDetai
   factory _$MenuItemDetailDTOCopyWith(_MenuItemDetailDTO value, $Res Function(_MenuItemDetailDTO) _then) = __$MenuItemDetailDTOCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String description, String imageUrl, MoneyDTO price, String? comboLabel, bool isPopular, bool isAvailable, RestaurantBriefDTO restaurant, String? sectionName, List<MenuItemOptionGroupDTO> optionGroups
+ String? id, String? name, String? description, String? imageUrl, MoneyDTO? price, String? comboLabel, bool? isPopular, bool? isAvailable, RestaurantBriefDTO? restaurant, String? sectionName, List<MenuItemOptionGroupDTO> optionGroups
 });
 
 
-@override $MoneyDTOCopyWith<$Res> get price;@override $RestaurantBriefDTOCopyWith<$Res> get restaurant;
+@override $MoneyDTOCopyWith<$Res>? get price;@override $RestaurantBriefDTOCopyWith<$Res>? get restaurant;
 
 }
 /// @nodoc
@@ -308,18 +314,18 @@ class __$MenuItemDetailDTOCopyWithImpl<$Res>
 
 /// Create a copy of MenuItemDetailDTO
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = null,Object? imageUrl = null,Object? price = null,Object? comboLabel = freezed,Object? isPopular = null,Object? isAvailable = null,Object? restaurant = null,Object? sectionName = freezed,Object? optionGroups = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? description = freezed,Object? imageUrl = freezed,Object? price = freezed,Object? comboLabel = freezed,Object? isPopular = freezed,Object? isAvailable = freezed,Object? restaurant = freezed,Object? sectionName = freezed,Object? optionGroups = null,}) {
   return _then(_MenuItemDetailDTO(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,imageUrl: null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as MoneyDTO,comboLabel: freezed == comboLabel ? _self.comboLabel : comboLabel // ignore: cast_nullable_to_non_nullable
-as String?,isPopular: null == isPopular ? _self.isPopular : isPopular // ignore: cast_nullable_to_non_nullable
-as bool,isAvailable: null == isAvailable ? _self.isAvailable : isAvailable // ignore: cast_nullable_to_non_nullable
-as bool,restaurant: null == restaurant ? _self.restaurant : restaurant // ignore: cast_nullable_to_non_nullable
-as RestaurantBriefDTO,sectionName: freezed == sectionName ? _self.sectionName : sectionName // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
+as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as MoneyDTO?,comboLabel: freezed == comboLabel ? _self.comboLabel : comboLabel // ignore: cast_nullable_to_non_nullable
+as String?,isPopular: freezed == isPopular ? _self.isPopular : isPopular // ignore: cast_nullable_to_non_nullable
+as bool?,isAvailable: freezed == isAvailable ? _self.isAvailable : isAvailable // ignore: cast_nullable_to_non_nullable
+as bool?,restaurant: freezed == restaurant ? _self.restaurant : restaurant // ignore: cast_nullable_to_non_nullable
+as RestaurantBriefDTO?,sectionName: freezed == sectionName ? _self.sectionName : sectionName // ignore: cast_nullable_to_non_nullable
 as String?,optionGroups: null == optionGroups ? _self._optionGroups : optionGroups // ignore: cast_nullable_to_non_nullable
 as List<MenuItemOptionGroupDTO>,
   ));
@@ -329,18 +335,24 @@ as List<MenuItemOptionGroupDTO>,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$MoneyDTOCopyWith<$Res> get price {
-  
-  return $MoneyDTOCopyWith<$Res>(_self.price, (value) {
+$MoneyDTOCopyWith<$Res>? get price {
+    if (_self.price == null) {
+    return null;
+  }
+
+  return $MoneyDTOCopyWith<$Res>(_self.price!, (value) {
     return _then(_self.copyWith(price: value));
   });
 }/// Create a copy of MenuItemDetailDTO
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$RestaurantBriefDTOCopyWith<$Res> get restaurant {
-  
-  return $RestaurantBriefDTOCopyWith<$Res>(_self.restaurant, (value) {
+$RestaurantBriefDTOCopyWith<$Res>? get restaurant {
+    if (_self.restaurant == null) {
+    return null;
+  }
+
+  return $RestaurantBriefDTOCopyWith<$Res>(_self.restaurant!, (value) {
     return _then(_self.copyWith(restaurant: value));
   });
 }

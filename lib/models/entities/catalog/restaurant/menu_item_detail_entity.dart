@@ -3,17 +3,17 @@ import 'package:food_drink_delivery/models/entities/catalog/restaurant/menu_item
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/restaurant_brief_entity.dart';
 
 class MenuItemDetailEntity {
-  final String id;
-  final String name;
-  final String description;
-  final String imageUrl;
-  final MoneyEntity price;
+  final String? id;
+  final String? name;
+  final String? description;
+  final String? imageUrl;
+  final MoneyEntity? price;
   final String? comboLabel;
-  final bool isPopular;
-  final bool isAvailable;
-  final RestaurantBriefEntity restaurantBrief;
+  final bool? isPopular;
+  final bool? isAvailable;
+  final RestaurantBriefEntity? restaurantBrief;
   final String? sectionName;
-  final List<MenuItemOptionGroupEntity> optionGroups;
+  final List<MenuItemOptionGroupEntity>? optionGroups;
 
   MenuItemDetailEntity({
     required this.id,

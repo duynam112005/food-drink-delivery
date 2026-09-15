@@ -36,7 +36,7 @@ class RestaurantDetailPage extends ConsumerStatefulWidget {
 
 class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   late final PageController _pageController;
-  final ScrollController _scrollController = ScrollController();
+  late final ScrollController _scrollController;
   final collapsedHeight = kToolbarHeight;
   final expandedHeight = 200.0;
 
@@ -44,6 +44,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 1, viewportFraction: 0.8);
+    _scrollController = ScrollController();
     Future.microtask(() {
       ref
           .read(restaurantDetailProvider.notifier)
@@ -63,6 +64,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -406,23 +408,33 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                 width: 146,
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () {
+                  onTap: () async {
                     final menuItemId = item.id;
                     final menuItemDetailName = item.name;
                     final menuItemDetailDescription = item.description;
                     final menuItemDetailImage = item.imageUrl;
-                    showModalBottomSheet(
+                    final itemPrice = item.price?.amount ?? 0;
+                    ref
+                        .read(restaurantDetailProvider.notifier)
+                        .getMenuItemDetail(menuItemid: menuItemId!);
+                    ref
+                        .read(restaurantDetailProvider.notifier)
+                        .resetItemSizeAndQuantity();
+                    await showModalBottomSheet(
                       scrollControlDisabledMaxHeightRatio: bodyHeight,
                       context: context,
                       builder: (context) {
                         return _buildItemDetailSheet(
                           bodyHeight,
+                          itemPrice: itemPrice,
+                          menuItemId: menuItemId,
                           itemName: menuItemDetailName,
                           itemDescription: menuItemDetailDescription,
                           itemImage: menuItemDetailImage,
                         );
                       },
                     );
+                    _pageController.jumpToPage(1);
                   },
                   child: Column(
                     crossAxisAlignment: .start,
@@ -497,24 +509,34 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
               return Column(
                 children: [
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       final menuItemId = listItems[index].id;
                       final menuItemDetailName = listItems[index].name;
                       final menuItemDetailDescription =
                           listItems[index].description;
                       final menuItemDetailImage = listItems[index].imageUrl;
-                      showModalBottomSheet(
+                      final itemPrice = listItems[index].price?.amount ?? 0;
+                      ref
+                          .read(restaurantDetailProvider.notifier)
+                          .getMenuItemDetail(menuItemid: menuItemId!);
+                      ref
+                          .read(restaurantDetailProvider.notifier)
+                          .resetItemSizeAndQuantity();
+                      await showModalBottomSheet(
                         scrollControlDisabledMaxHeightRatio: bodyHeight,
                         context: context,
                         builder: (context) {
                           return _buildItemDetailSheet(
                             bodyHeight,
+                            itemPrice: itemPrice,
+                            menuItemId: menuItemId,
                             itemName: menuItemDetailName,
                             itemDescription: menuItemDetailDescription,
                             itemImage: menuItemDetailImage,
                           );
                         },
                       );
+                      _pageController.jumpToPage(1);
                     },
                     child: Row(
                       children: [
@@ -728,16 +750,24 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
 
   Widget _buildItemDetailSheet(
     double bodyHeight, {
+    required int itemPrice,
+    required menuItemId,
     String? itemName,
     String? itemDescription,
     String? itemImage,
   }) {
     return Consumer(
       builder: (context, ref, child) {
-        final itemSizeSelectedIndex = ref.watch(
+        final menuItemDetailLoadStatus = ref.watch(
           restaurantDetailProvider.select(
-            (state) => state.itemSizeSelectedIndex,
+            (state) => state.menuItemDetailLoadStatus,
           ),
+        );
+        final errorMessage = ref.watch(
+          restaurantDetailProvider.select((state) => state.errorMessage),
+        );
+        final menuItemDetail = ref.watch(
+          restaurantDetailProvider.select((state) => state.menuItemDetail),
         );
         return Container(
           height: bodyHeight,
@@ -776,175 +806,339 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(
-                height: 244,
-                child: PageView.builder(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    ref
-                        .read(restaurantDetailProvider.notifier)
-                        .changeItemSizeIndex(index);
-                  },
-                  scrollBehavior: ScrollBehavior(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return AnimatedBuilder(
-                      animation: _pageController,
-                      builder: (context, child) {
-                        final currentPage =
-                            _pageController.page ??
-                            _pageController.initialPage.toDouble();
-                        final distance = (currentPage - index).abs();
-                        final scale = (1 - (currentPage - index).abs() * 0.2);
-                        return Transform.scale(
-                          scale: _pageController.position.haveDimensions
-                              ? distance < 1
-                                    ? scale
-                                    : 0.8
-                              : index == 1
-                              ? 1.0
-                              : 0.8,
-                          child: ImageFiltered(
-                            imageFilter: ImageFilter.blur(
-                              sigmaX: itemSizeSelectedIndex == index ? 0 : 4,
-                              sigmaY: itemSizeSelectedIndex == index ? 0 : 4,
-                            ),
-                            child: Container(
-                              height: 244,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.greyBold,
-                                    blurRadius: 19,
-                                    offset: Offset(0, 7),
+              Consumer(
+                builder: (context, ref, _) {
+                  final itemSizeSelectedIndex = ref.watch(
+                    restaurantDetailProvider.select(
+                      (state) => state.itemSizeSelectedIndex,
+                    ),
+                  );
+                  return SizedBox(
+                    height: 244,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        final itemSizePrice =
+                            menuItemDetail
+                                ?.optionGroups?[0]
+                                .listOptionValue[index]
+                                .price
+                                .amount ??
+                            0;
+                        final itemSizeId =
+                            menuItemDetail
+                                ?.optionGroups?[0]
+                                .listOptionValue[index]
+                                .id ??
+                            '';
+                        ref
+                            .read(restaurantDetailProvider.notifier)
+                            .changeItemSizeIndex(index, itemSizeId);
+                        ref
+                            .read(restaurantDetailProvider.notifier)
+                            .changeItemSizePrice(itemSizePrice);
+                        ref
+                            .read(restaurantDetailProvider.notifier)
+                            .getPrice(itemPrice);
+                      },
+                      scrollBehavior: ScrollBehavior(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 3,
+                      itemBuilder: (context, index) {
+                        return AnimatedBuilder(
+                          animation: _pageController,
+                          builder: (context, child) {
+                            final currentPage =
+                                _pageController.page ??
+                                _pageController.initialPage.toDouble();
+                            final distance = (currentPage - index).abs();
+                            final scale =
+                                (1 - (currentPage - index).abs() * 0.2);
+                            return Transform.scale(
+                              scale: _pageController.position.haveDimensions
+                                  ? distance < 1
+                                        ? scale
+                                        : 0.8
+                                  : index == 1
+                                  ? 1.0
+                                  : 0.8,
+                              child: ImageFiltered(
+                                imageFilter: ImageFilter.blur(
+                                  sigmaX: itemSizeSelectedIndex == index
+                                      ? 0
+                                      : 4,
+                                  sigmaY: itemSizeSelectedIndex == index
+                                      ? 0
+                                      : 4,
+                                ),
+                                child: Container(
+                                  height: 244,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.greyBold,
+                                        blurRadius: 19,
+                                        offset: Offset(0, 7),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              margin: const EdgeInsets.fromLTRB(0, 32, 0, 36),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.network(
-                                  itemImage ?? '',
-                                  fit: BoxFit.cover,
+                                  margin: const EdgeInsets.fromLTRB(
+                                    0,
+                                    32,
+                                    0,
+                                    36,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Image.network(
+                                      itemImage ?? '',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+              switch (menuItemDetailLoadStatus) {
+                LoadStatus.initial || LoadStatus.loading => const Center(
+                  child: CircularProgressIndicator(color: AppColors.red400),
+                ),
+                LoadStatus.failure => Center(
+                  child: Text(errorMessage ?? "An error occurred"),
+                ),
+                LoadStatus.success => Column(
+                  children: [
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final itemSizeSelectedIndex = ref.watch(
+                          restaurantDetailProvider.select(
+                            (state) => state.itemSizeSelectedIndex,
+                          ),
+                        );
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 96),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(3, (index) {
+                              final itemSizePrice =
+                                  menuItemDetail
+                                      ?.optionGroups?[0]
+                                      .listOptionValue[index]
+                                      .price
+                                      .amount ??
+                                  0;
+
+                              final itemSizeId =
+                                  menuItemDetail
+                                      ?.optionGroups?[0]
+                                      .listOptionValue[index]
+                                      .id ??
+                                  '';
+                              return GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(restaurantDetailProvider.notifier)
+                                      .changeItemSizeIndex(index, itemSizeId);
+                                  ref
+                                      .read(restaurantDetailProvider.notifier)
+                                      .changeItemSizePrice(itemSizePrice);
+                                  ref
+                                      .read(restaurantDetailProvider.notifier)
+                                      .getPrice(itemPrice);
+                                  _pageController.jumpToPage(index);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.blackOpacity13,
+                                        blurRadius: 30,
+                                        offset: const Offset(0, 7),
+                                      ),
+                                    ],
+                                    color: itemSizeSelectedIndex == index
+                                        ? AppColors.red400
+                                        : AppColors.white,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      index == 0
+                                          ? 'S'
+                                          : index == 1
+                                          ? 'M'
+                                          : 'L',
+                                      style: AppTextStyles.blackS16Medium,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
                           ),
                         );
                       },
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 96),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(3, (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        ref
-                            .read(restaurantDetailProvider.notifier)
-                            .changeItemSizeIndex(index);
-                        final nextIndex = ref
-                            .read(restaurantDetailProvider)
-                            .itemSizeSelectedIndex;
-                        _pageController.jumpToPage(nextIndex);
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.blackOpacity13,
-                              blurRadius: 30,
-                              offset: const Offset(0, 7),
+                    ),
+                    const SizedBox(height: 56),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 112),
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final itemQuantity = ref.watch(
+                            restaurantDetailProvider.select(
+                              (state) => state.itemQuantity,
                             ),
-                          ],
-                          color: itemSizeSelectedIndex == index
-                              ? AppColors.red400
-                              : AppColors.white,
-                        ),
-                        child: Center(
-                          child: Text(
-                            index == 0
-                                ? 'S'
-                                : index == 1
-                                ? 'M'
-                                : 'L',
-                            style: AppTextStyles.blackS16Medium,
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              const SizedBox(height: 56),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 112),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: AppColors.yellow75,
-                        ),
-                        child: SvgPicture.asset(
-                          AppSvgs.minusIcon,
-                          fit: BoxFit.scaleDown,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Center(
-                        child: Text("1", style: AppTextStyles.blackS16Medium),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: AppColors.yellow75,
-                        ),
-                        child: SvgPicture.asset(
-                          AppSvgs.plusIcon,
-                          fit: BoxFit.scaleDown,
-                        ),
+                          );
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(restaurantDetailProvider.notifier)
+                                      .decreaseItemQuantity();
+                                  ref
+                                      .read(restaurantDetailProvider.notifier)
+                                      .getPrice(itemPrice);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: AppColors.yellow75,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    AppSvgs.minusIcon,
+                                    fit: BoxFit.scaleDown,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Center(
+                                  child: Text(
+                                    itemQuantity.toString(),
+                                    style: AppTextStyles.blackS16Medium,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(restaurantDetailProvider.notifier)
+                                      .increaseItemQuantity();
+                                  ref
+                                      .read(restaurantDetailProvider.notifier)
+                                      .getPrice(itemPrice);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: AppColors.yellow75,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    AppSvgs.plusIcon,
+                                    fit: BoxFit.scaleDown,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],
                 ),
-              ),
+              },
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(36, 0, 36, 36),
+                padding: const EdgeInsets.fromLTRB(20, 0, 36, 36),
                 child: Row(
                   children: [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            context.pushNamed(RouteConfig.orderConfirm);
+                          },
+                          child: SvgPicture.asset(AppSvgs.cartIcon),
+                        ),
+                        Consumer(
+                          builder: (context, ref, _) {
+                            final cartItemCount = ref.watch(
+                              restaurantDetailProvider.select(
+                                (state) => state.cartItemCount,
+                              ),
+                            );
+                            return Positioned(
+                              top: -4,
+                              right: -4,
+                              child: Container(
+                                height: 14,
+                                width: 14,
+                                decoration: BoxDecoration(
+                                  color: AppColors.red400,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    cartItemCount.toString(),
+                                    style: AppTextStyles.whiteS12Medium
+                                        .copyWith(fontSize: 8),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 24),
                     Column(
                       children: [
                         Text('Price', style: AppTextStyles.blackS16Medium),
                         const SizedBox(height: 4),
-                        Text('\$ 5.99', style: AppTextStyles.red400S20Medium),
+                        Consumer(
+                          builder: (context, ref, _) {
+                            final price = ref.watch(
+                              restaurantDetailProvider.select(
+                                (state) => state.price,
+                              ),
+                            );
+                            return Text(
+                              price.toString(),
+                              style: AppTextStyles.red400S20Medium,
+                            );
+                          },
+                        ),
                       ],
                     ),
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        context.pushNamed(RouteConfig.orderConfirm);
+                        final optionValueId = ref
+                            .read(restaurantDetailProvider)
+                            .itemSizeId;
+                        ref
+                            .read(restaurantDetailProvider.notifier)
+                            .addToCart(
+                              context: context,
+                              menuItemId: menuItemId,
+                              optionValueId: optionValueId,
+                            );
+                        // context.pushNamed(RouteConfig.orderConfirm);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -955,9 +1149,33 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                           color: AppColors.red400,
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Text(
-                          'Add to Order',
-                          style: AppTextStyles.whiteS14Medium,
+                        child: Consumer(
+                          builder: (context, ref, _) {
+                            final addToCartLoadStatus = ref.watch(
+                              restaurantDetailProvider.select(
+                                (state) => state.addToCartLoadStatus,
+                              ),
+                            );
+                            return Row(
+                              children: [
+                                Text(
+                                  'Add to Order',
+                                  style: AppTextStyles.whiteS14Medium,
+                                ),
+                                addToCartLoadStatus == LoadStatus.loading
+                                    ? Container(
+                                        height: 16,
+                                        width: 16,
+                                        margin: const EdgeInsets.only(left: 8),
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : SizedBox(width: 16),
+                              ],
+                            );
+                          },
                         ),
                       ),
                     ),

@@ -32,9 +32,17 @@ abstract class RestaurantDetailState with _$RestaurantDetailState{
     //app bar state
     @Default(false) bool isCollapsedAppBar,
 
-    //menu item size selected
+    //menu item to order
+    @Default(LoadStatus.initial) LoadStatus addToCartLoadStatus,
     @Default(1) int itemSizeSelectedIndex,
+    @Default(0) int itemSizePrice,
+    @Default("") String itemSizeId,
+    @Default(0) double price,
+    @Default(0) int itemQuantity,
 
+    //cart
+    @Default(0) int cartItemCount,
+    
     //error message
     String? errorMessage,
   })= _RestaurantDetailState;
