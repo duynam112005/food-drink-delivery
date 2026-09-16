@@ -75,9 +75,9 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: AppColors.white,
         body: NestedScrollView(
           controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               SliverAppBar(
@@ -394,7 +394,8 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
           child: Text(menuSections[0].name, style: AppTextStyles.blackS16Bold),
         ),
         SizedBox(
-          height: 228,
+                height: 228,
+
           child: ListView.builder(
             itemCount: listItems.length,
             scrollDirection: Axis.horizontal,
@@ -406,6 +407,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   left: index == 0 ? 36 : 0,
                 ),
                 width: 146,
+
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () async {
@@ -763,9 +765,6 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
             (state) => state.menuItemDetailLoadStatus,
           ),
         );
-        final errorMessage = ref.watch(
-          restaurantDetailProvider.select((state) => state.errorMessage),
-        );
         final menuItemDetail = ref.watch(
           restaurantDetailProvider.select((state) => state.menuItemDetail),
         );
@@ -910,7 +909,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   child: CircularProgressIndicator(color: AppColors.red400),
                 ),
                 LoadStatus.failure => Center(
-                  child: Text(errorMessage ?? "An error occurred"),
+                  child: const SizedBox.shrink(),
                 ),
                 LoadStatus.success => Column(
                   children: [
@@ -985,10 +984,12 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                           ),
                         );
                       },
-                    ),
-                    const SizedBox(height: 56),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 112),
+                    ),                 
+                  ],
+                ),
+              },
+              Padding(
+                      padding: const EdgeInsets.fromLTRB(112, 56, 112, 0),
                       child: Consumer(
                         builder: (context, ref, _) {
                           final itemQuantity = ref.watch(
@@ -1058,9 +1059,6 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                         },
                       ),
                     ),
-                  ],
-                ),
-              },
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 36, 36),

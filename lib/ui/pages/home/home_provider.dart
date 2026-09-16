@@ -24,6 +24,8 @@ class Home extends _$Home {
       state = state.copyWith(
         categoryLoadStatus: LoadStatus.success,
         categories: categories,
+        selectedCategoryId: categories.isNotEmpty ? categories.first.id : null,
+        selectedSort: 'recommended',
       );
     } catch (e) {
       if(!ref.mounted) return;

@@ -159,7 +159,7 @@ class RestaurantDetail extends _$RestaurantDetail {
 
   //initialize
   Future<void> initialize(String restaurantId) async {
-    Future.wait([
+    await Future.wait([
       getRestaurantDetail(restaurantId),
       getRestaurantMenu(restaurantId),
       getRestaurantReviews(restaurantId: restaurantId),
@@ -209,6 +209,7 @@ class RestaurantDetail extends _$RestaurantDetail {
     required String optionValueId,
     String? note,
   }) async {
+    if(state.itemQuantity <1) return;
     state = state.copyWith(addToCartLoadStatus: LoadStatus.loading);
     try {
       await cartRepository.addToCart(
@@ -220,7 +221,6 @@ class RestaurantDetail extends _$RestaurantDetail {
       if (!ref.mounted) return;
       state = state.copyWith(addToCartLoadStatus: LoadStatus.success, cartItemCount: state.cartItemCount + 1);
       showTopSnackBar(
-        padding: EdgeInsets.zero,
         Overlay.of(context),
         const CustomSnackBar.success(
           message: "Item added to cart successfully",
@@ -234,10 +234,10 @@ class RestaurantDetail extends _$RestaurantDetail {
         errorMessage: e.toString(),
       );
       showTopSnackBar(
-        padding: EdgeInsets.zero,
+        displayDuration: const Duration(seconds: 4),
         Overlay.of(context),
-        const CustomSnackBar.error(
-          message: "Failed to add item to cart",
+        CustomSnackBar.error(
+          message: e.toString(),
           backgroundColor: AppColors.red400,
           messagePadding: EdgeInsets.zero
         ),

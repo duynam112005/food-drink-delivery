@@ -69,7 +69,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   headerSliverBuilder: (context, innerIsScroll) {
                     return [
                       SliverToBoxAdapter(
-                        child: _buildCategory(categoryLoadStatus, categories),
+                        child: _buildCategory(categoryLoadStatus, categories, bodyHeight),
                       ),
                       SliverToBoxAdapter(child: const SizedBox(height: 16)),
                       SliverToBoxAdapter(
@@ -296,6 +296,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildCategory(
     LoadStatus categoryLoadStatus,
     List<CategoryEntity> categories,
+    double bodyHeight,
   ) {
     final errorMessage = ref.watch(
       homeProvider.select((state) => state.errorMessage),
@@ -314,7 +315,11 @@ class _HomePageState extends ConsumerState<HomePage> {
               children: [
                 Text('Category', style: AppTextStyles.blackS16Bold),
                 const Spacer(),
-                Text('See all', style: AppTextStyles.blackS14Medium),
+                GestureDetector(onTap:(){
+                  // showModalBottomSheet(context: context, scrollControlDisabledMaxHeightRatio: bodyHeiht, builder: (context){
+                  //   return _buildCategorySeeAll(context, bodyHeight, categories);
+                  // });
+                },child: Text('See all', style: AppTextStyles.blackS14Medium)),
               ],
             ),
           ),
@@ -371,6 +376,20 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  Widget _buildCategorySeeAll(BuildContext context, double bodyHeight, List<CategoryEntity> categories) {
+    return Container(
+      height: bodyHeight,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBestPartners(
     LoadStatus bestPartnersStatus,
     List<RestaurantEntity> bestPartners,
@@ -423,86 +442,106 @@ class _HomePageState extends ConsumerState<HomePage> {
                 itemCount: bestPartners.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
+                  final restaurantId = bestPartners[index].id;
+                  final restaurantImage = bestPartners[index].coverUrl;
+                  final restaurantName = bestPartners[index].name;
+                  final hasTakeAway = bestPartners[index].hasTakeAway;
+                  final isFavorite = bestPartners[index].isFavorite;
                   return Padding(
                     padding: EdgeInsets.only(
                       right: 20,
                       left: index == 0 ? 20 : 0,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 116,
-                          width: 204,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image.network(
-                              bestPartners[index].coverUrl,
-                              fit: BoxFit.cover,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap:(){{
+                        context.pushNamed(
+                          RouteConfig.restaurantDetail,
+                          extra: {
+                            'restaurantId': restaurantId,
+                            'restaurantImage': restaurantImage,
+                            'restaurantName': restaurantName,
+                            'hasTakeAway': hasTakeAway,
+                            'isFavorite': isFavorite,
+                          },
+                        );
+                      }},
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 116,
+                            width: 204,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Image.network(
+                                bestPartners[index].coverUrl,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Text(
-                              bestPartners[index].name,
-                              style: AppTextStyles.blackS20Medium,
-                            ),
-                            SvgPicture.asset(AppSvgs.shieldCheckIcon),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            bestPartners[index].isOpen == true
-                                ? Text(
-                                    "Open",
-                                    style: AppTextStyles.greenS12Medium,
-                                  )
-                                : Text("Closed", style: AppTextStyles.red),
-                            DotWidget(),
-                            Text(
-                              bestPartners[index].addressLine,
-                              style: AppTextStyles.greyS12Medium,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Text(
+                                bestPartners[index].name,
+                                style: AppTextStyles.blackS20Medium,
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(900),
-                                color: AppColors.red400,
+                              SvgPicture.asset(AppSvgs.shieldCheckIcon),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              bestPartners[index].isOpen == true
+                                  ? Text(
+                                      "Open",
+                                      style: AppTextStyles.greenS12Medium,
+                                    )
+                                  : Text("Closed", style: AppTextStyles.red),
+                              DotWidget(),
+                              Text(
+                                bestPartners[index].addressLine,
+                                style: AppTextStyles.greyS12Medium,
                               ),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(AppSvgs.whiteStarIcon),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    bestPartners[index].rating.toString(),
-                                    style: AppTextStyles.whiteS12Medium,
-                                  ),
-                                ],
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(900),
+                                  color: AppColors.red400,
+                                ),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(AppSvgs.whiteStarIcon),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      bestPartners[index].rating.toString(),
+                                      style: AppTextStyles.whiteS12Medium,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            DotWidget(),
-                            Text('1.5km', style: AppTextStyles.blackS12Medium),
-                            DotWidget(),
-                            Text(
-                              bestPartners[index].isFreeShipping
-                                  ? 'Free Shipping'
-                                  : bestPartners[index].deliveryFee.formatted,
-                              style: AppTextStyles.blackS12Medium,
-                            ),
-                          ],
-                        ),
-                      ],
+                              DotWidget(),
+                              Text('1.5km', style: AppTextStyles.blackS12Medium),
+                              DotWidget(),
+                              Text(
+                                bestPartners[index].isFreeShipping
+                                    ? 'Free Shipping'
+                                    : bestPartners[index].deliveryFee.formatted,
+                                style: AppTextStyles.blackS12Medium,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -949,6 +988,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         );
         return Column(
           children: List.generate(3, (index) {
+            //index = 0;
             final sort = switch (index) {
               0 => 'recommended',
               1 => 'fastest',
