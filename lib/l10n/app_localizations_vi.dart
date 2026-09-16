@@ -85,4 +85,49 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get subtitle_enter_code => 'Chúng tôi vừa gửi mã tới ';
+
+  @override
+  String get search_hint => 'Tìm kiếm';
+
+  @override
+  String get filter_button => 'Lọc';
+
+  @override
+  String get delivery_to => 'Giao tới';
+
+  @override
+  String get category => 'Danh mục';
+
+  @override
+  String get see_all => 'Tất cả';
+
+  @override
+  String get best_partners => 'Nổi bật';
+
+  @override
+  String get open => 'Mở';
+
+  @override
+  String get close => 'Đóng';
+
+  @override
+  String get free_ship => 'Miễn ship';
+
+  @override
+  String get near_by => 'Gần đây';
+
+  @override
+  String get sales => 'Khuyến mãi';
+
+  @override
+  String get rate => 'Đánh giá';
+
+  @override
+  String get fast => 'Nhanh';
+
+  @override
+  String get sort_by => 'Sắp xếp';
+
+  @override
+  String get price => 'Giá';
 }

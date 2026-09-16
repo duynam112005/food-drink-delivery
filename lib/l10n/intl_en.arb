@@ -23,5 +23,20 @@
     "phone_number_hint": "Phone number",
     "register_button": "Register",
     "title_enter_code": "Verify your identity",
-    "subtitle_enter_code": "We have sent a code to "
+    "subtitle_enter_code": "We have sent a code to ",
+    "search_hint" : "Search on Coody",
+    "filter_button" : "Filter",
+    "delivery_to" : "Delivery to",
+    "category" : "Category",
+    "see_all" : "See all",
+    "best_partners" : "Best partners",
+    "open": "Open",
+    "close" : "Close",
+    "free_ship" : "Free ship",
+    "near_by" : "Nearby",
+    "sales" : "Sales",
+    "rate" : "Rate",
+    "fast" : "Fast",
+    "sort_by" : "Sort by",
+    "price" : "Price"
 }

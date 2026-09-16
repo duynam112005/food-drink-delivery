@@ -247,6 +247,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We have sent a code to '**
   String get subtitle_enter_code;
+
+  /// No description provided for @search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search on Coody'**
+  String get search_hint;
+
+  /// No description provided for @filter_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter_button;
+
+  /// No description provided for @delivery_to.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery to'**
+  String get delivery_to;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @see_all.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get see_all;
+
+  /// No description provided for @best_partners.
+  ///
+  /// In en, this message translates to:
+  /// **'Best partners'**
+  String get best_partners;
+
+  /// No description provided for @open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get open;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @free_ship.
+  ///
+  /// In en, this message translates to:
+  /// **'Free ship'**
+  String get free_ship;
+
+  /// No description provided for @near_by.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby'**
+  String get near_by;
+
+  /// No description provided for @sales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get sales;
+
+  /// No description provided for @rate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate'**
+  String get rate;
+
+  /// No description provided for @fast.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get fast;
+
+  /// No description provided for @sort_by.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get sort_by;
+
+  /// No description provided for @price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get price;
 }
 
 class _AppLocalizationsDelegate

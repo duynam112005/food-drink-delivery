@@ -23,5 +23,20 @@
     "phone_number_hint": "Số điện thoại",
     "register_button": "Đăng ký",
     "title_enter_code": "Xác minh danh tính",
-    "subtitle_enter_code": "Chúng tôi vừa gửi mã tới "
+    "subtitle_enter_code": "Chúng tôi vừa gửi mã tới ",
+    "search_hint" : "Tìm kiếm",
+    "filter_button" : "Lọc",
+    "delivery_to" : "Giao tới",
+    "category" : "Danh mục",
+    "see_all" : "Tất cả",
+    "best_partners" : "Nổi bật",
+    "open": "Mở",
+    "close" : "Đóng",
+    "free_ship" : "Miễn ship",
+    "near_by" : "Gần đây",
+    "sales" : "Khuyến mãi",
+    "rate" : "Đánh giá",
+    "fast" : "Nhanh",
+    "sort_by" : "Sắp xếp",
+    "price" : "Giá"
     }

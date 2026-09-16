@@ -85,4 +85,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get subtitle_enter_code => 'We have sent a code to ';
+
+  @override
+  String get search_hint => 'Search on Coody';
+
+  @override
+  String get filter_button => 'Filter';
+
+  @override
+  String get delivery_to => 'Delivery to';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get see_all => 'See all';
+
+  @override
+  String get best_partners => 'Best partners';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get free_ship => 'Free ship';
+
+  @override
+  String get near_by => 'Nearby';
+
+  @override
+  String get sales => 'Sales';
+
+  @override
+  String get rate => 'Rate';
+
+  @override
+  String get fast => 'Fast';
+
+  @override
+  String get sort_by => 'Sort by';
+
+  @override
+  String get price => 'Price';
 }

@@ -4,6 +4,7 @@ import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/common/app_textfield_widget.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/entities/catalog/category/category_entity.dart';
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/restaurant_entity.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
@@ -41,6 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     final categoryLoadStatus = ref.watch(
       homeProvider.select((state) => state.categoryLoadStatus),
     );
@@ -59,7 +61,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       backgroundColor: AppColors.cardColor,
       body: Column(
         children: [
-          _buildTopBar(context, bodyHeight),
+          _buildTopBar(context, bodyHeight, localizations),
           Expanded(
             child: DefaultTabController(
               length: 4,
@@ -115,7 +117,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildTopBar(BuildContext context, double bodyHeight) {
+  Widget _buildTopBar(BuildContext context, double bodyHeight, localizations) {
     return Container(
       height: 212,
       width: double.infinity,
@@ -138,7 +140,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             onTap: () {
               context.pushNamed(RouteConfig.search);
             },
-            hintText: 'Search on Coody',
+            hintText: AppLocalizations.of(context)!.search_hint,
             onChanged: (value) {},
           ),
           const SizedBox(height: 24),
@@ -152,7 +154,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Delivery to', style: AppTextStyles.red400S12Medium),
+                  Text(localizations.delivery_to, style: AppTextStyles.red400S12Medium),
                   const SizedBox(height: 2),
                   Text('1014 Prospect Valley', style: AppTextStyles.blackS14),
                 ],
@@ -271,7 +273,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         fit: BoxFit.scaleDown,
                       ),
                       const SizedBox(width: 4),
-                      Text('Filter', style: AppTextStyles.blackS12Medium),
+                      Text(localizations.filter, style: AppTextStyles.blackS12Medium),
                     ],
                   ),
                 ),
