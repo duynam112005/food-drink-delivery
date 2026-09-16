@@ -8,4 +8,6 @@ class AppImages{
   static const String logo = 'assets/images/logo_image.png';
 
   static const avatarFakeImage = 'assets/images/avatar_fake_image.png';
+
+  static const String miniMapImage = 'assets/images/mini_map_image.png';
 }

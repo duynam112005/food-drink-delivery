@@ -61,6 +61,8 @@
    + SliverGrid: grid
    + SliverPadding: padding cho Sliver
    + SliverFillRemaining: phần còn lại của view port
+- Xử lý bo góc như màn detail thì cho title của SliverAppBar là 1 container bo góc
+- 1 list sliver của CustomerScrollView có thể có nhiều SliverAppBar
 
 13. Xử lý trường hợp đang call API mà thoát màn hình đó
 - ở provider check mounted (mounted cho biết 1 state của stateful còn tồn tại hay không)
