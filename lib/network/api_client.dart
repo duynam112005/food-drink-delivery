@@ -33,6 +33,10 @@ abstract class ApiClient {
     @Body() Map<String, dynamic> body,
   );
 
+  //refresh token
+  @POST("/v1/auth/refresh")
+  Future<ApiResponseDTO<AuthDTO>> refreshToken(@Body() Map<String, dynamic> body);
+
   //register
   @POST("/v1/auth/register")
   Future<ApiResponseDTO<AuthDTO>> register(@Body() Map<String, dynamic> body);

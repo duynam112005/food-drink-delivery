@@ -129,6 +129,30 @@ class AuthRepository {
     }
   }
 
+  //refresh token
+  Future<AuthEntity> refreshToken(String refreshToken) async{
+    try{
+      final response = await apiClient.refreshToken({'refreshToken': refreshToken});
+      final results = response.data;
+      return AuthEntity(
+        user: UserEntity(
+          id: results.user.id,
+          fullName: results.user.fullName,
+          email: results.user.email,
+          phone: results.user.phone,
+          avatarUrl: results.user.avatarUrl,
+          emailVerified: results.user.emailVerified,
+        ),
+        accessToken: results.accessToken,
+        refreshToken: results.refreshToken,
+        tokenType: results.tokenType,
+        expiresIn: results.expiresIn,
+      );
+    } on DioException catch(e){
+      throw ApiExceptionMapper().map(e);
+    }
+  }
+
   //request otp email
   Future<void> requestOTPEmail(String email) async{
     try{
