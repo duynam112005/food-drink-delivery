@@ -34,4 +34,6 @@ class AppSvgs {
   static const String minusCircleIcon = '$_svgPath/ic_minus_circle.svg';
   static const String minusIcon = '$_svgPath/ic_minus.svg';
   static const String cartIcon = '$_svgPath/ic_cart.svg';
+  static const String paypalIcon = '$_svgPath/ic_paypal.svg';
+  static const String cashIcon = '$_svgPath/ic_cash.svg';
 }

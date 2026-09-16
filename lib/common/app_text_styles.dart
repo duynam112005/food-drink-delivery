@@ -58,6 +58,11 @@ class AppTextStyles {
   //S20
   static final red400S20Medium = red400.copyWith(fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: -0.28);
 
+  //RED100
+  static final red100 = TextStyle(color: AppColors.red100, fontWeight: FontWeight.w400);
+  //S12
+  static final red100S12MediumOpacity50 = red100.copyWith(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: -0.24, color: AppColors.red100Opacity50);
+
 
   //ERROR
   static final error = TextStyle(color: Colors.red, fontWeight: FontWeight.w400);

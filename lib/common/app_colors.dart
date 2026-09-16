@@ -21,6 +21,10 @@ class AppColors{
   static const Color red50 = Color(0xFFFFEBE5);
   static Color red50Opacity20 = red50.withOpacity(0.2);
 
+  //red100
+  static const Color red100 = Color(0xFFEF9F27);
+  static Color red100Opacity50 = red100.withOpacity(0.5);
+
   //red400
   static const Color red400 = Color(0xFFEF9F27);
   static Color red400Opacity50 = red400.withOpacity(0.5);
