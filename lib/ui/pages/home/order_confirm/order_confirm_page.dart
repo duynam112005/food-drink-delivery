@@ -5,6 +5,7 @@ import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/common/text_button_widget.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class OrderConfirmPage extends StatefulWidget {
@@ -17,11 +18,12 @@ class OrderConfirmPage extends StatefulWidget {
 class _OrderConfirmPageState extends State<OrderConfirmPage> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.cardColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        title: Text('Confirm Order', style: AppTextStyles.blackS16Medium),
+        title: Text(localizations.confirm_order_title, style: AppTextStyles.blackS16Medium),
         centerTitle: true,
         backgroundColor: AppColors.white,
         automaticallyImplyLeading: false,
@@ -36,7 +38,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            _buildAddressInfo(),
+            _buildAddressInfo(localizations),
             _buildItemPaymentInfo(),
             _buildAddVoucher(),
             _buildPaymentMethod(),
@@ -46,7 +48,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
     );
   }
 
-  Widget _buildAddressInfo() {
+  Widget _buildAddressInfo(AppLocalizations localizations) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
@@ -58,7 +60,7 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Text('Delivery to', style: AppTextStyles.blackS16Bold),
+            child: Text(localizations.delivery_to, style: AppTextStyles.blackS16Bold),
           ),
           Container(
             height: 1,

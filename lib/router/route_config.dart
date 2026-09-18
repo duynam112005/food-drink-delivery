@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:food_drink_delivery/di/injection.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
 import 'package:food_drink_delivery/storage/secure_storage.dart';
 import 'package:food_drink_delivery/ui/pages/home/order_confirm/order_confirm_page.dart';
@@ -38,7 +39,6 @@ class RouteConfig {
       final hasSeenOnboarding = await storage.read('hasSeenOnboarding');
       final matchedLocation = state.matchedLocation;
 
-      // 1. Lần đầu người dùng mở app -> Màn Onboarding
       if (hasSeenOnboarding != 'true') {
         if (matchedLocation != onboarding) {
           return onboarding;
@@ -46,7 +46,8 @@ class RouteConfig {
         return null;
       }
 
-      final isAuthRoute = matchedLocation == login ||
+      final isAuthRoute =
+          matchedLocation == login ||
           matchedLocation == register ||
           matchedLocation == enterEmail ||
           matchedLocation == enterCode ||
@@ -54,12 +55,12 @@ class RouteConfig {
 
       final accessToken = await storage.read('accessToken');
       final refreshToken = await storage.read('refreshToken');
-      final hasToken = accessToken != null &&
+      final hasToken =
+          accessToken != null &&
           accessToken.isNotEmpty &&
           refreshToken != null &&
           refreshToken.isNotEmpty;
 
-      // Nếu đã từng mở app nhưng không có token -> Màn Login
       if (!hasToken) {
         if (matchedLocation == onboarding) {
           return login;
@@ -70,7 +71,6 @@ class RouteConfig {
         return null;
       }
 
-      // 2. Đã có tài khoản / token: Kiểm tra xem session còn hạn hay đã hết hạn
       if (isAuthRoute || matchedLocation == onboarding) {
         try {
           final authRepo = sl<AuthRepository>();
@@ -80,10 +80,8 @@ class RouteConfig {
               authEntity.refreshToken!.isNotEmpty) {
             await storage.write('refreshToken', authEntity.refreshToken!);
           }
-          // Session hợp lệ -> Màn Home
           return home;
         } catch (_) {
-          // Hết hạn session -> Màn Login
           await storage.delete('accessToken');
           await storage.delete('refreshToken');
           return login;
@@ -130,12 +128,17 @@ class RouteConfig {
             path: restaurantDetail,
             name: restaurantDetail,
             builder: (context, state) {
-              final extra = state.extra as Map<String, dynamic>;
-              final restaurantId = extra['restaurantId'] as String;
-              final restaurantImage = extra['restaurantImage'] as String;
-              final restaurantName = extra['restaurantName'] as String;
-              final hasTakeAway = extra['hasTakeAway'];
-              final isFavorite = extra['isFavorite'];
+              final extra = state.extra as Map<dynamic, Object?>;
+              final localizations = AppLocalizations.of(context);
+              final restaurantId =
+                  extra[localizations!.restaurant_id_key] as String;
+              final restaurantImage =
+                  extra[localizations.restaurant_image_key] as String;
+              final restaurantName =
+                  extra[localizations.restaurant_name_key] as String;
+              final hasTakeAway =
+                  extra[localizations.has_take_away_key] as bool;
+              final isFavorite = extra[localizations.is_favorite_key] as bool;
               return RestaurantDetailPage(
                 restaurantId: restaurantId,
                 restaurantImage: restaurantImage,

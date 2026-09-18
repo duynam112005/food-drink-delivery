@@ -4,6 +4,7 @@ import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
 import 'package:food_drink_delivery/common/app_textfield_widget.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/ui/pages/home/search/search_provider.dart';
@@ -35,6 +36,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     final searchStatus = ref.watch(searchProvider).searchLoadStatus;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -45,7 +47,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             Row(
               children: [
                 InkWell(
-                  onTap: () {     
+                  onTap: () {
                     context.pop();
                   },
                   child: SvgPicture.asset(AppSvgs.arrowLeftIcon),
@@ -67,7 +69,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                             ),
                           )
                         : null,
-                    hintText: 'Search on Coody',
+                    hintText: localizations!.search_hint,
                     onChanged: (value) async {
                       if (value.isEmpty) {
                         ref.read(searchProvider.notifier).clearSearch();
@@ -87,13 +89,14 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                 ),
                 LoadStatus.failure => Center(
                   child: Text(
-                    ref.watch(searchProvider).errorMessage ?? 'Error',
+                    ref.watch(searchProvider).errorMessage ??
+                        localizations.error_text,
                     style: AppTextStyles.red400S14,
                   ),
                 ),
                 LoadStatus.success => ListView(
                   physics: const BouncingScrollPhysics(),
-                  children: [_buildSearchRestaurants()],
+                  children: [_buildSearchRestaurants(localizations)],
                 ),
               },
             ),
@@ -103,8 +106,10 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     );
   }
 
-  Widget _buildSearchRestaurants() {
-    final searchResults = ref.watch(searchProvider.select((state) => state.searchResult));
+  Widget _buildSearchRestaurants(AppLocalizations? localizations) {
+    final searchResults = ref.watch(
+      searchProvider.select((state) => state.searchResult),
+    );
     final restaurants = searchResults?.restaurants ?? [];
     return Column(
       children: [
@@ -118,6 +123,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             restaurant.id,
             restaurant.hasTakeAway,
             restaurant.isFavorite,
+            localizations,
           ),
         ),
       ],
@@ -133,12 +139,19 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     String id,
     bool hasTakeAway,
     bool isFavorite,
+    AppLocalizations? localizations,
   ) {
     return GestureDetector(
       onTap: () {
         context.pushNamed(
           RouteConfig.restaurantDetail,
-          extra: {'restaurantId': id, 'restaurantImage': imageUrl, 'restaurantName': name, 'hasTakeAway': hasTakeAway, 'isFavorite': isFavorite},
+          extra: {
+            localizations.restaurant_id_key: id,
+            localizations.restaurant_image_key: imageUrl,
+            localizations.restaurant_name_key: name,
+            localizations.has_take_away_key: hasTakeAway,
+            localizations.is_favorite_key: isFavorite,
+          },
         );
       },
       child: Container(
@@ -191,10 +204,13 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     ),
                     DotWidget(),
                     SvgPicture.asset(AppSvgs.locationIcon),
-                    Text('1.5km', style: AppTextStyles.blackS12Medium),
+                    Text(
+                      localizations!.distance_restaurant,
+                      style: AppTextStyles.blackS12Medium,
+                    ),
                     DotWidget(),
                     Text(
-                      isFreeShipping ? 'Free Shipping' : deliveryFee,
+                      isFreeShipping ? localizations.free_ship : deliveryFee,
                       style: AppTextStyles.blackS12Medium,
                     ),
                   ],

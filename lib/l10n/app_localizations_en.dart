@@ -15,6 +15,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get title_onboarding1 => 'Diverse & sparkling food.';
 
   @override
+  String get error_text => 'An error occurred';
+
+  @override
+  String get no_restaurant_text => 'No restaurant available';
+
+  @override
   String get subtitle_onboarding1 =>
       'We use the best local ingredients to create fresh and delicious food and drinks.';
 
@@ -96,6 +102,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delivery_to => 'Delivery to';
 
   @override
+  String get address_delivery => '1014 Prospect Valley';
+
+  @override
   String get category => 'Category';
 
   @override
@@ -109,6 +118,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get distance_restaurant => '1.5km';
 
   @override
   String get free_ship => 'Free ship';
@@ -130,4 +142,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get price => 'Price';
+
+  @override
+  String get filtered_restaurant_text => 'Filtered Restaurants';
+
+  @override
+  String get home_label => 'Home';
+
+  @override
+  String get compass_label => 'Compass';
+
+  @override
+  String get order_label => 'Order';
+
+  @override
+  String get profile_label => 'Profile';
+
+  @override
+  String get restaurant_id_key => 'restaurantId';
+
+  @override
+  String get restaurant_name_key => 'restaurantName';
+
+  @override
+  String get restaurant_image_key => 'restaurantImage';
+
+  @override
+  String get has_take_away_key => 'hasTakeAway';
+
+  @override
+  String get is_favorite_key => 'isFavorite';
+
+  @override
+  String get recommended_text => 'Recommended';
+
+  @override
+  String get fastest_delivery_text => 'Fastest Delivery';
+
+  @override
+  String get most_popular_text => 'Most Popular';
+
+  @override
+  String get max_delivery_fee_text => 'Max Delivery Fee';
+
+  @override
+  String get max_fee_text => '\$100';
+
+  @override
+  String get min_fee_text => '\$0.0';
+
+  @override
+  String get take_away_badge => 'Take Away';
+
+  @override
+  String get minute_text => 'mins';
+
+  @override
+  String get no_voucher_text => 'No Voucher Available';
+
+  @override
+  String get delivery_text => 'Delivery';
+
+  @override
+  String get review_text => 'Review';
+
+  @override
+  String get available_text => 'Available';
+
+  @override
+  String get no_available_text => 'No Available';
+
+  @override
+  String get no_combo_text => 'No combo';
+
+  @override
+  String get like_text => 'likes';
+
+  @override
+  String get add_to_cart_text_button => 'Add to Order';
+
+  @override
+  String get confirm_order_title => 'Comfirm Order';
 }

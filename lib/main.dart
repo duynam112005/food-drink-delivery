@@ -11,7 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await configureDependencies();
   runApp(ProviderScope(child: const MyApp()));
 }
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: L10n.all,
       routerConfig: RouteConfig.routes,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Cook Food Drink Delivery',
     );
   }
 }

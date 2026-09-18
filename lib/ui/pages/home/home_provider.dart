@@ -20,15 +20,16 @@ class Home extends _$Home {
     state = state.copyWith(categoryLoadStatus: LoadStatus.loading);
     try {
       final categories = await catalogRepository.getCategories();
-      if(!ref.mounted) return;
+      if (!ref.mounted) return;
       state = state.copyWith(
         categoryLoadStatus: LoadStatus.success,
         categories: categories,
         selectedCategoryId: categories.isNotEmpty ? categories.first.id : null,
         selectedSort: 'recommended',
+        selectedSortIndex: 0,
       );
     } catch (e) {
-      if(!ref.mounted) return;
+      if (!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         categoryLoadStatus: LoadStatus.failure,
@@ -41,13 +42,13 @@ class Home extends _$Home {
     state = state.copyWith(bestPartnersLoadStatus: LoadStatus.loading);
     try {
       final bestPartners = await catalogRepository.getBestPartners();
-      if(!ref.mounted) return;
+      if (!ref.mounted) return;
       state = state.copyWith(
         bestPartnersLoadStatus: LoadStatus.success,
         bestPartners: bestPartners,
       );
     } catch (e) {
-      if(!ref.mounted) return;
+      if (!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         bestPartnersLoadStatus: LoadStatus.failure,
@@ -81,7 +82,7 @@ class Home extends _$Home {
         lat: lat,
         lng: lng,
       );
-      if(!ref.mounted) return;
+      if (!ref.mounted) return;
       state = state.copyWith(
         restaurantLoadStatus: {
           ...state.restaurantLoadStatus,
@@ -90,7 +91,7 @@ class Home extends _$Home {
         restaurants: {...state.restaurants, sort: restaurants},
       );
     } catch (e) {
-      if(!ref.mounted) return;
+      if (!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         restaurantLoadStatus: {
@@ -102,32 +103,46 @@ class Home extends _$Home {
   }
 
   //change selected category id
-  void changeSelectedCategoryId(String? categoryId){
+  void changeSelectedCategoryId(String? categoryId) {
     state = state.copyWith(selectedCategoryId: categoryId);
   }
 
   //selected sort
-  void changeSelectedSort(String? sort){
-    state = state.copyWith(selectedSort: sort);
+  void changeSelectedSort(int index) {
+    String sort = index == 0
+        ? 'recommended'
+        : index == 1
+        ? 'fastest'
+        : 'popular';
+    state = state.copyWith(selectedSort: sort, selectedSortIndex: index);
   }
 
   //selected max delivery fee
-  void changeMaxDeliveryFee(double? maxDeliveryFee){
+  void changeMaxDeliveryFee(double? maxDeliveryFee) {
     state = state.copyWith(selectedMaxDeliveryFee: maxDeliveryFee);
   }
 
   //get filter restaurants
-  Future<void> getRestaurantsByFilter(String? categoryId, String? sort, double? maxDeliveryFee) async{
+  Future<void> getRestaurantsByFilter(
+    String? categoryId,
+    String? sort,
+    double? maxDeliveryFee,
+  ) async {
     state = state.copyWith(filteredRestaurantsLoadStatus: LoadStatus.loading);
-    try{
-      final filteredRestaurants = await catalogRepository.getRestaurantsByFilter(categoryId: categoryId, sort: sort, maxDeliveryFee: maxDeliveryFee);
-      if(!ref.mounted) return;
+    try {
+      final filteredRestaurants = await catalogRepository
+          .getRestaurantsByFilter(
+            categoryId: categoryId,
+            sort: sort,
+            maxDeliveryFee: maxDeliveryFee,
+          );
+      if (!ref.mounted) return;
       state = state.copyWith(
         filteredRestaurantsLoadStatus: LoadStatus.success,
         filteredRestaurants: filteredRestaurants,
       );
-    } catch(e){
-      if(!ref.mounted) return;
+    } catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         errorMessage: e.toString(),
         filteredRestaurantsLoadStatus: LoadStatus.failure,
@@ -135,9 +150,9 @@ class Home extends _$Home {
     }
   }
 
-  //change selected item
-  void changeSelectedItem(int index) {
-    state = state.copyWith(selectedItem: index);
+  //change selected bottom navigation
+  void changeSelectedBottomNavig(int index) {
+    state = state.copyWith(selectedBottomNavig: index);
   }
 
   //initialize

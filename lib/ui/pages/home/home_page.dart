@@ -71,7 +71,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                   headerSliverBuilder: (context, innerIsScroll) {
                     return [
                       SliverToBoxAdapter(
-                        child: _buildCategory(categoryLoadStatus, categories, bodyHeight),
+                        child: _buildCategory(
+                          categoryLoadStatus,
+                          categories,
+                          bodyHeight,
+                          localizations,
+                        ),
                       ),
                       SliverToBoxAdapter(child: const SizedBox(height: 16)),
                       SliverToBoxAdapter(
@@ -79,6 +84,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           bestPartnersStatus,
                           bestPartners,
                           bodyHeight,
+                          localizations,
                         ),
                       ),
                       SliverToBoxAdapter(child: const SizedBox(height: 16)),
@@ -92,7 +98,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               topRight: Radius.circular(15),
                             ),
                           ),
-                          child: _buildTabBar(),
+                          child: _buildTabBar(localizations),
                         ),
                       ),
                     ];
@@ -105,7 +111,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         bottomRight: Radius.circular(15),
                       ),
                     ),
-                    child: _buildTabBarView(),
+                    child: _buildTabBarView(localizations),
                   ),
                 ),
               ),
@@ -113,7 +119,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(localizations),
     );
   }
 
@@ -154,9 +160,15 @@ class _HomePageState extends ConsumerState<HomePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(localizations.delivery_to, style: AppTextStyles.red400S12Medium),
+                  Text(
+                    localizations.delivery_to,
+                    style: AppTextStyles.red400S12Medium,
+                  ),
                   const SizedBox(height: 2),
-                  Text('1014 Prospect Valley', style: AppTextStyles.blackS14),
+                  Text(
+                    localizations.address_delivery,
+                    style: AppTextStyles.blackS14,
+                  ),
                 ],
               ),
               const Spacer(),
@@ -188,17 +200,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                                 dividerColor: AppColors.cardColor,
                                 tabs: [
-                                  Tab(text: 'Category'),
-                                  Tab(text: 'Sort by'),
-                                  Tab(text: 'Price'),
+                                  Tab(text: localizations.category),
+                                  Tab(text: localizations.sort_by),
+                                  Tab(text: localizations.price),
                                 ],
                               ),
                               Expanded(
                                 child: TabBarView(
                                   children: [
-                                    _buildCategoryFilter(),
-                                    _buildSortFilter(),
-                                    _buildPriceFilter(),
+                                    _buildCategoryFilter(localizations),
+                                    _buildSortFilter(localizations),
+                                    _buildPriceFilter(localizations),
                                   ],
                                 ),
                               ),
@@ -229,6 +241,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       return _buildFilteredRestaurantsDetail(
                                         context,
                                         bodyHeight,
+                                        localizations,
                                       );
                                     },
                                   );
@@ -248,7 +261,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   ),
                                   child: Text(
                                     textAlign: TextAlign.center,
-                                    'Complete',
+                                    localizations.filter_button,
                                     style: AppTextStyles.whiteS14Medium,
                                   ),
                                 ),
@@ -273,7 +286,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                         fit: BoxFit.scaleDown,
                       ),
                       const SizedBox(width: 4),
-                      Text(localizations.filter, style: AppTextStyles.blackS12Medium),
+                      Text(
+                        localizations.filter_button,
+                        style: AppTextStyles.blackS12Medium,
+                      ),
                     ],
                   ),
                 ),
@@ -299,6 +315,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     LoadStatus categoryLoadStatus,
     List<CategoryEntity> categories,
     double bodyHeight,
+    localizations,
   ) {
     final errorMessage = ref.watch(
       homeProvider.select((state) => state.errorMessage),
@@ -315,13 +332,19 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(
               children: [
-                Text('Category', style: AppTextStyles.blackS16Bold),
+                Text(localizations.category, style: AppTextStyles.blackS16Bold),
                 const Spacer(),
-                GestureDetector(onTap:(){
-                  // showModalBottomSheet(context: context, scrollControlDisabledMaxHeightRatio: bodyHeiht, builder: (context){
-                  //   return _buildCategorySeeAll(context, bodyHeight, categories);
-                  // });
-                },child: Text('See all', style: AppTextStyles.blackS14Medium)),
+                GestureDetector(
+                  onTap: () {
+                    // showModalBottomSheet(context: context, scrollControlDisabledMaxHeightRatio: bodyHeiht, builder: (context){
+                    //   return _buildCategorySeeAll(context, bodyHeight, categories);
+                    // });
+                  },
+                  child: Text(
+                    localizations.see_all,
+                    style: AppTextStyles.blackS14Medium,
+                  ),
+                ),
               ],
             ),
           ),
@@ -334,7 +357,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: CircularProgressIndicator(color: AppColors.red400),
               ),
               LoadStatus.failure => Center(
-                child: Text(errorMessage ?? 'Failed to load categories'),
+                child: Text(errorMessage ?? localizations.error_text),
               ),
               LoadStatus.success => ListView.builder(
                 physics: const BouncingScrollPhysics(),
@@ -378,7 +401,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildCategorySeeAll(BuildContext context, double bodyHeight, List<CategoryEntity> categories) {
+  Widget _buildCategorySeeAll(
+    BuildContext context,
+    double bodyHeight,
+    List<CategoryEntity> categories,
+  ) {
     return Container(
       height: bodyHeight,
       width: double.infinity,
@@ -396,6 +423,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     LoadStatus bestPartnersStatus,
     List<RestaurantEntity> bestPartners,
     double bodyHeight,
+    localizations,
   ) {
     final errorMessage = ref.watch(
       homeProvider.select((state) => state.errorMessage),
@@ -411,7 +439,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(
               children: [
-                Text('Best Partners', style: AppTextStyles.blackS16Bold),
+                Text(
+                  localizations.best_partners,
+                  style: AppTextStyles.blackS16Bold,
+                ),
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
@@ -419,11 +450,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                       context: context,
                       scrollControlDisabledMaxHeightRatio: bodyHeight,
                       builder: (context) {
-                        return _buildBestPartnersDetail(context, bodyHeight);
+                        return _buildBestPartnersDetail(
+                          context,
+                          bodyHeight,
+                          localizations,
+                        );
                       },
                     );
                   },
-                  child: Text('See all', style: AppTextStyles.blackS14Medium),
+                  child: Text(
+                    localizations.see_all,
+                    style: AppTextStyles.blackS14Medium,
+                  ),
                 ),
               ],
             ),
@@ -437,7 +475,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: CircularProgressIndicator(color: AppColors.red400),
               ),
               LoadStatus.failure => Center(
-                child: Text(errorMessage ?? 'Failed to load best partners'),
+                child: Text(errorMessage ?? localizations.error_text),
               ),
               LoadStatus.success => ListView.builder(
                 physics: const BouncingScrollPhysics(),
@@ -456,18 +494,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap:(){{
-                        context.pushNamed(
-                          RouteConfig.restaurantDetail,
-                          extra: {
-                            'restaurantId': restaurantId,
-                            'restaurantImage': restaurantImage,
-                            'restaurantName': restaurantName,
-                            'hasTakeAway': hasTakeAway,
-                            'isFavorite': isFavorite,
-                          },
-                        );
-                      }},
+                      onTap: () {
+                        {
+                          context.pushNamed(
+                            RouteConfig.restaurantDetail,
+                            extra: {
+                              localizations.restaurant_id_key: restaurantId,
+                              localizations.restaurant_image_key:
+                                  restaurantImage,
+                              localizations.restaurant_name_key: restaurantName,
+                              localizations.has_take_away_key: hasTakeAway,
+                              localizations.is_favorite_key: isFavorite,
+                            },
+                          );
+                        }
+                      },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -497,10 +538,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                             children: [
                               bestPartners[index].isOpen == true
                                   ? Text(
-                                      "Open",
+                                      localizations.open,
                                       style: AppTextStyles.greenS12Medium,
                                     )
-                                  : Text("Closed", style: AppTextStyles.red),
+                                  : Text(
+                                      localizations.close,
+                                      style: AppTextStyles.red,
+                                    ),
                               DotWidget(),
                               Text(
                                 bestPartners[index].addressLine,
@@ -532,11 +576,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 ),
                               ),
                               DotWidget(),
-                              Text('1.5km', style: AppTextStyles.blackS12Medium),
+                              Text(
+                                localizations.distance_restaurant,
+                                style: AppTextStyles.blackS12Medium,
+                              ),
                               DotWidget(),
                               Text(
                                 bestPartners[index].isFreeShipping
-                                    ? 'Free Shipping'
+                                    ? localizations.free_ship
                                     : bestPartners[index].deliveryFee.formatted,
                                 style: AppTextStyles.blackS12Medium,
                               ),
@@ -555,11 +602,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildBottomNavigationBar() {
-    ref.watch(homeProvider.select((state) => state.selectedItem));
-    final currentIndex = ref.read(
-      homeProvider.select((state) => state.selectedItem),
-    );
+  Widget _buildBottomNavigationBar(AppLocalizations? localizations) {
+    final currentIndex = ref.watch(homeProvider.select((state) => state.selectedBottomNavig));
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(30),
@@ -570,47 +614,69 @@ class _HomePageState extends ConsumerState<HomePage> {
         backgroundColor: AppColors.white,
         selectedItemColor: AppColors.red400,
         onTap: (value) {
-          ref.read(homeProvider.notifier).changeSelectedItem(value);
+          ref.read(homeProvider.notifier).changeSelectedBottomNavig(value);
         },
         currentIndex: currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.homeIcon, color: currentIndex == 0 ? AppColors.red400 : null),
-            label: 'Home',
+            icon: SvgPicture.asset(
+              AppSvgs.homeIcon,
+              color: currentIndex == 0 ? AppColors.red400 : null,
+            ),
+            label: localizations!.home_label,
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.compressIcon, color: currentIndex == 1 ? AppColors.red400 : null),
-            label: 'Compress',
+            icon: SvgPicture.asset(
+              AppSvgs.compressIcon,
+              color: currentIndex == 1 ? AppColors.red400 : null,
+            ),
+            label: localizations.compass_label,
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.orderIcon, color: currentIndex == 2 ? AppColors.red400 : null),
-            label: 'Order',
+            icon: SvgPicture.asset(
+              AppSvgs.orderIcon,
+              color: currentIndex == 2 ? AppColors.red400 : null,
+            ),
+            label: localizations.order_label,
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(AppSvgs.profileIcon, color: currentIndex == 3 ? AppColors.red400 : null),
-            label: 'Profile',
+            icon: SvgPicture.asset(
+              AppSvgs.profileIcon,
+              color: currentIndex == 3 ? AppColors.red400 : null,
+            ),
+            label: localizations.profile_label,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBestPartnersDetail(BuildContext context, double bodyHeight) {
+  Widget _buildBestPartnersDetail(
+    BuildContext context,
+    double bodyHeight,
+    localizations,
+  ) {
     final bestPartners = ref.watch(
       homeProvider.select((state) => state.bestPartners),
     );
+    final errorMessage = ref.watch(
+      homeProvider.select((state) => state.errorMessage),
+    );
     return _buildRestaurantListSheet(
       context,
+      localizations,
       bodyHeight,
-      'Best Partners',
+      localizations.best_partners,
       bestPartners,
       LoadStatus.success,
+      errorMessage
     );
   }
 
   Widget _buildFilteredRestaurantsDetail(
     BuildContext context,
     double bodyHeight,
+    localizations,
   ) {
     return Consumer(
       builder: (context, ref, child) {
@@ -620,12 +686,17 @@ class _HomePageState extends ConsumerState<HomePage> {
         final filteredRestaurants = ref.watch(
           homeProvider.select((state) => state.filteredRestaurants),
         );
+        final errorMessage = ref.watch(
+          homeProvider.select((state) => state.errorMessage),
+        );
         return _buildRestaurantListSheet(
           context,
+          localizations,
           bodyHeight,
-          'Filtered Restaurants',
+          localizations.filtered_restaurants,
           filteredRestaurants,
           filteredRestaurantsLoadStatus,
+          errorMessage,
         );
       },
     );
@@ -633,10 +704,12 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildRestaurantListSheet(
     BuildContext context,
+    AppLocalizations? localizations,
     double bodyHeight,
     String title,
     List<RestaurantEntity> restaurants,
     LoadStatus loadStatus,
+    String? errorMessage,
   ) {
     return Container(
       padding: const EdgeInsets.only(top: 16),
@@ -658,8 +731,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           LoadStatus.loading || LoadStatus.initial => const Center(
             child: CircularProgressIndicator(color: AppColors.red400),
           ),
-          LoadStatus.failure => const Center(
-            child: Text('Failed to load restaurants'),
+          LoadStatus.failure => Center(
+            child: Text(errorMessage ?? localizations!.error_text),
           ),
           LoadStatus.success => Column(
             children: [
@@ -696,6 +769,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           restaurants,
                           tags,
                           index,
+                          localizations,
                         ),
                       );
                     },
@@ -714,6 +788,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     List<RestaurantEntity> restaurants,
     List<String> tags,
     int index,
+    AppLocalizations? localizations,
   ) {
     final restaurantId = restaurants[index].id;
     final restaurantImage = restaurants[index].coverUrl;
@@ -725,11 +800,11 @@ class _HomePageState extends ConsumerState<HomePage> {
         context.pushNamed(
           RouteConfig.restaurantDetail,
           extra: {
-            'restaurantId': restaurantId,
-            'restaurantImage': restaurantImage,
-            'restaurantName': restaurantName,
-            'hasTakeAway': hasTakeAway,
-            'isFavorite': isFavorite,
+            localizations.restaurant_id_key: restaurantId,
+            localizations.restaurant_image_key: restaurantImage,
+            localizations.restaurant_name_key: restaurantName,
+            localizations.has_take_away_key: hasTakeAway,
+            localizations.is_favorite_key: isFavorite,
           },
         );
       },
@@ -762,8 +837,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             Row(
               children: [
                 restaurants[index].isOpen == true
-                    ? Text("Open", style: AppTextStyles.greenS12Medium)
-                    : Text("Closed", style: AppTextStyles.redS12Medium),
+                    ? Text(
+                        localizations!.open,
+                        style: AppTextStyles.greenS12Medium,
+                      )
+                    : Text(
+                        localizations!.close,
+                        style: AppTextStyles.redS12Medium,
+                      ),
                 DotWidget(),
                 Expanded(
                   child: SizedBox(
@@ -810,11 +891,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 DotWidget(),
                 SvgPicture.asset(AppSvgs.locationIcon),
-                Text('1.5km', style: AppTextStyles.blackS12Medium),
+                Text(
+                  localizations!.distance_restaurant,
+                  style: AppTextStyles.blackS12Medium,
+                ),
                 DotWidget(),
                 Text(
                   restaurants[index].isFreeShipping
-                      ? 'Free Shipping'
+                      ? localizations.free_ship
                       : restaurants[index].deliveryFee.formatted,
                   style: AppTextStyles.blackS12Medium,
                 ),
@@ -827,18 +911,18 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildTabBarView() {
+  Widget _buildTabBarView(AppLocalizations? localizations) {
     return TabBarView(
       children: [
-        _buildRestaurantList(RestaurantSort.nearby),
-        _buildRestaurantList(RestaurantSort.sales),
-        _buildRestaurantList(RestaurantSort.rate),
-        _buildRestaurantList(RestaurantSort.fast),
+        _buildRestaurantList(RestaurantSort.nearby, localizations),
+        _buildRestaurantList(RestaurantSort.sales, localizations),
+        _buildRestaurantList(RestaurantSort.rate, localizations),
+        _buildRestaurantList(RestaurantSort.fast, localizations),
       ],
     );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabBar(localizations) {
     return TabBar(
       onTap: (index) {
         final sort = RestaurantSort.values[index];
@@ -848,15 +932,18 @@ class _HomePageState extends ConsumerState<HomePage> {
       labelColor: AppColors.red400,
       overlayColor: MaterialStateProperty.all(AppColors.red400Opacity10),
       tabs: [
-        Tab(text: 'Nearby'),
-        Tab(text: 'Sales'),
-        Tab(text: 'Rate'),
-        Tab(text: 'Fast'),
+        Tab(text: localizations!.near_by),
+        Tab(text: localizations.sales),
+        Tab(text: localizations.rate),
+        Tab(text: localizations.fast),
       ],
     );
   }
 
-  Widget _buildRestaurantList(RestaurantSort sort) {
+  Widget _buildRestaurantList(
+    RestaurantSort sort,
+    AppLocalizations? localizations,
+  ) {
     final restaurant = ref.watch(
       homeProvider.select((state) => state.restaurants[sort]),
     );
@@ -873,15 +960,13 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: CircularProgressIndicator(color: AppColors.red400),
         );
       case LoadStatus.failure:
-        return Center(
-          child: Text(errorMessage ?? 'Failed to load restaurants'),
-        );
+        return Center(child: Text(errorMessage ?? localizations!.error_text));
       case LoadStatus.success:
         if (restaurant == null) {
           return SizedBox();
         }
         if (restaurant.isEmpty) {
-          return const Center(child: Text('No restaurants available'));
+          return Center(child: Text(localizations!.no_restaurant_text));
         }
         return ListView.separated(
           itemCount: restaurant.length,
@@ -895,6 +980,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 restaurant,
                 restaurant[index].tags,
                 index,
+                localizations,
               ),
             );
           },
@@ -904,7 +990,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
-  Widget _buildCategoryFilter() {
+  Widget _buildCategoryFilter(AppLocalizations? localizations) {
     return Consumer(
       builder: (context, ref, _) {
         final categoryLoadStatus = ref.watch(
@@ -927,7 +1013,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             );
           case LoadStatus.failure:
             return Center(
-              child: Text(errorMessage ?? 'Failed to load categories'),
+              child: Text(errorMessage ?? localizations!.error_text),
             );
           case LoadStatus.success:
             return Padding(
@@ -982,23 +1068,17 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildSortFilter() {
+  Widget _buildSortFilter(AppLocalizations? localizations) {
     return Consumer(
       builder: (context, ref, _) {
-        final selectedSort = ref.watch(
-          homeProvider.select((state) => state.selectedSort),
+        final selectedSortIndex = ref.watch(
+          homeProvider.select((state) => state.selectedSortIndex),
         );
         return Column(
           children: List.generate(3, (index) {
-            //index = 0;
-            final sort = switch (index) {
-              0 => 'recommended',
-              1 => 'fastest',
-              _ => 'popular',
-            };
             return GestureDetector(
               onTap: () {
-                ref.read(homeProvider.notifier).changeSelectedSort(sort);
+                ref.read(homeProvider.notifier).changeSelectedSort(index);
               },
               child: Container(
                 margin: const EdgeInsets.fromLTRB(20, 24, 20, 0),
@@ -1022,14 +1102,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     const SizedBox(width: 12),
                     Text(
                       index == 0
-                          ? 'Recommended'
+                          ? localizations!.recommended_text
                           : index == 1
-                          ? 'Fastest Delivery'
-                          : 'Most Popular',
+                          ? localizations!.fastest_delivery_text
+                          : localizations!.most_popular_text,
                       style: AppTextStyles.blackS14,
                     ),
                     const Spacer(),
-                    selectedSort == sort
+                    selectedSortIndex == index
                         ? SvgPicture.asset(AppSvgs.tickIcon)
                         : const SizedBox(),
                   ],
@@ -1042,7 +1122,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildPriceFilter() {
+  Widget _buildPriceFilter(AppLocalizations? localizations) {
     return Consumer(
       builder: (context, ref, _) {
         final maxDeliveryFeeValue = ref.watch(
@@ -1053,7 +1133,10 @@ class _HomePageState extends ConsumerState<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Max Delivery Fee', style: AppTextStyles.blackS14Bold),
+              Text(
+                localizations!.max_delivery_fee_text,
+                style: AppTextStyles.blackS14Bold,
+              ),
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.symmetric(
@@ -1069,11 +1152,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     Row(
                       children: [
                         Text(
-                          '\$${maxDeliveryFeeValue?.toStringAsFixed(1) ?? "0.0"}',
+                          '\$${maxDeliveryFeeValue?.toStringAsFixed(1) ?? localizations.min_fee_text}',
                           style: AppTextStyles.blackS14,
                         ),
                         const Spacer(),
-                        Text('\$100', style: AppTextStyles.blackS14),
+                        Text(
+                          localizations.max_fee_text,
+                          style: AppTextStyles.blackS14,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),

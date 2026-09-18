@@ -12,6 +12,7 @@ abstract class HomeState with _$HomeState{
     //categories
     @Default(LoadStatus.initial) LoadStatus categoryLoadStatus,
     @Default([]) List<CategoryEntity> categories,
+    
     //best partners
     @Default(LoadStatus.initial) LoadStatus bestPartnersLoadStatus,
     @Default([]) List<RestaurantEntity> bestPartners,
@@ -24,12 +25,13 @@ abstract class HomeState with _$HomeState{
     //filters
     String? selectedCategoryId,
     String? selectedSort,
+    int? selectedSortIndex,
     double? selectedMaxDeliveryFee,
     @Default(LoadStatus.initial) LoadStatus filteredRestaurantsLoadStatus,
     @Default([]) List<RestaurantEntity> filteredRestaurants,
 
     //selected item bottom navigation
-    @Default(0) int selectedItem,
+    @Default(0) int selectedBottomNavig,
     String? errorMessage,
   })= _HomeState;
 }

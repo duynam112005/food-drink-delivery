@@ -6,6 +6,7 @@ import 'package:food_drink_delivery/common/app_colors.dart';
 import 'package:food_drink_delivery/common/app_images.dart';
 import 'package:food_drink_delivery/common/app_svgs.dart';
 import 'package:food_drink_delivery/common/app_text_styles.dart';
+import 'package:food_drink_delivery/l10n/app_localizations.dart';
 import 'package:food_drink_delivery/models/entities/catalog/restaurant/menu_section_entity.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/router/route_config.dart';
@@ -70,6 +71,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final bodyHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return DefaultTabController(
@@ -146,7 +148,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                                       color: AppColors.red50Opacity20,
                                     ),
                                     child: Text(
-                                      "Take Away",
+                                      localizations.take_away_badge,
                                       style: AppTextStyles.red400S12Medium,
                                     ),
                                   )
@@ -186,21 +188,24 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
               SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(color: AppColors.white),
-                  child: _buildRestaurantInfor(),
+                  child: _buildRestaurantInfor(localizations),
                 ),
               ),
               SliverToBoxAdapter(
-                child: Container(color: AppColors.white, child: _buildTabBar()),
+                child: Container(
+                  color: AppColors.white,
+                  child: _buildTabBar(localizations),
+                ),
               ),
             ];
           },
-          body: _buildTabBarView(bodyHeight),
+          body: _buildTabBarView(bodyHeight, localizations),
         ),
       ),
     );
   }
 
-  Widget _buildRestaurantInfor() {
+  Widget _buildRestaurantInfor(AppLocalizations localizations) {
     final restaurant = ref.watch(
       restaurantDetailProvider.select((state) => state.restaurantDetail),
     );
@@ -216,7 +221,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
               child: CircularProgressIndicator(color: AppColors.red400),
             ),
             LoadStatus.failure => Center(
-              child: Text(errorMessage ?? "An error occurred"),
+              child: Text(errorMessage ?? localizations.error_text),
             ),
 
             LoadStatus.success => Padding(
@@ -227,8 +232,14 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   Row(
                     children: [
                       restaurant.isOpen == true
-                          ? Text("Open", style: AppTextStyles.greenS12Medium)
-                          : Text("Closed", style: AppTextStyles.redS12Medium),
+                          ? Text(
+                              localizations.open,
+                              style: AppTextStyles.greenS12Medium,
+                            )
+                          : Text(
+                              localizations.close,
+                              style: AppTextStyles.redS12Medium,
+                            ),
                       DotWidget(),
                       Text(restaurant.city, style: AppTextStyles.greyS14),
                     ],
@@ -263,13 +274,13 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                       DotWidget(),
                       SvgPicture.asset(AppSvgs.clockIcon),
                       Text(
-                        "${restaurant.etaMinutes.toString()} mins",
+                        "${restaurant.etaMinutes.toString()} ${localizations.minute_text}",
                         style: AppTextStyles.blackS12Medium,
                       ),
                       DotWidget(),
                       Text(
                         restaurant.isFreeShipping
-                            ? 'Free Shipping'
+                            ? localizations.free_ship
                             : restaurant.deliveryFee.formatted,
                         style: AppTextStyles.blackS12Medium,
                       ),
@@ -277,9 +288,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                   ),
                   const SizedBox(height: 24),
                   GestureDetector(
-                    onTap: () {
-                      debugPrint('Get vouchers');
-                    },
+                    onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -297,7 +306,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                             restaurant.promotions != null &&
                                     restaurant.promotions!.isNotEmpty
                                 ? restaurant.promotions![0].title
-                                : "No Voucher Available",
+                                : localizations.no_voucher_text,
                             style: AppTextStyles.blackS14,
                           ),
                         ],
@@ -313,7 +322,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
           );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabBar(AppLocalizations localizations) {
     return Column(
       children: [
         Container(
@@ -328,24 +337,27 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
           overlayColor: MaterialStateProperty.all(AppColors.red400Opacity10),
           dividerColor: AppColors.cardColor,
           tabs: [
-            Tab(text: "Delivery"),
-            Tab(text: 'Review'),
+            Tab(text: localizations.delivery_text),
+            Tab(text: localizations.review_text),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildTabBarView(double bodyHeight) {
+  Widget _buildTabBarView(double bodyHeight, AppLocalizations localizations) {
     return Container(
       color: AppColors.white,
       child: TabBarView(
-        children: [_buildDeliveryTab(bodyHeight), _buildReviewTab()],
+        children: [
+          _buildDeliveryTab(bodyHeight, localizations),
+          _buildReviewTab(localizations),
+        ],
       ),
     );
   }
 
-  Widget _buildDeliveryTab(double bodyHeight) {
+  Widget _buildDeliveryTab(double bodyHeight, AppLocalizations localizations) {
     final menuSections = ref.watch(
       restaurantDetailProvider.select((state) => state.menuSections),
     );
@@ -361,11 +373,12 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
         child: CircularProgressIndicator(color: AppColors.red400),
       ),
       LoadStatus.failure => Center(
-        child: Text(errorMessage ?? "An error occurred"),
+        child: Text(errorMessage ?? localizations.error_text),
       ),
       LoadStatus.success => ListView(
         children: [
-          if (lengthSections >= 1) _buildPopularItem(menuSections, bodyHeight),
+          if (lengthSections >= 1)
+            _buildPopularItem(menuSections, bodyHeight, localizations),
           Container(
             height: 1,
             width: double.infinity,
@@ -373,9 +386,19 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
             margin: const EdgeInsets.symmetric(vertical: 20),
           ),
           if (lengthSections >= 2)
-            _buildComboItem(menuSections, bodyHeight, indexItem: 1),
+            _buildComboItem(
+              menuSections,
+              bodyHeight,
+              localizations,
+              indexItem: 1,
+            ),
           if (lengthSections >= 3)
-            _buildComboItem(menuSections, bodyHeight, indexItem: 2),
+            _buildComboItem(
+              menuSections,
+              bodyHeight,
+              localizations,
+              indexItem: 2,
+            ),
         ],
       ),
     };
@@ -384,6 +407,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   Widget _buildPopularItem(
     List<MenuSectionEntity> menuSections,
     double bodyHeight,
+    AppLocalizations localizations,
   ) {
     final listItems = menuSections[0].items;
     return Column(
@@ -394,7 +418,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
           child: Text(menuSections[0].name, style: AppTextStyles.blackS16Bold),
         ),
         SizedBox(
-                height: 228,
+          height: 228,
 
           child: ListView.builder(
             itemCount: listItems.length,
@@ -427,6 +451,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                       context: context,
                       builder: (context) {
                         return _buildItemDetailSheet(
+                          localizations,
                           bodyHeight,
                           itemPrice: itemPrice,
                           menuItemId: menuItemId,
@@ -472,11 +497,11 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                           ),
                           item.isAvailable == true
                               ? Text(
-                                  'Available',
+                                  localizations.available_text,
                                   style: AppTextStyles.greyS12Medium,
                                 )
                               : Text(
-                                  'No available',
+                                  localizations.no_available_text,
                                   style: AppTextStyles.greyS12Medium,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -495,7 +520,8 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
 
   Widget _buildComboItem(
     List<MenuSectionEntity> menuSections,
-    double bodyHeight, {
+    double bodyHeight,
+    AppLocalizations localizations, {
     required int indexItem,
   }) {
     final listItems = menuSections[indexItem].items;
@@ -529,6 +555,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                         context: context,
                         builder: (context) {
                           return _buildItemDetailSheet(
+                            localizations,
                             bodyHeight,
                             itemPrice: itemPrice,
                             menuItemId: menuItemId,
@@ -594,7 +621,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                                           style: AppTextStyles.greyS12Medium,
                                         )
                                       : Text(
-                                          'No combo',
+                                          localizations.no_combo_text,
                                           style: AppTextStyles.greyS12Medium,
                                         ),
                                 ],
@@ -620,7 +647,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
     );
   }
 
-  Widget _buildReviewTab() {
+  Widget _buildReviewTab(AppLocalizations localizations) {
     final reviewSections = ref.watch(
       restaurantDetailProvider.select((state) => state.reviewSections),
     );
@@ -635,7 +662,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
         child: CircularProgressIndicator(color: AppColors.red400),
       ),
       LoadStatus.failure => Center(
-        child: Text(errorMessage ?? "An error occurred"),
+        child: Text(errorMessage ?? localizations.error_text),
       ),
       LoadStatus.success => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 36),
@@ -706,7 +733,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                     SvgPicture.asset(AppSvgs.favouriteIcon),
                     const SizedBox(width: 6),
                     Text(
-                      '${reviewSections[index].likeCount.toString()} likes',
+                      '${reviewSections[index].likeCount.toString()} ${localizations.like_text}',
                       style: AppTextStyles.red400S12Medium,
                     ),
                     const Spacer(),
@@ -751,6 +778,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
   }
 
   Widget _buildItemDetailSheet(
+    AppLocalizations localizations,
     double bodyHeight, {
     required int itemPrice,
     required menuItemId,
@@ -908,9 +936,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                 LoadStatus.initial || LoadStatus.loading => const Center(
                   child: CircularProgressIndicator(color: AppColors.red400),
                 ),
-                LoadStatus.failure => Center(
-                  child: const SizedBox.shrink(),
-                ),
+                LoadStatus.failure => Center(child: const SizedBox.shrink()),
                 LoadStatus.success => Column(
                   children: [
                     Consumer(
@@ -984,81 +1010,81 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                           ),
                         );
                       },
-                    ),                 
+                    ),
                   ],
                 ),
               },
               Padding(
-                      padding: const EdgeInsets.fromLTRB(112, 56, 112, 0),
-                      child: Consumer(
-                        builder: (context, ref, _) {
-                          final itemQuantity = ref.watch(
-                            restaurantDetailProvider.select(
-                              (state) => state.itemQuantity,
-                            ),
-                          );
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  ref
-                                      .read(restaurantDetailProvider.notifier)
-                                      .decreaseItemQuantity();
-                                  ref
-                                      .read(restaurantDetailProvider.notifier)
-                                      .getPrice(itemPrice);
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(40),
-                                    color: AppColors.yellow75,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    AppSvgs.minusIcon,
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: Center(
-                                  child: Text(
-                                    itemQuantity.toString(),
-                                    style: AppTextStyles.blackS16Medium,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  ref
-                                      .read(restaurantDetailProvider.notifier)
-                                      .increaseItemQuantity();
-                                  ref
-                                      .read(restaurantDetailProvider.notifier)
-                                      .getPrice(itemPrice);
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(40),
-                                    color: AppColors.yellow75,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    AppSvgs.plusIcon,
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                padding: const EdgeInsets.fromLTRB(112, 56, 112, 0),
+                child: Consumer(
+                  builder: (context, ref, _) {
+                    final itemQuantity = ref.watch(
+                      restaurantDetailProvider.select(
+                        (state) => state.itemQuantity,
                       ),
-                    ),
+                    );
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(restaurantDetailProvider.notifier)
+                                .decreaseItemQuantity();
+                            ref
+                                .read(restaurantDetailProvider.notifier)
+                                .getPrice(itemPrice);
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: AppColors.yellow75,
+                            ),
+                            child: SvgPicture.asset(
+                              AppSvgs.minusIcon,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: Center(
+                            child: Text(
+                              itemQuantity.toString(),
+                              style: AppTextStyles.blackS16Medium,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(restaurantDetailProvider.notifier)
+                                .increaseItemQuantity();
+                            ref
+                                .read(restaurantDetailProvider.notifier)
+                                .getPrice(itemPrice);
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: AppColors.yellow75,
+                            ),
+                            child: SvgPicture.asset(
+                              AppSvgs.plusIcon,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 36, 36),
@@ -1106,7 +1132,10 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                     const SizedBox(width: 24),
                     Column(
                       children: [
-                        Text('Price', style: AppTextStyles.blackS16Medium),
+                        Text(
+                          localizations.price,
+                          style: AppTextStyles.blackS16Medium,
+                        ),
                         const SizedBox(height: 4),
                         Consumer(
                           builder: (context, ref, _) {
@@ -1157,7 +1186,7 @@ class _RestaurantDetailPageState extends ConsumerState<RestaurantDetailPage> {
                             return Row(
                               children: [
                                 Text(
-                                  'Add to Order',
+                                  localizations.add_to_cart_text_button,
                                   style: AppTextStyles.whiteS14Medium,
                                 ),
                                 addToCartLoadStatus == LoadStatus.loading

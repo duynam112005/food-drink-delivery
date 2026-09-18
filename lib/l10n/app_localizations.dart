@@ -110,6 +110,18 @@ abstract class AppLocalizations {
   /// **'Diverse & sparkling food.'**
   String get title_onboarding1;
 
+  /// No description provided for @error_text.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get error_text;
+
+  /// No description provided for @no_restaurant_text.
+  ///
+  /// In en, this message translates to:
+  /// **'No restaurant available'**
+  String get no_restaurant_text;
+
   /// No description provided for @subtitle_onboarding1.
   ///
   /// In en, this message translates to:
@@ -266,6 +278,12 @@ abstract class AppLocalizations {
   /// **'Delivery to'**
   String get delivery_to;
 
+  /// No description provided for @address_delivery.
+  ///
+  /// In en, this message translates to:
+  /// **'1014 Prospect Valley'**
+  String get address_delivery;
+
   /// No description provided for @category.
   ///
   /// In en, this message translates to:
@@ -295,6 +313,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @distance_restaurant.
+  ///
+  /// In en, this message translates to:
+  /// **'1.5km'**
+  String get distance_restaurant;
 
   /// No description provided for @free_ship.
   ///
@@ -337,6 +361,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Price'**
   String get price;
+
+  /// No description provided for @filtered_restaurant_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered Restaurants'**
+  String get filtered_restaurant_text;
+
+  /// No description provided for @home_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home_label;
+
+  /// No description provided for @compass_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Compass'**
+  String get compass_label;
+
+  /// No description provided for @order_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get order_label;
+
+  /// No description provided for @profile_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile_label;
+
+  /// No description provided for @restaurant_id_key.
+  ///
+  /// In en, this message translates to:
+  /// **'restaurantId'**
+  String get restaurant_id_key;
+
+  /// No description provided for @restaurant_name_key.
+  ///
+  /// In en, this message translates to:
+  /// **'restaurantName'**
+  String get restaurant_name_key;
+
+  /// No description provided for @restaurant_image_key.
+  ///
+  /// In en, this message translates to:
+  /// **'restaurantImage'**
+  String get restaurant_image_key;
+
+  /// No description provided for @has_take_away_key.
+  ///
+  /// In en, this message translates to:
+  /// **'hasTakeAway'**
+  String get has_take_away_key;
+
+  /// No description provided for @is_favorite_key.
+  ///
+  /// In en, this message translates to:
+  /// **'isFavorite'**
+  String get is_favorite_key;
+
+  /// No description provided for @recommended_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended'**
+  String get recommended_text;
+
+  /// No description provided for @fastest_delivery_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Fastest Delivery'**
+  String get fastest_delivery_text;
+
+  /// No description provided for @most_popular_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Popular'**
+  String get most_popular_text;
+
+  /// No description provided for @max_delivery_fee_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Delivery Fee'**
+  String get max_delivery_fee_text;
+
+  /// No description provided for @max_fee_text.
+  ///
+  /// In en, this message translates to:
+  /// **'\$100'**
+  String get max_fee_text;
+
+  /// No description provided for @min_fee_text.
+  ///
+  /// In en, this message translates to:
+  /// **'\$0.0'**
+  String get min_fee_text;
+
+  /// No description provided for @take_away_badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Away'**
+  String get take_away_badge;
+
+  /// No description provided for @minute_text.
+  ///
+  /// In en, this message translates to:
+  /// **'mins'**
+  String get minute_text;
+
+  /// No description provided for @no_voucher_text.
+  ///
+  /// In en, this message translates to:
+  /// **'No Voucher Available'**
+  String get no_voucher_text;
+
+  /// No description provided for @delivery_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get delivery_text;
+
+  /// No description provided for @review_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get review_text;
+
+  /// No description provided for @available_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get available_text;
+
+  /// No description provided for @no_available_text.
+  ///
+  /// In en, this message translates to:
+  /// **'No Available'**
+  String get no_available_text;
+
+  /// No description provided for @no_combo_text.
+  ///
+  /// In en, this message translates to:
+  /// **'No combo'**
+  String get no_combo_text;
+
+  /// No description provided for @like_text.
+  ///
+  /// In en, this message translates to:
+  /// **'likes'**
+  String get like_text;
+
+  /// No description provided for @add_to_cart_text_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Order'**
+  String get add_to_cart_text_button;
+
+  /// No description provided for @confirm_order_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Comfirm Order'**
+  String get confirm_order_title;
 }
 
 class _AppLocalizationsDelegate

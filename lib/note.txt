@@ -18,6 +18,8 @@
 3. Dùng package form_builder_validators để bắt lỗi FormField
    + Dùng .compose để có thể dùng nhiều validator thành 1 validator
 
+3.1 Lệnh gen lại file app_localizations: flutter gen-l10n
+
 4. Interceptor
 - onRequest
    + RequestOptions: gắn thêm các request để dio gửi lên server
@@ -68,7 +70,7 @@
 - ở provider check mounted (mounted cho biết 1 state của stateful còn tồn tại hay không)
 
 14. Nếu dùng GestureDetector bình thường thì các chỗ như const SizedBox(hieght: 16) sẽ không nhận onTap vì nó là vùng trống, không có nội dung nên không ăn onTap
-- Sửa: set behavior của GestureDetector là opaque 
+- Sửa: set behavior của GestureDetector là opaque
 
 15. Xử lý blur 
 - Dùng ImageFiltered
@@ -79,16 +81,16 @@
 
 17. Xử lý refresh token, cấu hình cho Interceptor
 - Luồng hoạt động của accessToken và refreshToken
-    + accessToken hết hạn --> server return 401 --> gửi refreshToken --> backend kiểm tra refreshToken --> nếu hợp lệ thì backend return accessToken mới/nếu trả về lỗi thì logout --> lưu lại accessToken mới --? call lại API
+    + accessToken hết hạn --> server return 401 --> gửi refreshToken --> backend kiểm tra refreshToken --> nếu hợp lệ thì backend return accessToken mới/nếu trả về lỗi thì logout --> lưu lại accessToken mới --> call lại API
 
 - handler.next(options) cho request đi tiếp
 
-- handler.resolve(retryResponse) là hãy coi response này là kết quả của request ban đầu đề tiếp tục xử lý request 
+- handler.resolve(retryResponse) là hãy coi response này là kết quả của request ban đầu đề tiếp tục xử lý request ban đầu
 
 - err.requestOptions (cái thông tin request ban đầu sẽ được lưu trong err.requestOptions) dùng để retry lại request. Nghĩa là:
     + Nếu server trả về 401, refresh token, lưu token mới vào SecureStorage và thay vào Authorization bằng token mới. Sau đó dùng dio.fetch (cho phép đưa trực tiếp RequestOptions vào Dio) để retry request lại cái request ban đầu
 
-- isRefreshRequest dùng để ngăn interceptor tự refreshToken vô hạn (ở đây không cần thiết lắm vì mình đang refreshToken bằng _dioToken (không có interceptor))
+- isRefreshRequest dùng để ngăn interceptor tự refreshToken vô hạn (ở đây không cần thiết lắm vì mình đang gửi refreshToken bằng _dioToken (không có interceptor))
 
 - hasRetried: không cho 1 request retry vô hạn. Biến này XỬ LÝ KHI refresh thành công, call lại API ban đầu (ví dụ '/get/cart') nhưng lại trả về lỗi. Lúc này cần hasRetried để logout
 

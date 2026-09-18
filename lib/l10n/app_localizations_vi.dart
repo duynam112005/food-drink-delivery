@@ -15,6 +15,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get title_onboarding1 => 'Đa dạng & hấp dẫn';
 
   @override
+  String get error_text => 'Có lỗi xảy ra';
+
+  @override
+  String get no_restaurant_text => 'Không có nhà hàng';
+
+  @override
   String get subtitle_onboarding1 =>
       'Chúng tôi sử dụng nguyên liệu địa phương tốt nhất để tạo ra đồ ăn và thức uống tươi ngon.';
 
@@ -96,6 +102,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get delivery_to => 'Giao tới';
 
   @override
+  String get address_delivery => '02 Dương Đình Nghệ';
+
+  @override
   String get category => 'Danh mục';
 
   @override
@@ -109,6 +118,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get close => 'Đóng';
+
+  @override
+  String get distance_restaurant => '1.5km';
 
   @override
   String get free_ship => 'Miễn ship';
@@ -130,4 +142,85 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get price => 'Giá';
+
+  @override
+  String get filtered_restaurant_text => 'Nhà hàng đã lọc';
+
+  @override
+  String get home_label => 'Trang chủ';
+
+  @override
+  String get compass_label => 'Khám phá';
+
+  @override
+  String get order_label => 'Đặt hàng';
+
+  @override
+  String get profile_label => 'Cá nhân';
+
+  @override
+  String get restaurant_id_key => 'restaurantId';
+
+  @override
+  String get restaurant_name_key => 'restaurantName';
+
+  @override
+  String get restaurant_image_key => 'restaurantImage';
+
+  @override
+  String get has_take_away_key => 'hasTakeAway';
+
+  @override
+  String get is_favorite_key => 'isFavorite';
+
+  @override
+  String get recommended_text => 'Đề xuất';
+
+  @override
+  String get fastest_delivery_text => 'Giao hàng nhanh';
+
+  @override
+  String get most_popular_text => 'Thông dụng nhất';
+
+  @override
+  String get max_delivery_fee_text => 'Phí vận chuyển';
+
+  @override
+  String get max_fee_text => '\$100';
+
+  @override
+  String get min_fee_text => '\$0.0';
+
+  @override
+  String get take_away_badge => 'Mang đi';
+
+  @override
+  String get minute_text => 'phút';
+
+  @override
+  String get no_voucher_text => 'Không có voucher';
+
+  @override
+  String get delivery_text => 'Vận chuyển';
+
+  @override
+  String get review_text => 'Đánh giá';
+
+  @override
+  String get available_text => 'Sẵn';
+
+  @override
+  String get no_available_text => 'Không sẵn';
+
+  @override
+  String get no_combo_text => 'Không combo';
+
+  @override
+  String get like_text => 'lượt thích';
+
+  @override
+  String get add_to_cart_text_button => 'Thêm';
+
+  @override
+  String get confirm_order_title => 'Xác nhận đơn hàng';
 }
