@@ -23,7 +23,10 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
       backgroundColor: AppColors.cardColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        title: Text(localizations.confirm_order_title, style: AppTextStyles.blackS16Medium),
+        title: Text(
+          localizations.confirm_order_title,
+          style: AppTextStyles.blackS16Medium,
+        ),
         centerTitle: true,
         backgroundColor: AppColors.white,
         automaticallyImplyLeading: false,
@@ -60,14 +63,17 @@ class _OrderConfirmPageState extends State<OrderConfirmPage> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Text(localizations.delivery_to, style: AppTextStyles.blackS16Bold),
+            child: Text(
+              localizations.delivery_to,
+              style: AppTextStyles.blackS16Bold,
+            ),
           ),
           Container(
             height: 1,
             width: double.infinity,
             color: AppColors.cardColor,
           ),
-      
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Row(

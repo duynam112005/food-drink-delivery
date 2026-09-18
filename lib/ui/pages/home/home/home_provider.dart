@@ -2,7 +2,7 @@ import 'package:food_drink_delivery/di/injection.dart';
 import 'package:food_drink_delivery/models/enums/load_status.dart';
 import 'package:food_drink_delivery/models/enums/restaurant_sort.dart';
 import 'package:food_drink_delivery/repositories/catalog/catalog_repository.dart';
-import 'package:food_drink_delivery/ui/pages/home/home_state.dart';
+import 'package:food_drink_delivery/ui/pages/home/home/home_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_provider.g.dart';

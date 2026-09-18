@@ -11,7 +11,7 @@ import 'package:food_drink_delivery/ui/pages/auth/forgot_password/enter_email/en
 import 'package:food_drink_delivery/ui/pages/auth/login/login_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/register/register_page.dart';
 import 'package:food_drink_delivery/ui/pages/auth/verify/enter_code_page.dart';
-import 'package:food_drink_delivery/ui/pages/home/home_page.dart';
+import 'package:food_drink_delivery/ui/pages/home/home/home_page.dart';
 import 'package:go_router/go_router.dart';
 
 class RouteConfig {
