@@ -1,12 +1,26 @@
 import 'package:dio/dio.dart';
-import 'package:food_drink_delivery/di/injection.dart';
-import 'package:food_drink_delivery/repositories/auth/auth_repository.dart';
+import 'package:food_drink_delivery/router/route_config.dart';
 import 'package:food_drink_delivery/storage/secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
-class ApiInterceptor extends Interceptor {
-  final SecureStorage secureStorage = SecureStorage();
-  Future<bool>? _refreshingToken;
-  final authRepository = sl<AuthRepository>();
+class ApiInterceptor extends QueuedInterceptor {
+  final Dio dio;
+  final SecureStorage secureStorage;
+
+  late final Dio _tokenDio;
+
+  ApiInterceptor({
+    required this.dio,
+    required this.secureStorage,
+  }) {
+    _tokenDio = Dio(
+      BaseOptions(
+        baseUrl: dio.options.baseUrl,
+        connectTimeout: dio.options.connectTimeout,
+        receiveTimeout: dio.options.receiveTimeout,
+      ),
+    );
+  }
 
   @override
   void onRequest(
@@ -14,7 +28,7 @@ class ApiInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     final token = await secureStorage.read('accessToken');
-    if (token != null) {
+    if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
     }
     handler.next(options);
@@ -32,7 +46,7 @@ class ApiInterceptor extends Interceptor {
   ) async {
     final requestOptions = err.requestOptions;
     final isUnauthorized = err.response?.statusCode == 401;
-    final isRefreshRequest = requestOptions.path == '/v1/auth/refresh';
+    final isRefreshRequest = requestOptions.path.contains('/v1/auth/refresh');
     final hasRetried = requestOptions.extra['hasRetried'] == true;
 
     if (!isUnauthorized || isRefreshRequest || hasRetried) {
@@ -40,74 +54,74 @@ class ApiInterceptor extends Interceptor {
       return;
     }
 
+    final currentAccessToken = await secureStorage.read('accessToken');
+    final requestAuthHeader =
+        requestOptions.headers['Authorization'] as String?;
+
+    // 1. Kiểm tra nếu Token đã được làm mới trước đó bởi một request khác
+    if (currentAccessToken != null &&
+        requestAuthHeader != 'Bearer $currentAccessToken') {
+      requestOptions.headers['Authorization'] = 'Bearer $currentAccessToken';
+      requestOptions.extra['hasRetried'] = true;
+      try {
+        final response = await dio.fetch(requestOptions);
+        return handler.resolve(response);
+      } on DioException catch (retryError) {
+        return handler.next(retryError);
+      }
+    }
+
+    // 2. Lấy refreshToken để tiến hành refresh
     final refreshToken = await secureStorage.read('refreshToken');
-    if (refreshToken == null) {
+    if (refreshToken == null || refreshToken.isEmpty) {
+      await _handleLogout();
       handler.next(err);
       return;
     }
 
-    _refreshingToken ??= _refreshAccessToken(
-      refreshToken,
-      requestOptions.baseUrl,
-    );
-    final refreshed = await _refreshingToken!;
-    _refreshingToken = null;
-
-    if (!refreshed) {
-      handler.next(err);
-      return;
-    }
-
-    final accessToken = await secureStorage.read('accessToken');
-    if (accessToken == null) {
-      handler.next(err);
-      return;
-    }
-
-    requestOptions.headers['Authorization'] = 'Bearer $accessToken';
-    requestOptions.extra['hasRetried'] = true;
-
+    // 3. Gọi API refresh token bằng _tokenDio riêng biệt
     try {
-      final response = await Dio().fetch(requestOptions);
-      handler.resolve(response);
-    } on DioException catch (retryError) {
-      handler.next(retryError);
-    }
-  }
-
-  Future<bool> _refreshAccessToken(
-    String refreshToken,
-    String baseUrl,
-  ) async {
-    try {
-      final response = await Dio(
-        BaseOptions(baseUrl: baseUrl),
-      ).post<Map<String, dynamic>>(
+      final response = await _tokenDio.post<Map<String, dynamic>>(
         '/v1/auth/refresh',
         data: {'refreshToken': refreshToken},
       );
 
       final data = response.data?['data'];
-      final accessToken = data is Map<String, dynamic>
-          ? data['accessToken']
+      final newAccessToken = data is Map<String, dynamic>
+          ? data['accessToken'] as String?
           : null;
       final newRefreshToken = data is Map<String, dynamic>
-          ? data['refreshToken']
+          ? data['refreshToken'] as String?
           : null;
 
-      if (accessToken is! String || accessToken.isEmpty) {
-        throw StateError('Refresh token response has no access token');
+      if (newAccessToken == null || newAccessToken.isEmpty) {
+        throw StateError('Refresh token response has no valid access token');
       }
 
-      await secureStorage.write('accessToken', accessToken);
-      if (newRefreshToken is String && newRefreshToken.isNotEmpty) {
+      await secureStorage.write('accessToken', newAccessToken);
+      if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
         await secureStorage.write('refreshToken', newRefreshToken);
       }
-      return true;
+
+      // 4. Retry request thất bại ban đầu bằng token mới qua dio của app
+      requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+      requestOptions.extra['hasRetried'] = true;
+
+      final retryResponse = await dio.fetch(requestOptions);
+      handler.resolve(retryResponse);
     } catch (_) {
-      await secureStorage.delete('accessToken');
-      await secureStorage.delete('refreshToken');
-      return false;
+      await _handleLogout();
+      handler.next(err);
+    }
+  }
+
+  Future<void> _handleLogout() async {
+    await secureStorage.delete('accessToken');
+    await secureStorage.delete('refreshToken');
+
+    final context = RouteConfig.navigationKey.currentContext;
+    if (context != null && context.mounted) {
+      context.goNamed(RouteConfig.login);
     }
   }
 }

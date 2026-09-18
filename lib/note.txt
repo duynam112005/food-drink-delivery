@@ -76,3 +76,31 @@
 16. Làm hiệu ứng vuốt page thì page nhỏ dần, page được focus thì to dần
 - Dùng Transform.scale và scale động + AnimatedBuilder
 - _pageController.position.haveDimensions: để check xem page đó có kích thước không (thường khi mới khởi toạ thì page không có kích thước nên nó return false)
+
+17. Xử lý refresh token, cấu hình cho Interceptor
+- Luồng hoạt động của accessToken và refreshToken
+    + accessToken hết hạn --> server return 401 --> gửi refreshToken --> backend kiểm tra refreshToken --> nếu hợp lệ thì backend return accessToken mới/nếu trả về lỗi thì logout --> lưu lại accessToken mới --? call lại API
+
+- handler.next(options) cho request đi tiếp
+
+- handler.resolve(retryResponse) là hãy coi response này là kết quả của request ban đầu đề tiếp tục xử lý request 
+
+- err.requestOptions (cái thông tin request ban đầu sẽ được lưu trong err.requestOptions) dùng để retry lại request. Nghĩa là:
+    + Nếu server trả về 401, refresh token, lưu token mới vào SecureStorage và thay vào Authorization bằng token mới. Sau đó dùng dio.fetch (cho phép đưa trực tiếp RequestOptions vào Dio) để retry request lại cái request ban đầu
+
+- isRefreshRequest dùng để ngăn interceptor tự refreshToken vô hạn (ở đây không cần thiết lắm vì mình đang refreshToken bằng _dioToken (không có interceptor))
+
+- hasRetried: không cho 1 request retry vô hạn. Biến này XỬ LÝ KHI refresh thành công, call lại API ban đầu (ví dụ '/get/cart') nhưng lại trả về lỗi. Lúc này cần hasRetried để logout
+
+- Tại sao cần phải tạo _dioToken:
+    + Vì dio chính đang có interceptor. Nếu mình post '/v1/auth/refresh' lên mà gặp interceptor xong server lại trả về 401 thì nó sẽ tạo ra loop
+    + Vì vậy, mình chỉ post với dio thông thường, không cấu hình interceptor (_dioToken). Nếu nó trả về 401 thì mình sẽ handle logout
+    => cần tạo 1 dio mà không cấu hình interceptor
+    
+- Xử lý khi nhiều request Refresh đồng thời (Ví dụ màn home call 3 API và server đều trả về 401, lúc này cả 3 đều request refresh -> không tối ưu)
+    + Solution: 3 request nhưng chỉ 1 cái thực hiện refresh thôi (Dùng QueuedInterceptor)
+    + QueuedInterceptor cho phép Dio xếp xử lý interceptor (chỉ xử lý chỗ interceptor chứ không xử lý network request) vào hàng đợi (Ví dụ: Request A --> Queue, Request B --> Queue, Request C --> queue). Request A sẽ được thực hiện trước, B, C đợi
+    + khi đến B, C thì nó check và thấy A đã refresh token mới rồi nên nó lấy luôn token mới gắn vào Authorization
+    + Các biến cần để check điều này: 
+      + currentAccessToken để đọc token hiện tại trong secure storage. Sau đó sẽ kiểm tra xem accessToken đã được 1 request khác refresh trước đó hay chưa
+      + requestAuthHeader: requestOptions.headers['Authorization'] (chính là phần'Bearer $accessToken)
